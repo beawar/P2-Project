@@ -187,6 +187,9 @@ Tesserato* Squadra::at (int i) const{
     return tesserati.at(i);
 }
 
+Tesserato& Squadra::operator [] (int i) const{
+    return tesserati[i];
+}
 bool Squadra::operator ==(const Squadra& s) const{
     if(tesserati.size() != s.tesserati.size()){
         return false;
