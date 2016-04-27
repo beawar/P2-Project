@@ -12,7 +12,7 @@ private:
     int rigoriRicevuti;
 
 public:
-    Portiere(const QString&, const QString&, const QDate& = QDate::currentDate(), unsigned int = 0);
+    Portiere(const QString& ="", const QString& ="", const QDate& = QDate::currentDate(), unsigned int = 0);
 
     unsigned int getTiriParati() const;
     unsigned int getTitiRicevuti() const;

@@ -137,6 +137,10 @@ bool SquadreModel::isEmpty() const{
     return squadre.isEmpty();
 }
 
+Squadra& SquadreModel::operator [] (int i) const{
+    QList<Squadra*>::iterator it;
+    return *(it+i);
+}
 Squadra* SquadreModel::at(int i) const{
     if(i>=0){
         return squadre.at(i);

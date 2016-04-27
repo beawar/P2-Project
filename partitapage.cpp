@@ -96,7 +96,7 @@ bool PartitaPage::validatePage() const{
 
 Squadra* PartitaPage::getHomeTeam() const{
     if(squadra1ComboBox->currentData().isValid()){
-        return squadra1ComboBox->currentData();
+        return squadre->at(squadra1ComboBox->currentIndex());
 
     }
     else{
@@ -106,7 +106,7 @@ Squadra* PartitaPage::getHomeTeam() const{
 
 Squadra* PartitaPage::getGuestTeam() const{
     if(squadra2ComboBox->currentData().isValid()){
-        return squadra2ComboBox->currentData();
+        return squadre->at(squadra2ComboBox->currentIndex());
     }
     else{
         return 0;
@@ -115,7 +115,7 @@ Squadra* PartitaPage::getGuestTeam() const{
 
 Arbitro* PartitaPage::getArbitro1() const{
     if(arbitro1ComboBox->currentData().isValid()){
-        return arbitro1ComboBox->currentData();
+        return arbitri->at(arbitro1ComboBox->currentIndex());
     }
     else{
         return 0;
@@ -124,13 +124,13 @@ Arbitro* PartitaPage::getArbitro1() const{
 
 Arbitro* PartitaPage::getArbitro2() const{
     if(arbitro2ComboBox->currentData().isValid()){
-        return arbitro2ComboBox->currentData();
+        return arbitri->at(arbitro2ComboBox->currentIndex());
     }
     else{
         return 0;
     }
 }
 
-QString PartitaPage::getCategoria () const{
+QString PartitaPage::getCategoria() const{
     return categoria->currentText();
 }

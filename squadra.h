@@ -67,6 +67,7 @@ public:
 
     Tesserato* trova(Tesserato &) const;
     Tesserato* at (int) const;
+    Tesserato& operator [] (int) const;
     bool operator == (const Squadra&) const;
     void sortByName();
     void sortByNumber();
