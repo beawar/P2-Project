@@ -16,9 +16,9 @@ QVariant ArbitriModel::data(const QModelIndex &index, int role) const{
         return QVariant::Invalid;
     }
 
-    Arbitro* arbitro = arbitri[index.row()];
+    const Arbitro* arbitro = arbitri[index.row()];
     if(role == Qt::DisplayRole){
-        return QString(arbitro->getNome() + arbitro->getCognome());
+        return QString(arbitro->getNome() + " " + arbitro->getCognome());
     }
     else if(role == ArbitroRole){
         return arbitro;
@@ -135,11 +135,15 @@ Arbitro* ArbitriModel::trova(const Arbitro &a) const{
 
 Arbitro* ArbitriModel::at(int i) const{
     if(i>=0){
-        return arbitri.at(i);
+        return arbitri[i];
     }
     else{
         return 0;
     }
+}
+
+Arbitro& ArbitriModel::operator [] (int i) const{
+    return *(arbitri[i]);
 }
 
 bool ArbitriModel::isEmpty() const{

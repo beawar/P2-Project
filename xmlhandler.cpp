@@ -27,7 +27,7 @@ void XmlHandler::writeFile(QFile& file) throw(Err_Save){
 
 void XmlHandler::writeItem(){
     for(int i=0; i<squadreModel->size(); ++i){
-        const Squadra* squadra = squadreModel->at(i);
+        Squadra* squadra = squadreModel->at(i);
 
         xmlWriter.writeStartElement("Squadra");
         xmlWriter.writeTextElement("Nome", squadra->getNome());
@@ -71,7 +71,7 @@ void XmlHandler::writeItem(){
     }
 
     for(int i=0; i<arbitriModel->size(); ++i){
-        const Arbitro* arbitro = arbitriModel->at(i);
+        Arbitro* arbitro = arbitriModel->at(i);
         xmlWriter.writeStartElement("Arbitro");
         xmlWriter.writeTextElement("Nome", arbitro->getNome());
         xmlWriter.writeTextElement("Cognome", arbitro->getCognome());

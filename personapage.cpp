@@ -52,7 +52,8 @@ void PersonaPage::createEditor(){
     dataEdit = new QDateEdit;
     dataEdit->setDisplayFormat("dd/MM/yyyy");
     dataEdit->setMaximumDate(QDate::currentDate());
-    dataEdit->setDate(QDate::currentDate());
+    dataEdit->setDate(QDate(1990, 1, 1));
+    dataEdit->calendarPopup();
 
     numeroLabel = new QLabel(tr("Numero:"));
     numeroLabel->setAlignment(Qt::AlignCenter);
@@ -72,8 +73,8 @@ void PersonaPage::createEditor(){
     registerField("persona.giocatore", giocatoreButton);
     registerField("persona.allenatore", allenatoreButton);
     registerField("persona.arbitro", arbitroButton);
-    registerField("persona.nome*", nomeEdit);
-    registerField("persona.cognome*", cognomeEdit);
+    registerField("persona.nome", nomeEdit);
+    registerField("persona.cognome", cognomeEdit);
     registerField("persona.data", dataEdit);
     registerField("persona.numero", numeroEdit);
     registerField("persona.squadra", squadraEdit);
@@ -159,7 +160,6 @@ void PersonaPage::insertPerson(){
             gioc->setCognome(cognomeEdit->text());
             gioc->setAnno(dataEdit->date());
             gioc->setNumero(numeroEdit->value());
-
             squadre->addTesserato(gioc, Squadra(squadraEdit->currentText()));
         }
     }
@@ -185,4 +185,6 @@ void PersonaPage::insertPerson(){
     }
         break;
     }
+    nomeEdit->clear();
+    cognomeEdit->clear();
 }

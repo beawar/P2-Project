@@ -11,7 +11,7 @@ class ArbitriModel : public QAbstractListModel
 private:
     QList<Arbitro*> arbitri;
 public:
-    enum {ArbitroRole = Qt::UserRole+1};
+    enum {ArbitroRole = Qt::UserRole+1, NomeRole, CognomeRole, DataRole, LivelloRole};
 
     explicit ArbitriModel(QObject *parent = 0);
 
@@ -25,6 +25,7 @@ public:
     unsigned int size() const;
     Arbitro* trova(const Arbitro&) const;
     Arbitro* at(int i) const;
+    Arbitro& operator [] (int) const;
     bool isEmpty() const;
 
     void clear();

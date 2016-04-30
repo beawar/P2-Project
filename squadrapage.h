@@ -8,11 +8,13 @@
 #include <QLineEdit>
 #include <QListView>
 #include <QPushButton>
+#include "squadremodel.h"
 
 class SquadraPage : public QWizardPage
 {
     Q_OBJECT
 private:
+    SquadreModel* squadre;
     void createEditor();
     void createLayout();
 
@@ -22,12 +24,14 @@ private:
     QLabel* societaLabel;
     QLineEdit* nomeEdit;
     QLineEdit* societaEdit;
+    QPushButton* insertButton;
 
 private slots:
+    void insertTeam();
 
 
 public:
-    explicit SquadraPage(QWidget *parent = 0);
+    explicit SquadraPage(SquadreModel* sm, QWidget *parent = 0);
 
     int nextId() const;
 

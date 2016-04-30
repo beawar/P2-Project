@@ -1,4 +1,5 @@
 #include "newwizard.h"
+#include <QMessageBox>
 
 
 NewWizard::NewWizard(SquadreModel *sm, ArbitriModel *am, QWidget *parent) :
@@ -13,7 +14,7 @@ NewWizard::NewWizard(SquadreModel *sm, ArbitriModel *am, QWidget *parent) :
 
     introP = new IntroPage(sm, am);
     personaP = new PersonaPage(sm, am);
-    squadraP = new SquadraPage;
+    squadraP = new SquadraPage(sm);
     partitaP = new PartitaPage(sm, am);
 
     setPage(Page_Intro, introP);
@@ -49,50 +50,25 @@ Arbitro* NewWizard::getArbitro2() const{
 }
 
 void NewWizard::accept(){
-    if(currentId() == Page_Persona){
-        if(field("persona.giocatore").toBool()){
-            Giocatore* t = new Giocatore;
-            t->setNome(field("persona.nome").toString());
-            t->setCognome(field("persona.cognome").toString());
-            t->setAnno(field("persona.data").toDate());
-            t->setNumero(field("persona.numero").toInt());
-            squadre->addTesserato(t, Squadra(field("persona.squadra").toString()));
+    if(currentId() == Page_Partita){
+        if(partitaP->validatePage()){
+            if(partitaP->getCategoria() == tr("Regionale")){
+                partitaP->getArbitro1()->addPRegionale();
+                partitaP->getArbitro2()->addPRegionale();
+            }
+            else if(partitaP->getCategoria() == tr("Nazionale")){
+                partitaP->getArbitro1()->addPNazionale();
+                partitaP->getArbitro2()->addPNazionale();
+            }
+            else if(partitaP->getCategoria() == tr("Internazionale")){
+                partitaP->getArbitro1()->addPInternaz();
+                partitaP->getArbitro2()->addPInternaz();
+            }
+            emit partitaCreata();
         }
-        else if(field("persona.allenatore").toBool()){
-            Allenatore* t = new Allenatore;
-            t->setNome(field("persona.nome").toString());
-            t->setCognome(field("persona.cognome").toString());
-            t->setAnno(field("persona.data").toDate());
-            squadre->addTesserato(t, Squadra(field("persona.squadra").toString()));
-        }
-        else if(field("persona.arbitro").toBool()){
-            Arbitro* t = new Arbitro;
-            t->setNome(field("persona.nome").toString());
-            t->setCognome(field("persona.cognome").toString());
-            t->setAnno(field("persona.data").toDate());
-            t->setLivello(field("persona.livello").toInt());
-            arbitri->addArbitro(t);
-        }
-    }
-    else if(currentId() == Page_Squadra){
-        Squadra* s = new Squadra;
-        s->setNome(field("squadra.nome").toString());
-        s->setSocieta(field("squadra.societa").toString());
-        squadre->addSquadra(s);
-    }
-    else if(currentId() == Page_Partita){
-        emit partitaCreata();
-        if(partitaP->getCategoria() == tr("Regionale")){
-            partitaP->getArbitro1()->addPRegionale();
-            partitaP->getArbitro2()->addPRegionale();
-        }
-        else if(partitaP->getCategoria() == tr("Nazionale")){
-            partitaP->getArbitro1()->addPNazionale();
-            partitaP->getArbitro2()->addPNazionale();
-        }
-        else if(partitaP->getCategoria() == tr("Internazionale")){
-            partitaP->getArbitro1()->addPInternaz();
-            partitaP->getArbitro2()->addPInternaz();
+        else{
+            QMessageBox::warning(this, tr("Informazioni invalide"), tr("Impossibile creare la partita. Ricontrollare le "
+                                                                        "informazioni immesse"), QMessageBox::Ok);
         }
     }
     close();

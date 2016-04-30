@@ -138,8 +138,7 @@ bool SquadreModel::isEmpty() const{
 }
 
 Squadra& SquadreModel::operator [] (int i) const{
-    QList<Squadra*>::iterator it;
-    return *(it+i);
+    return *(squadre[i]);
 }
 Squadra* SquadreModel::at(int i) const{
     if(i>=0){

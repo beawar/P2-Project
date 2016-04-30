@@ -1,7 +1,7 @@
 #include "squadrapage.h"
 
-SquadraPage::SquadraPage(QWidget *parent) :
-    QWizardPage(parent)
+SquadraPage::SquadraPage(SquadreModel *sm, QWidget *parent) :
+    QWizardPage(parent), squadre(sm)
 {
     createEditor();
     createLayout();
@@ -20,7 +20,10 @@ void SquadraPage::createEditor(){
     societaLabel->setAlignment(Qt::AlignCenter);
     societaEdit = new QLineEdit;
 
-    registerField("squadra.nome*", nomeEdit);
+    insertButton = new QPushButton(tr("Inserisci"));
+    connect(insertButton, SIGNAL(clicked()), this, SLOT(insertTeam()));
+
+    registerField("squadra.nome", nomeEdit);
     registerField("squadra.societa", societaEdit);
 }
 
@@ -41,6 +44,13 @@ void SquadraPage::createLayout(){
     editorLayout->addLayout(editLayout);
 
     layout->addLayout(editorLayout, 1);
+    layout->addWidget(insertButton, 0, Qt::AlignRight);
+}
+
+void SquadraPage::insertTeam(){
+    squadre->addSquadra(new Squadra(nomeEdit->text(), societaEdit->text()));
+    nomeEdit->clear();
+    societaEdit->clear();
 }
 
 int SquadraPage::nextId() const{
