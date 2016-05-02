@@ -1,25 +1,25 @@
 #ifndef SQUADREMODEL_H
 #define SQUADREMODEL_H
 
-#include <QAbstractListModel>
+#include <QAbstractTableModel>
 #include <QVariant>
 #include "squadra.h"
 
-class SquadreModel : public QAbstractListModel
+class SquadreModel : public QAbstractTableModel
 {
     Q_OBJECT
 private:
     QList<Squadra*> squadre;
 public:
-    enum SquadraRoles {SquadraRole = Qt::UserRole+1, TesseratoRole, NomeRole, SocietaRole};
+    enum SquadraRoles {NomeRole = Qt::UserRole+1, SocietaRole, VittorieRole,
+                      PareggiRole, SconfitteRole, PenalitaRole, PuntiRole};
 
     explicit SquadreModel(QObject *parent = 0);
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole ) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-    bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
-    Qt::ItemFlags flags(const QModelIndex& index) const;
 
     Squadra* trova(const Squadra& s) const;
     void addSquadra(Squadra *);

@@ -182,6 +182,7 @@ void PersonaPage::insertPerson(){
         arb->setLivello(livelloEdit->value());
         arbitri->addArbitro(arb);
 
+
     }
         break;
     }

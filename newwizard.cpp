@@ -65,12 +65,12 @@ void NewWizard::accept(){
                 partitaP->getArbitro2()->addPInternaz();
             }
             emit partitaCreata();
+            close();
         }
         else{
             QMessageBox::warning(this, tr("Informazioni invalide"), tr("Impossibile creare la partita. Ricontrollare le "
                                                                         "informazioni immesse"), QMessageBox::Ok);
         }
     }
-    close();
 }
 

@@ -2,11 +2,16 @@
 #include <typeinfo>
 
 SquadreModel::SquadreModel(QObject *parent) :
-    QAbstractListModel(parent) {}
+    QAbstractTableModel(parent) {}
 
 int SquadreModel::rowCount(const QModelIndex &parent) const{
     Q_UNUSED(parent);
     return squadre.count();
+}
+
+int SquadreModel::columnCount(const QModelIndex &parent) const{
+    Q_UNUSED(parent);
+    return 7;
 }
 
 QVariant SquadreModel::data(const QModelIndex &index, int role) const{
@@ -18,11 +23,26 @@ QVariant SquadreModel::data(const QModelIndex &index, int role) const{
     if(role == Qt::DisplayRole){
         return squadra->getNome();
     }
-    else if(role == SquadraRole){
-        return squadra;
+    else if(role == NomeRole){
+        return squadra->getNome();
     }
-    else if(role == TesseratoRole){
-
+    else if(role == SocietaRole){
+        return squadra->getSocieta();
+    }
+    else if(role == VittorieRole){
+        return squadra->getVittorie();
+    }
+    else if(role == PareggiRole){
+        return squadra->getPareggi();
+    }
+    else if(role == SconfitteRole){
+        return squadra->getSconfitte();
+    }
+    else if(role == PenalitaRole){
+        return squadra->getPenalita();
+    }
+    else if(role == PuntiRole){
+        return squadra->getPunti();
     }
     else{
         return QVariant::Invalid;
@@ -30,61 +50,25 @@ QVariant SquadreModel::data(const QModelIndex &index, int role) const{
 }
 
 QVariant SquadreModel::headerData(int section, Qt::Orientation orientation, int role) const{
-    if(orientation == Qt::Horizontal){
-        Q_UNUSED(section);
-        if(role == NomeRole)
-            return tr("Squadra");
-        else if(role == SocietaRole){
-            return tr("Società");
+    if(orientation == Qt::Horizontal && role == Qt::DisplayRole){
+        switch(section){
+            case 0:
+                return tr("Squadra");
+            case 1:
+                return tr("Società");
+            case 2:
+                return tr("V");
+            case 3:
+                return tr("P");
+            case 4:
+                return tr("S");
+            case 5:
+                return tr("Pt");
+            case 6:
+                return tr("Pen");
+            default:
+                return "";
         }
-    }
-    return "";
-}
-
-bool SquadreModel::setData(const QModelIndex &index, const QVariant &value, int role){
-    if(index.isValid()){
-        switch(role){
-        case NomeRole:
-        {
-            QString n = value.toString();
-            if(squadre[index.row()]->getNome() != n){
-                squadre[index.row()]->setNome(n);
-                emit QAbstractListModel::dataChanged(index, index);
-                return true;
-            }
-            else{
-                return false;
-            }
-        }
-        case SocietaRole:
-        {
-            QString s = value.toString();
-            if(squadre[index.row()]->getNome() != s){
-                squadre[index.row()]->setSocieta(s);
-                emit QAbstractListModel::dataChanged(index, index);
-                return true;
-            }
-            else{
-                return false;
-            }
-        }
-
-        default:
-            return false;
-        }
-    }
-    else{
-        return false;
-    }
-
-}
-
-Qt::ItemFlags SquadreModel::flags(const QModelIndex &index) const{
-    if(index.isValid()){
-        return (QAbstractListModel::flags(index) | Qt::ItemIsEditable);
-    }
-    else{
-        return Qt::NoItemFlags;
     }
 }
 
@@ -141,7 +125,7 @@ Squadra& SquadreModel::operator [] (int i) const{
     return *(squadre[i]);
 }
 Squadra* SquadreModel::at(int i) const{
-    if(i>=0){
+    if(i>0 && i<=squadre.size()){
         return squadre.at(i);
     }
     else{

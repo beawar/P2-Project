@@ -6,6 +6,7 @@
 #include <QFileDialog>
 #include <QString>
 #include <QMessageBox>
+#include <QTableView>
 
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent), tabs(0), fileOpen(tr("Senza Titolo")),  xml(&squadre, &arbitri)
@@ -61,13 +62,13 @@ void MainWindow::open(){
         }
         try{
             xml.readFile(fileName);
+            fileOpen = fileName;
+            creaClassifica();
         }
         catch(Err_Open e){
             QMessageBox::critical(this, tr("Errore!"), tr("Si è verificato un errore nell'apertura del file"), QMessageBox::Ok);
             fileOpen = "";
         }
-        fileOpen = fileName;
-        creaClassifica();
     }
 }
 
@@ -190,6 +191,8 @@ void MainWindow::createMenus(){
 }
 
 void MainWindow::creaClassifica(){
+    QTableView* tableView = new QTableView(this);
+    tableView->setModel(&squadre);
 
 }
 

@@ -85,8 +85,12 @@ void XmlHandler::writeItem(){
 void XmlHandler::readFile(const QString &filename) throw(Err_Open){
     if(!filename.isEmpty()){
         QFile file(filename);
+        if (!file.open(QFile::ReadOnly | QFile::Text)){
+            throw Err_Open();
+        }
         xmlReader.setDevice(&file);
-        while(!xmlReader.isEndDocument()){
+        xmlReader.readNext();
+        while(!xmlReader.atEnd()){
             if(xmlReader.isStartElement()){
                 if(xmlReader.name() == "Squadra"){
                     readSquadra();
@@ -97,10 +101,12 @@ void XmlHandler::readFile(const QString &filename) throw(Err_Open){
             }
             xmlReader.readNext();
         }
-        if(xmlReader.hasError() || (squadreModel->isEmpty() && arbitriModel->isEmpty())){
+
+        file.close();
+
+        if(xmlReader.hasError()){
             throw Err_Open();
         }
-        file.close();
     }
 }
 

@@ -31,7 +31,7 @@ void Arbitro::setLivello(const unsigned int &x){
 }
 
 void Arbitro::addPRegionale(const int &x){
-    (partiteRegionali+x)<0 ? partiteRegionali=0: partiteRegionali+=x;
+    (partiteRegionali+x)<0 ? partiteRegionali=0 : partiteRegionali+=x;
     aumentaLivello();
 }
 
