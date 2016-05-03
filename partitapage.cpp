@@ -30,7 +30,6 @@ void PartitaPage::createView(){
     squadra2 = new CheckList(squadre->at(squadra2ComboBox->currentIndex()));
 
     squadra1List = new QListView;
-    squadra1List->setModel(squadra1);
     QStringList sl;
 
     if(squadra1ComboBox->currentData().isValid()){
@@ -39,6 +38,7 @@ void PartitaPage::createView(){
         }
     }
     squadra1->setStringList(sl);
+    squadra1List->setModel(squadra1);
 
     squadra2List = new QListView;
     squadra2List->setModel(squadra2);

@@ -134,6 +134,7 @@ void MainWindow::showPartita(){
     tabs->newPartita();
     exportAct->setEnabled(true);
     setCentralWidget(tabs);
+    //tabs->show();
 }
 
 void MainWindow::createActions(){
