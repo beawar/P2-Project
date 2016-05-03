@@ -1,11 +1,11 @@
 #ifndef SQUADREMODEL_H
 #define SQUADREMODEL_H
 
-#include <QAbstractTableModel>
+#include <QAbstractListModel>
 #include <QVariant>
 #include "squadra.h"
 
-class SquadreModel : public QAbstractTableModel
+class SquadreModel : public QAbstractListModel
 {
     Q_OBJECT
 private:

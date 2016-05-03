@@ -5,10 +5,10 @@ PartitaPage::PartitaPage(SquadreModel *sm, ArbitriModel *am, QWidget *parent) :
     QWizardPage(parent), squadre(sm), arbitri(am)
 { 
     layout = new QVBoxLayout;
-
     createView();
     createLayout();
 
+    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     setLayout(layout);
 }
 
@@ -21,16 +21,27 @@ void PartitaPage::createView(){
 
     arbitro1ComboBox = new QComboBox;
     arbitro1ComboBox->setModel(arbitri);
+    connect(squadra1ComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(update()));
 
     arbitro2ComboBox = new QComboBox;
     arbitro2ComboBox->setModel(arbitri);
 
+    squadra1 = new CheckList(squadre->at(squadra1ComboBox->currentIndex()));
+    squadra2 = new CheckList(squadre->at(squadra2ComboBox->currentIndex()));
+
     squadra1List = new QListView;
-    squadra1List->addScrollBarWidget(new CheckList(getHomeTeam()), Qt::AlignLeft);
-    connect(squadra1ComboBox, SIGNAL(currentIndexChanged(int)), squadra1List, SLOT(update()));
+    squadra1List->setModel(squadra1);
+    QStringList sl;
+
+    if(squadra1ComboBox->currentData().isValid()){
+        for(int i=0; i<squadre->at(squadra1ComboBox->currentIndex())->size(); ++i){
+            sl.insert(i, squadre->at(squadra1ComboBox->currentIndex())->at(i)->getInfo());
+        }
+    }
+    squadra1->setStringList(sl);
 
     squadra2List = new QListView;
-    squadra2List->addScrollBarWidget(new CheckList(getGuestTeam()), Qt::AlignLeft);
+    squadra2List->setModel(squadra2);
     connect(squadra2ComboBox, SIGNAL(currentIndexChanged(int)), squadra2List, SLOT(update()));
 
     categoriaLabel = new QLabel(tr("Categoria: "));
@@ -39,6 +50,11 @@ void PartitaPage::createView(){
     categoria->addItem(tr("Regionale"));
     categoria->addItem(tr("Nazionale"));
     categoria->addItem(tr("Internazionale"));
+
+    registerField("partita.homeTeam", squadra1ComboBox);
+    registerField("partita.guestTeam", squadra2ComboBox);
+    registerField("partita.arbitro1", arbitro1ComboBox);
+    registerField("partita.arbitro2", arbitro2ComboBox);
 
 }
 
@@ -92,43 +108,6 @@ bool PartitaPage::validatePage() const{
         return true;
     }
 
-}
-
-Squadra* PartitaPage::getHomeTeam() const{
-    if(squadra1ComboBox->currentData().isValid()){
-        return squadre->at(squadra1ComboBox->currentIndex());
-
-    }
-    else{
-        return 0;
-    }
-}
-
-Squadra* PartitaPage::getGuestTeam() const{
-    if(squadra2ComboBox->currentData().isValid()){
-        return squadre->at(squadra2ComboBox->currentIndex());
-    }
-    else{
-        return 0;
-    }
-}
-
-Arbitro* PartitaPage::getArbitro1() const{
-    if(arbitro1ComboBox->currentData().isValid()){
-        return arbitri->at(arbitro1ComboBox->currentIndex());
-    }
-    else{
-        return 0;
-    }
-}
-
-Arbitro* PartitaPage::getArbitro2() const{
-    if(arbitro2ComboBox->currentData().isValid()){
-        return arbitri->at(arbitro2ComboBox->currentIndex());
-    }
-    else{
-        return 0;
-    }
 }
 
 QString PartitaPage::getCategoria() const{

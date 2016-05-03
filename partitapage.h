@@ -9,6 +9,7 @@
 #include <QGroupBox>
 #include <QSpinBox>
 #include <QLabel>
+#include "checklist.h"
 #include "squadremodel.h"
 #include "arbitrimodel.h"
 #include "tabs.h"
@@ -19,11 +20,9 @@ class PartitaPage : public QWizardPage
 private:
     void createView();
     void createLayout();
-    void creaPartita();
 
     SquadreModel* squadre;
     ArbitriModel* arbitri;
-    Squadra* home, *guest;
 
     QVBoxLayout* layout;
 
@@ -41,16 +40,16 @@ private:
 
     QListView* squadra1List;
     QListView* squadra2List;
+
+    CheckList* squadra1;
+    CheckList* squadra2;
+
 public:
     explicit PartitaPage(SquadreModel* sm, ArbitriModel* am, QWidget *parent = 0);
 
     int nextId() const;
     bool validatePage() const;
 
-    Squadra* getHomeTeam() const;
-    Squadra* getGuestTeam() const;
-    Arbitro* getArbitro1() const;
-    Arbitro* getArbitro2() const;
     QString getCategoria() const;
 
 

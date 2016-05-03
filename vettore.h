@@ -83,7 +83,7 @@ typename Vettore<T>::pointer Vettore<T>::copia(const Vettore<T>&v){
 template <class T>
 typename Vettore<T>::pointer Vettore<T>::ridimensiona(pointer a, int d){
     T* aux = new T[d];
-    for(int i=0; i<d; ++i){
+    for(int i=0; i<(d/2); ++i){
         aux[i] = a[i];
     }
     delete [] a;
@@ -302,7 +302,12 @@ template <class T>
 void Vettore<T>::push_back(const_reference t){
     if(dim == size()){
         array = ridimensiona(array, dim*2);
-        dim=dim*2;
+        if(dim == 0){
+            dim = 1;
+        }
+        else{
+            dim=dim*2;
+        }
     }
     array[size()] = t;
     ++_size;

@@ -117,6 +117,7 @@ void XmlHandler::readSquadra(){
         if(xmlReader.name() == "Nome"){
             QString nome = xmlReader.readElementText();
             squadra->setNome(nome);
+            squadreModel->addSquadra(squadra);
         }
         else if(xmlReader.name() == "Società"){
             QString societa = xmlReader.readElementText();
@@ -147,7 +148,6 @@ void XmlHandler::readSquadra(){
         xmlReader.readNext();
     }
 
-    squadreModel->addSquadra(squadra);
 }
 
 void XmlHandler::readGiocatore(const Squadra& squadra){

@@ -1,19 +1,51 @@
 #include "checklist.h"
-#include <QStandardItem>
+#include <QVBoxLayout>
 
-CheckList::CheckList(Squadra *s, QWidget *parent) :
-    QWidget(parent), squadra(s)
+CheckList::CheckList(Squadra *s, QObject *parent) :
+    QStringListModel(parent), squadra(s)
 {
-    if(squadra){
+    /*if(squadra){
         for(int i=0; i<squadra->size(); ++i){
-            checkBox[i] = new QCheckBox(squadra->at(i)->getInfo());
-            connect(checkBox[i], SIGNAL(clicked()), this, SLOT(checkItem(i)));
-
+            strList.append(squadra->at(i)->getInfo());
         }
+    }
+    setStringList(strList);*/
+}
+
+Qt::ItemFlags CheckList::flags(const QModelIndex &index) const{
+    if(index.isValid()){
+        return QStringListModel::flags(index) | Qt::ItemIsUserCheckable;
+    }
+    return QStringListModel::flags(index);
+}
+
+QVariant CheckList::data(const QModelIndex &index, int role) const{
+    if(!index.isValid()){
+        return QVariant();
+    }
+    else if(role == Qt::CheckStateRole){
+        return squadra->at(index.row())->isChecked();
+    }
+    else{
+        return QStringListModel::data(index, role);
     }
 }
 
-void CheckList::checkItem(int index){
-    squadra->at(index)->setChecked(checkBox[index]->isChecked());
+bool CheckList::setData(const QModelIndex &index, const QVariant &value, int role){
+    if(!index.isValid() || role == Qt::CheckStateRole){
+        return false;
+    }
+    else if(value == Qt::Checked){
+        squadra->at(index.row())->setChecked(true);
+        return true;
+    }
+    else if(value == Qt::Unchecked){
+        squadra->at(index.row())->setChecked(false);
+        return true;
+    }
+    else{
+        return false;
+    }
+
 }
 

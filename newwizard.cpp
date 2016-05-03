@@ -29,40 +29,38 @@ NewWizard::NewWizard(SquadreModel *sm, ArbitriModel *am, QWidget *parent) :
         setMaximumSize(500, 360);
     }
 
-
-    setDefaultProperty("QComboBox", "currentData", "currentIndexChanged");
 }
 
 Squadra* NewWizard::getHomeTeam() const{
-    return partitaP->getHomeTeam();
+    return squadre->at(field("partita.homeTeam").toInt());
 }
 
 Squadra* NewWizard::getGuestTeam() const{
-    return partitaP->getGuestTeam();
+    return squadre->at(field("partita.guestTeam").toInt());
 }
 
 Arbitro* NewWizard::getArbitro1() const{
-    return partitaP->getArbitro1();
+    return arbitri->at(field("partita.arbitro1").toInt());
 }
 
 Arbitro* NewWizard::getArbitro2() const{
-    return partitaP->getArbitro2();
+    return arbitri->at(field("partita.arbitro2").toInt());
 }
 
 void NewWizard::accept(){
     if(currentId() == Page_Partita){
         if(partitaP->validatePage()){
             if(partitaP->getCategoria() == tr("Regionale")){
-                partitaP->getArbitro1()->addPRegionale();
-                partitaP->getArbitro2()->addPRegionale();
+                arbitri->at(field("partita.arbitro1").toInt())->addPRegionale();
+                arbitri->at(field("partita.arbitro2").toInt())->addPRegionale();
             }
             else if(partitaP->getCategoria() == tr("Nazionale")){
-                partitaP->getArbitro1()->addPNazionale();
-                partitaP->getArbitro2()->addPNazionale();
+                arbitri->at(field("partita.arbitro1").toInt())->addPNazionale();
+                arbitri->at(field("partita.arbitro2").toInt())->addPNazionale();
             }
             else if(partitaP->getCategoria() == tr("Internazionale")){
-                partitaP->getArbitro1()->addPInternaz();
-                partitaP->getArbitro2()->addPInternaz();
+                arbitri->at(field("partita.arbitro1").toInt())->addPInternaz();
+                arbitri->at(field("partita.arbitro2").toInt())->addPInternaz();
             }
             emit partitaCreata();
             close();

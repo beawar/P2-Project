@@ -2,7 +2,7 @@
 #include <typeinfo>
 
 SquadreModel::SquadreModel(QObject *parent) :
-    QAbstractTableModel(parent) {}
+    QAbstractListModel(parent) {}
 
 int SquadreModel::rowCount(const QModelIndex &parent) const{
     Q_UNUSED(parent);
