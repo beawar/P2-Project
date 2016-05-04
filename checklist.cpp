@@ -1,22 +1,22 @@
 #include "checklist.h"
 #include <QVBoxLayout>
+#include "squadremodel.h"
 
 CheckList::CheckList(Squadra *s, QObject *parent) :
     QStringListModel(parent), squadra(s)
 {
-    /*if(squadra){
+    if(squadra){
         for(int i=0; i<squadra->size(); ++i){
-            strList.append(squadra->at(i)->getInfo());
+            strList<<(squadra->at(i)->getInfo());
         }
     }
-    setStringList(strList);*/
+    setStringList(strList);
 }
 
 Qt::ItemFlags CheckList::flags(const QModelIndex &index) const{
     if(index.isValid()){
-        return QStringListModel::flags(index) | Qt::ItemIsUserCheckable;
+        return Qt::ItemIsEnabled | Qt::ItemIsSelectable| Qt::ItemIsUserCheckable | Qt::ItemNeverHasChildren;
     }
-    return QStringListModel::flags(index);
 }
 
 QVariant CheckList::data(const QModelIndex &index, int role) const{
@@ -47,5 +47,16 @@ bool CheckList::setData(const QModelIndex &index, const QVariant &value, int rol
         return false;
     }
 
+}
+
+void CheckList::createList(Squadra *s){
+    if(s){
+        strList.clear();
+        squadra = s;
+        for(int i=0; i<squadra->size(); ++i){
+            strList.push_back(squadra->at(i)->getInfo());
+        }
+        setStringList(strList);
+    }
 }
 

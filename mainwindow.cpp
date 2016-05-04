@@ -44,10 +44,8 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 void MainWindow::newFile(){
-    NewWizard* newWizard = new NewWizard(&squadre, &arbitri, this);
+    newWizard = new NewWizard(&squadre, &arbitri, this);
     newWizard->show();
-    tabs = new Tabs(newWizard->getHomeTeam(), newWizard->getGuestTeam(),
-                    newWizard->getArbitro1(), newWizard->getArbitro2(), this);
     connect(newWizard, SIGNAL(partitaCreata()), this, SLOT(showPartita()));
 }
 
@@ -131,10 +129,15 @@ void MainWindow::aboutQt(){
 }
 
 void MainWindow::showPartita(){
-    tabs->newPartita();
+    Squadra* home = newWizard->getHomeTeam();
+    Squadra* guest = newWizard->getGuestTeam();
+    Arbitro* a1 = newWizard->getArbitro1();
+    Arbitro* a2 = newWizard->getArbitro2();
+    tabs = new Tabs(home, guest, a1, a2, this);
+    //tabs->newPartita();
     exportAct->setEnabled(true);
     setCentralWidget(tabs);
-    //tabs->show();
+    setTabPosition(Qt::TopDockWidgetArea, QTabWidget::North);
 }
 
 void MainWindow::createActions(){

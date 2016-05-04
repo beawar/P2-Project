@@ -43,6 +43,8 @@ private:
     QString fileOpen;
     XmlHandler xml;
 
+    NewWizard* newWizard;
+
 private slots:
     void newFile();
     void open();

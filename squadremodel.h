@@ -11,7 +11,7 @@ class SquadreModel : public QAbstractListModel
 private:
     QList<Squadra*> squadre;
 public:
-    enum SquadraRoles {NomeRole = Qt::UserRole+1, SocietaRole, VittorieRole,
+    enum {NomeRole = Qt::UserRole+1, SocietaRole, VittorieRole,
                       PareggiRole, SconfitteRole, PenalitaRole, PuntiRole};
 
     explicit SquadreModel(QObject *parent = 0);

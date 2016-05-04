@@ -5,6 +5,15 @@ Tabs::Tabs(Squadra *s1, Squadra *s2, Arbitro *arb1, Arbitro *arb2, QWidget *pare
     QTabWidget(parent), team1(s1), team2(s2), a1(arb1), a2(arb2),
     statTeam1(0), statTeam2(0), partita(0)
 {
+    if(team1 && team2 && a1 && a2){
+        statTeam1 = new Stat(team1);
+        statTeam2 = new Stat(team2);
+        partita = new Partita(team1, team2, a1, a2);
+
+        addTab(partita, tr("Partita"));
+        addTab(statTeam1, team1->getNome());
+        addTab(statTeam2, team2->getNome());
+    }
 }
 
 void Tabs::exportPng(){
@@ -20,18 +29,5 @@ void Tabs::exportPng(){
 }
 
 void Tabs::newPartita(){
-    if(team1 && team2 && a1 && a2){
-        statTeam1 = new Stat(team1);
-        statTeam2 = new Stat(team2);
-        partita = new Partita(team1, team2, a1, a2);
 
-        addTab(partita, tr("Partita"));
-        addTab(statTeam1, team1->getNome());
-        addTab(statTeam2, team2->getNome());
-    }
-    else{
-        statTeam1 = 0;
-        statTeam2 = 0;
-        partita = 0;
-    }
 }

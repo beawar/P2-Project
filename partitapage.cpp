@@ -10,6 +10,11 @@ PartitaPage::PartitaPage(SquadreModel *sm, ArbitriModel *am, QWidget *parent) :
 
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     setLayout(layout);
+
+    registerField("partita.homeTeam", squadra1ComboBox);
+    registerField("partita.guestTeam", squadra2ComboBox);
+    registerField("partita.arbitro1", arbitro1ComboBox);
+    registerField("partita.arbitro2", arbitro2ComboBox);
 }
 
 void PartitaPage::createView(){
@@ -21,7 +26,6 @@ void PartitaPage::createView(){
 
     arbitro1ComboBox = new QComboBox;
     arbitro1ComboBox->setModel(arbitri);
-    connect(squadra1ComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(update()));
 
     arbitro2ComboBox = new QComboBox;
     arbitro2ComboBox->setModel(arbitri);
@@ -30,18 +34,15 @@ void PartitaPage::createView(){
     squadra2 = new CheckList(squadre->at(squadra2ComboBox->currentIndex()));
 
     squadra1List = new QListView;
-    QStringList sl;
-
-    if(squadra1ComboBox->currentData().isValid()){
-        for(int i=0; i<squadre->at(squadra1ComboBox->currentIndex())->size(); ++i){
-            sl.insert(i, squadre->at(squadra1ComboBox->currentIndex())->at(i)->getInfo());
-        }
-    }
-    squadra1->setStringList(sl);
     squadra1List->setModel(squadra1);
+    connect(squadra1ComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateList()));
+    connect(squadra1List, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(checkItem(CheckList*, QModelIndex)));
+    connect(squadra1ComboBox, SIGNAL(currentIndexChanged(int)), squadra1List, SLOT(update()));
 
     squadra2List = new QListView;
     squadra2List->setModel(squadra2);
+    connect(squadra2ComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateList()));
+    connect(squadra1List, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(checkItem(CheckList*, QModelIndex)));
     connect(squadra2ComboBox, SIGNAL(currentIndexChanged(int)), squadra2List, SLOT(update()));
 
     categoriaLabel = new QLabel(tr("Categoria: "));
@@ -50,11 +51,6 @@ void PartitaPage::createView(){
     categoria->addItem(tr("Regionale"));
     categoria->addItem(tr("Nazionale"));
     categoria->addItem(tr("Internazionale"));
-
-    registerField("partita.homeTeam", squadra1ComboBox);
-    registerField("partita.guestTeam", squadra2ComboBox);
-    registerField("partita.arbitro1", arbitro1ComboBox);
-    registerField("partita.arbitro2", arbitro2ComboBox);
 
 }
 
@@ -112,4 +108,21 @@ bool PartitaPage::validatePage() const{
 
 QString PartitaPage::getCategoria() const{
     return categoria->currentText();
+}
+
+void PartitaPage::updateList(){
+    squadra1->createList(squadre->at(squadra1ComboBox->currentIndex()));
+    squadra2->createList(squadre->at(squadra2ComboBox->currentIndex()));
+    emit update();
+}
+
+void PartitaPage::checkItem(CheckList* clist, QModelIndex index){
+    bool ischeck = clist->data(index, Qt::CheckStateRole).toBool();
+    if(ischeck){
+        clist->setData(index, Qt::Unchecked, Qt::Unchecked);
+    }
+    else{
+        clist->setData(index, Qt::Checked, Qt::Checked);
+    }
+    emit update();
 }

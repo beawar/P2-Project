@@ -44,6 +44,10 @@ private:
     CheckList* squadra1;
     CheckList* squadra2;
 
+private slots:
+    void updateList();
+    void checkItem(CheckList* clist, QModelIndex index);
+
 public:
     explicit PartitaPage(SquadreModel* sm, ArbitriModel* am, QWidget *parent = 0);
 
