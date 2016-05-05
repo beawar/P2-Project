@@ -15,7 +15,7 @@ CheckList::CheckList(Squadra *s, QObject *parent) :
 
 Qt::ItemFlags CheckList::flags(const QModelIndex &index) const{
     if(index.isValid()){
-        return Qt::ItemIsEnabled | Qt::ItemIsSelectable| Qt::ItemIsUserCheckable | Qt::ItemNeverHasChildren;
+        return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemNeverHasChildren;
     }
 }
 
