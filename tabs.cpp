@@ -24,10 +24,6 @@ void Tabs::exportPng(){
 
         QPixmap pixmap2(statTeam2->rect().size());
         statTeam2->render(&pixmap2, QPoint(), QRegion(statTeam2->rect()));
-        pixmap2.save(tr("./images/%1.png").arg(team2->getNome()));
+        pixmap2.save(tr("./Images/%1.png").arg(team2->getNome()));
     }
-}
-
-void Tabs::newPartita(){
-
 }

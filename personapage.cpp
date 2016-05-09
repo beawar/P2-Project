@@ -143,49 +143,54 @@ void PersonaPage::changeEditor(){
 }
 
 void PersonaPage::insertPerson(){
-    switch(radioButtonGroup->checkedId()){
-    case giocatore:
-    {
-        if(portiereButton->isChecked()){
-            Portiere* gioc = new Portiere;
-            gioc->setNome(nomeEdit->text());
-            gioc->setCognome(cognomeEdit->text());
-            gioc->setAnno(dataEdit->date());
-            gioc->setNumero(numeroEdit->value());
-            squadre->addTesserato(gioc, Squadra(squadraEdit->currentText()));
+    try{
+        switch(radioButtonGroup->checkedId()){
+            case giocatore:
+            {
+                if(portiereButton->isChecked()){
+                    Portiere* gioc = new Portiere;
+                    gioc->setNome(nomeEdit->text());
+                    gioc->setCognome(cognomeEdit->text());
+                    gioc->setAnno(dataEdit->date());
+                    gioc->setNumero(numeroEdit->value());
+                    squadre->addTesserato(gioc, Squadra(squadraEdit->currentText()));
+                }
+                else{
+                    Giocatore* gioc = new Giocatore;
+                    gioc->setNome(nomeEdit->text());
+                    gioc->setCognome(cognomeEdit->text());
+                    gioc->setAnno(dataEdit->date());
+                    gioc->setNumero(numeroEdit->value());
+                    squadre->addTesserato(gioc, Squadra(squadraEdit->currentText()));
+                }
+            }
+            break;
+            case allenatore:
+            {
+                Allenatore* all = new Allenatore;
+                all->setNome(nomeEdit->text());
+                all->setCognome(cognomeEdit->text());
+                all->setAnno(dataEdit->date());
+                squadre->addTesserato(all, Squadra(squadraEdit->currentText()));
+            }
+            break;
+            case arbitro:
+            {
+                Arbitro* arb = new Arbitro;
+                arb->setNome(nomeEdit->text());
+                arb->setCognome(cognomeEdit->text());
+                arb->setAnno(dataEdit->date());
+                arb->setLivello(livelloEdit->value());
+                arbitri->addArbitro(arb);
+            }
+            break;
         }
-        else{
-            Giocatore* gioc = new Giocatore;
-            gioc->setNome(nomeEdit->text());
-            gioc->setCognome(cognomeEdit->text());
-            gioc->setAnno(dataEdit->date());
-            gioc->setNumero(numeroEdit->value());
-            squadre->addTesserato(gioc, Squadra(squadraEdit->currentText()));
-        }
+        nomeEdit->clear();
+        cognomeEdit->clear();
     }
-        break;
-    case allenatore:
-    {
-        Allenatore* all = new Allenatore;
-        all->setNome(nomeEdit->text());
-        all->setCognome(cognomeEdit->text());
-        all->setAnno(dataEdit->date());
-        squadre->addTesserato(all, Squadra(squadraEdit->currentText()));
+    catch(Err_Tesserato e){
+        QMessageBox::warning(this, tr("Inserimento non riuscito"),
+                             tr("Il tesserato che si vuole inserire è già presente in memoria"),
+                             QMessageBox::Ok);
     }
-        break;
-    case arbitro:
-    {
-        Arbitro* arb = new Arbitro;
-        arb->setNome(nomeEdit->text());
-        arb->setCognome(cognomeEdit->text());
-        arb->setAnno(dataEdit->date());
-        arb->setLivello(livelloEdit->value());
-        arbitri->addArbitro(arb);
-
-
-    }
-        break;
-    }
-    nomeEdit->clear();
-    cognomeEdit->clear();
 }

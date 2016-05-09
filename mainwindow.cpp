@@ -1,17 +1,14 @@
 #include "mainwindow.h"
-#include <QWidget>
-#include <QVBoxLayout>
-#include <QLabel>
 #include <QFont>
 #include <QFileDialog>
 #include <QString>
 #include <QMessageBox>
-#include <QTableView>
+#include <QGridLayout>
 
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent), tabs(0), fileOpen(tr("Senza Titolo")),  xml(&squadre, &arbitri)
 {
-    QWidget* widget = new QWidget;
+    widget = new QWidget;
     setCentralWidget(widget);
 
     QWidget* topFiller = new QWidget;
@@ -75,7 +72,6 @@ void MainWindow::save(){
         if(!fileOpen.isEmpty()){
             QFile file(fileOpen);
             if(file.open(QIODevice::WriteOnly)){
-
                 try{
                     xml.writeFile(file);
                 }
@@ -89,7 +85,6 @@ void MainWindow::save(){
             file.close();
         }
         else{
-            emit saveAs();
         }
     }
 }
@@ -102,7 +97,6 @@ void MainWindow::saveAs(){
             try{
                 xml.writeFile(file);
                 fileOpen = fileName;
-                file.close();
             }
             catch(Err_Save e){
                 QMessageBox::critical(this, tr("Errore!"), tr("Si è verificato un errore nel salvataggio del file"), QMessageBox::Ok);
@@ -115,17 +109,25 @@ void MainWindow::saveAs(){
     }
 }
 
+void MainWindow::exportPng(){
+    tabs->exportPng();
+}
+
 
 void MainWindow::edit(){
 
 }
 
 void MainWindow::about(){
-
+    QMessageBox::about(this, "HandBall Stats", tr("HandBallStats è un applicativo per la gestione "
+                                                  "di partite di pallamano, che permette di mantenere traccia "
+                                                  "delle statistiche individuali e di squadra per ogni partita "
+                                                  "giocata.\n ----------------------------------------------- \n"
+                                                  "Versione 1.0 Copyright Beatrice Guerra"));
 }
 
 void MainWindow::aboutQt(){
-
+    QMessageBox::aboutQt(this, "About Qt");
 }
 
 void MainWindow::showPartita(){
@@ -134,10 +136,8 @@ void MainWindow::showPartita(){
     Arbitro* a1 = newWizard->getArbitro1();
     Arbitro* a2 = newWizard->getArbitro2();
     tabs = new Tabs(home, guest, a1, a2, this);
-    //tabs->newPartita();
     exportAct->setEnabled(true);
     setCentralWidget(tabs);
-    setTabPosition(Qt::TopDockWidgetArea, QTabWidget::North);
 }
 
 void MainWindow::createActions(){
@@ -169,8 +169,8 @@ void MainWindow::createActions(){
     exitAct->setShortcut(QKeySequence::Quit);
     connect(exitAct, SIGNAL(triggered()), this, SLOT(close()));
 
-    aboutAct = new QAction(tr("&?"), this);
-    connect(openAct, SIGNAL(triggered()), this, SLOT(about()));
+    aboutAct = new QAction(tr("&About HBStats"), this);
+    connect(aboutAct, SIGNAL(triggered()), this, SLOT(about()));
 
     aboutQtAct = new QAction(tr("&Qt"), this);
     connect(aboutQtAct, SIGNAL(triggered()), this, SLOT(aboutQt()));
@@ -195,8 +195,77 @@ void MainWindow::createMenus(){
 }
 
 void MainWindow::creaClassifica(){
-    QTableView* tableView = new QTableView(this);
-    tableView->setModel(&squadre);
+
+    delete widget;
+    widget = new QWidget;
+
+    QFont font;
+    font.setBold(true);
+    font.setPointSize(16);
+
+    QLabel* header[8];
+    header[0] = new QLabel("N°");
+    header[1] = new QLabel(tr("Nome"));
+    header[2] = new QLabel(tr("Punti"));
+    header[3] = new QLabel(tr("V")); //Vittorie
+    header[4] = new QLabel(tr("P")); //Pareggi
+    header[5] = new QLabel(tr("S")); //Sconfitte
+    header[6] = new QLabel(tr("Pen")); //Penalità
+    header[7] = new QLabel(tr("DR")); //Differenza Reti
+
+
+    squadre.sort();
+
+    QLabel* teamsLabel[squadre.size()][8];
+
+    for(int i=0; i<squadre.size(); ++i){
+        teamsLabel[i][0] = new QLabel(QString::number(i+1));
+        teamsLabel[i][1] = new QLabel(squadre.at(i)->getNome());
+        teamsLabel[i][2] = new QLabel(QString::number(squadre.at(i)->getPunti()));
+        teamsLabel[i][3] = new QLabel(QString::number(squadre.at(i)->getVittorie()));
+        teamsLabel[i][4] = new QLabel(QString::number(squadre.at(i)->getPareggi()));
+        teamsLabel[i][5] = new QLabel(QString::number(squadre.at(i)->getSconfitte()));
+        teamsLabel[i][6] = new QLabel(QString::number(squadre.at(i)->getPenalita()));
+        teamsLabel[i][7] = new QLabel(QString::number(squadre.at(i)->getDifferenzaReti()));
+    }
+
+    QGridLayout* classifica = new QGridLayout;
+    for(int i=0; i<8; ++i){
+        header[i]->setFont(font);
+        header[i]->setAlignment(Qt::AlignHCenter);
+        classifica->addWidget(header[i], 1, i+1);
+    }
+
+
+    font.setBold(false);
+    for(int i=0; i<squadre.size(); ++i){
+        for(int j=0; j<8; ++j){
+            teamsLabel[i][j]->setFont(font);
+            teamsLabel[i][j]->setAlignment(Qt::AlignHCenter);
+            classifica->addWidget(teamsLabel[i][j], i+2, j+1);
+        }
+    }
+
+    QWidget* topFiller = new QWidget;
+    topFiller->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    QWidget* bottomFiller = new QWidget;
+    bottomFiller->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    QHBoxLayout* classificaLayout = new QHBoxLayout;
+    classificaLayout->addStretch(20);
+    classificaLayout->addLayout(classifica);
+    classificaLayout->addStretch(20);
+
+    QVBoxLayout* layout = new QVBoxLayout;
+    layout->addWidget(topFiller);
+    layout->addLayout(classificaLayout);
+    layout->addWidget(bottomFiller);
+
+    classifica->setAlignment(layout, Qt::AlignHCenter);
+
+    widget->setLayout(layout);
+    setCentralWidget(widget);
 
 }
 

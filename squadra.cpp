@@ -72,7 +72,7 @@ int Squadra::getPunti() const{
 
 unsigned int Squadra::getTiriSegnati() const{
     unsigned int tot=0;
-    for(Vettore<Tesserato*>::const_iterator cit; cit<tesserati.cend(); ++cit){
+    for(Vettore<Tesserato*>::const_iterator cit = tesserati.cbegin(); cit<tesserati.cend(); ++cit){
         const Giocatore* g = dynamic_cast<const Giocatore*>(*cit);
         if(g){
             tot+= g->getTiriSegnati();
@@ -83,7 +83,7 @@ unsigned int Squadra::getTiriSegnati() const{
 
  unsigned int Squadra::getGoalSubiti() const{
      unsigned int tot=0;
-     for(Vettore<Tesserato*>::const_iterator cit; cit<tesserati.cend(); ++cit){
+     for(Vettore<Tesserato*>::const_iterator cit = tesserati.cbegin(); cit<tesserati.cend(); ++cit){
          Portiere* p = dynamic_cast<Portiere*>(*cit);
          if(p){
              tot+= p->getGoalSubiti();
@@ -94,7 +94,7 @@ unsigned int Squadra::getTiriSegnati() const{
 
 unsigned int Squadra::getTiriTotali() const{
     unsigned int tot=0;
-    for(Vettore<Tesserato*>::const_iterator cit; cit<tesserati.cend(); ++cit){
+    for(Vettore<Tesserato*>::const_iterator cit = tesserati.cbegin(); cit<tesserati.cend(); ++cit){
         Giocatore* g = dynamic_cast<Giocatore*>(*cit);
         if(g){
             tot+= g->getTiriTotali();
@@ -105,7 +105,7 @@ unsigned int Squadra::getTiriTotali() const{
 
 unsigned int Squadra::getRigoriSegnati() const{
     unsigned int tot=0;
-    for(Vettore<Tesserato*>::const_iterator cit; cit<tesserati.cend(); ++cit){
+    for(Vettore<Tesserato*>::const_iterator cit = tesserati.cbegin(); cit<tesserati.cend(); ++cit){
         const Giocatore* g = dynamic_cast<const Giocatore*>(*cit);
         if(g){
             tot+= g->getRigoriSegnati();
@@ -116,7 +116,7 @@ unsigned int Squadra::getRigoriSegnati() const{
 
 unsigned int Squadra::getRigoriSubiti() const{
     unsigned int tot=0;
-    for(Vettore<Tesserato*>::const_iterator cit; cit<tesserati.cend(); ++cit){
+    for(Vettore<Tesserato*>::const_iterator cit = tesserati.cbegin(); cit<tesserati.cend(); ++cit){
         Portiere* p = dynamic_cast<Portiere*>(*cit);
         if(p){
             tot+= p->getRigoriSubiti();
@@ -127,7 +127,7 @@ unsigned int Squadra::getRigoriSubiti() const{
 
 unsigned int Squadra::getRigoriTotali() const{
     unsigned int tot=0;
-    for(Vettore<Tesserato*>::const_iterator cit; cit<tesserati.cend(); ++cit){
+    for(Vettore<Tesserato*>::const_iterator cit = tesserati.cbegin(); cit<tesserati.cend(); ++cit){
         const Giocatore* g = dynamic_cast<const Giocatore*>(*cit);
         if(g){
             tot+= g->getRigoriTotali();
@@ -205,61 +205,77 @@ bool Squadra::operator ==(const Squadra& s) const{
 }
 
 void Squadra::sortByName(){
-    Vettore<Tesserato*>::iterator it = tesserati.begin();
-    for(; it<tesserati.end(); ++it){
-        Giocatore* g1 = dynamic_cast<Giocatore*>(*it);
-        if(g1){
-            Giocatore* g2 = dynamic_cast<Giocatore*>(*it);
-            if(g2 && *g1 > *g2){
-                Giocatore* temp = g1;
-                g1 = g2;
-                g2 = temp;
-            }
-        }
-        else{
-            Allenatore* all1 = dynamic_cast<Allenatore*>(*it);
+    Vettore<Tesserato*> giocatori;
+    Vettore<Tesserato*> allenatori;
+    for(Vettore<Tesserato*>::iterator it = tesserati.begin(); it != tesserati.end(); ++it){
+        Giocatore* gioc = dynamic_cast<Giocatore*>(*it);
+        if(gioc){
             bool inserito = false;
-            for(Vettore<Tesserato*>::iterator it2=tesserati.end()-1; it2>it && !inserito; --it2){
-                Allenatore* all2 = dynamic_cast<Allenatore*>(*it2);
-                if(all2 && *all1 > *all2){
-                    Allenatore aux = *all1;
-                    it = tesserati.erase(it);
-                    ++it2;
-                    it2 = tesserati.insert(it2, &aux);
+            for(Vettore<Tesserato*>::iterator it2 = giocatori.begin(); it2 != giocatori.end() && !inserito; ++it2){
+                Giocatore* g2 = dynamic_cast<Giocatore*>(*it2);
+                if(*gioc < *g2){
+                    it2 = giocatori.insert(it2, gioc);
                     inserito = true;
                 }
             }
+            if(!inserito){
+                giocatori.push_back(gioc);
+            }
+        }
+        else{
+            Allenatore* all = dynamic_cast<Allenatore*>(*it);
+            bool inserito = false;
+            for(Vettore<Tesserato*>::iterator it2 = allenatori.begin(); it2 != allenatori.end() && !inserito; ++it2){
+                Allenatore* all2 = dynamic_cast<Allenatore*>(*it2);
+                if(*all < *all2){
+                    it2 = allenatori.insert(it2, all);
+                    inserito = true;
+                }
+            }
+            if(!inserito){
+                allenatori.push_back(all);
+            }
         }
     }
+    tesserati = giocatori;
+    tesserati = tesserati + allenatori;
 }
 
 void Squadra::sortByNumber(){
-    Vettore<Tesserato*>::iterator it = tesserati.begin();
-    for(; it<tesserati.end(); ++it){
-        Giocatore* g1 = dynamic_cast<Giocatore*>(*it);
-        if(g1){
-            Giocatore* g2 = dynamic_cast<Giocatore*>(*it);
-            if(g2 && g1->getNumero() > g2->getNumero()){
-                Giocatore* temp = g1;
-                g1 = g2;
-                g2 = temp;
-            }
-        }
-        else{
-            Allenatore* all1 = dynamic_cast<Allenatore*>(*it);
+    Vettore<Tesserato*> giocatori;
+    Vettore<Tesserato*> allenatori;
+    for(Vettore<Tesserato*>::iterator it = tesserati.begin(); it != tesserati.end(); ++it){
+        Giocatore* gioc = dynamic_cast<Giocatore*>(*it);
+        if(gioc){
             bool inserito = false;
-            for(Vettore<Tesserato*>::iterator it2=tesserati.end()-1; it2>it && !inserito; --it2){
-                Allenatore* all2 = dynamic_cast<Allenatore*>(*it2);
-                if(all2 && *all1 > *all2){
-                    Allenatore aux = *all1;
-                    it = tesserati.erase(it);
-                    ++it2;
-                    it2 = tesserati.insert(it2, &aux);
+            for(Vettore<Tesserato*>::iterator it2 = giocatori.begin(); it2 != giocatori.end() && !inserito; ++it2){
+                Giocatore* g2 = dynamic_cast<Giocatore*>(*it2);
+                if(gioc->getNumero() < g2->getNumero() || (gioc->getNumero() == g2->getNumero() && *gioc < *g2)){
+                    it2 = giocatori.insert(it2, gioc);
                     inserito = true;
                 }
             }
+            if(!inserito){
+                giocatori.push_back(gioc);
+            }
+        }
+        else{
+            Allenatore* all = dynamic_cast<Allenatore*>(*it);
+            bool inserito = false;
+            for(Vettore<Tesserato*>::iterator it2 = allenatori.begin(); it2 != allenatori.end() && !inserito; ++it2){
+                Allenatore* all2 = dynamic_cast<Allenatore*>(*it2);
+                if(*all < *all2){
+                    it2 = allenatori.insert(it2, all);
+                    inserito = true;
+                }
+            }
+            if(!inserito){
+                allenatori.push_back(all);
+            }
         }
     }
+    tesserati = giocatori;
+    tesserati = tesserati + allenatori;
 }
 
 void Squadra::clear(){
@@ -267,6 +283,10 @@ void Squadra::clear(){
     pareggi = 0;
     sconfitte = 0;
     penalita = 0;
+}
+
+void Squadra::clearAll(){
+    delete[] &tesserati;
 }
 
 unsigned int Squadra::size() const{

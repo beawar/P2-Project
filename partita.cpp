@@ -17,12 +17,13 @@ Partita::Partita(Squadra *home, Squadra *guest, Arbitro *a1, Arbitro *a2, QWidge
     homeName->setFont(font);
     guestName->setFont(font);
 
-    QLabel* punteggio = new QLabel(tr("%1 : %2").arg(homeTeam->getTiriSegnati()).arg(guestTeam->getTiriSegnati()));
+    punteggio = new QLabel(tr("%1 : %2").arg(homeTeam->getTiriSegnati()).arg(guestTeam->getTiriSegnati()));
     punteggio->setAlignment(Qt::AlignHCenter);
     punteggio->setFont(font);
 
     QLabel* arbitriLabel = new QLabel(tr("Arbitri"));
     QFont corsivo;
+    corsivo.setPointSize(20);
     corsivo.setItalic(true);
     corsivo.setBold(true);
     arbitriLabel->setFont(corsivo);
@@ -50,6 +51,9 @@ Partita::Partita(Squadra *home, Squadra *guest, Arbitro *a1, Arbitro *a2, QWidge
     mainLayout->addLayout(goals);
     mainLayout->addLayout(teams);
     mainLayout->addLayout(arbitriLayout);
+
+    setLayout(mainLayout);
+
 }
 
 Squadra* Partita::getHomeTeam() const{
@@ -92,5 +96,3 @@ void Partita::createGuestLayout(){
 
     guestGroup->setLayout(guestLayout);
 }
-
-

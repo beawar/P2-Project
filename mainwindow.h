@@ -7,6 +7,8 @@
 #include <QAction>
 #include <QString>
 #include <QToolBar>
+#include <QLabel>
+#include <QVBoxLayout>
 #include "newwizard.h"
 #include "squadremodel.h"
 #include "arbitrimodel.h"
@@ -20,6 +22,8 @@ private:
     void createActions();
     void createMenus();
     void creaClassifica();
+
+    QWidget* widget;
 
     QMenu* fileMenu;
     QMenu* editMenu;
@@ -50,6 +54,7 @@ private slots:
     void open();
     void save();
     void saveAs();
+    void exportPng();
     void edit();
     void about();
     void aboutQt();

@@ -28,6 +28,8 @@ private:
     QGroupBox* homeGroup;
     QGroupBox* guestGroup;
 
+    QLabel* punteggio;
+
 public:
     explicit Partita(Squadra* home, Squadra* guest, Arbitro* a1, Arbitro* a2, QWidget *parent = 0);
     Squadra* getHomeTeam() const;

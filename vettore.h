@@ -3,6 +3,7 @@
 
 #include "iterator.h"
 #include <stddef.h>
+#define DEFAULT_DIMENSION 10
 
 template <class T>
 class Vettore
@@ -35,6 +36,7 @@ public:
     Vettore(const Vettore&);
     ~Vettore();
     Vettore& operator =(const Vettore&);
+    Vettore& operator +(const Vettore&);
 
     size_type size () const;
     size_type capacity () const;
@@ -54,7 +56,7 @@ public:
     const_iterator cend() const;
 
     iterator insert(iterator, const_reference);
-    void insert (iterator, size_type, const_reference);
+    iterator insert(iterator, size_type, const_reference);
     iterator erase(iterator);
     iterator erase(iterator, iterator);
     void erase (const_reference);
@@ -83,7 +85,7 @@ typename Vettore<T>::pointer Vettore<T>::copia(const Vettore<T>&v){
 template <class T>
 typename Vettore<T>::pointer Vettore<T>::ridimensiona(pointer a, int d){
     T* aux = new T[d];
-    for(int i=0; i<(d/2); ++i){
+    for(int i=0; i<(d-DEFAULT_DIMENSION); ++i){
         aux[i] = a[i];
     }
     delete [] a;
@@ -114,15 +116,10 @@ Vettore<T>::Vettore()
 
 template <class T>
 Vettore<T>::Vettore(size_type n, const_reference t)
-    :array(new T[n]), _size(0), dim(0){
-    if(n>0){
-        dim = 1;
-        _size = 1;
-        array[0] = t;
-    }
-    for(int i=1; i<n; ++i){
-        push_back(t);
-    }
+    :array(new T[n]), _size(n), dim(n){
+    for(int i=0; i<n; ++i){
+        array[i] = t;
+    }    
 }
 
 template<class T>
@@ -150,6 +147,14 @@ Vettore<T>& Vettore<T>::operator =(const Vettore<T>& v){
         array = copia(v);
     }
     return *this;
+}
+
+template <class T>
+Vettore<T>& Vettore<T>::operator +(const Vettore<T>& v){
+   for(int i = 0; i<v.size(); ++i){
+       push_back(v[i]);
+   }
+   return *this;
 }
 
 template <class T>
@@ -218,37 +223,33 @@ bool Vettore<T>::empty() const{
 
 template <class T>
 typename Vettore<T>::iterator Vettore<T>::begin() const{
-
     iterator iaux(array);
     return iaux;
 }
 
 template <class T>
 typename Vettore<T>::iterator Vettore<T>::end() const{
-    pointer paux = &array[size()];
-    iterator iaux(paux);
+    iterator iaux(&array[size()]);
     return iaux;
 }
 
 template <class T>
 typename Vettore<T>::const_iterator Vettore<T>::cbegin() const{
-    pointer paux = &array;
-    const_iterator iaux(paux);
+    const_iterator iaux(array);
     return iaux;
 }
 
 template <class T>
 typename Vettore<T>::const_iterator Vettore<T>::cend() const{
-    pointer paux = &array[size()];
-    const_iterator iaux(paux);
+    const_iterator iaux(&array[size()]);
     return iaux;
 }
 template <class T>
 typename Vettore<T>::iterator Vettore<T>::insert(iterator it, const_reference x){
-    for(iterator i=end(); i>it; --i){
+    for(iterator i(&array[size()]); i>it; --i){
         if(dim==size()){
-            array = ridimensiona(array, dim*2);
-            dim*=2;
+            array = ridimensiona(array, dim + DEFAULT_DIMENSION);
+            dim += DEFAULT_DIMENSION;
         }
         *i = *(--i);
     }
@@ -257,10 +258,11 @@ typename Vettore<T>::iterator Vettore<T>::insert(iterator it, const_reference x)
 }
 
 template <class T>
-void Vettore<T>::insert(iterator it, size_type n, const_reference x){
+typename Vettore<T>::iterator Vettore<T>::insert(iterator it, size_type n, const_reference x){
     for(int i=0; i<n; ++i){
         it = insert(it, x);
     }
+    return it;
 }
 
 template <class T>
@@ -301,13 +303,8 @@ void Vettore<T>::clear(){
 template <class T>
 void Vettore<T>::push_back(const_reference t){
     if(dim == size()){
-        array = ridimensiona(array, dim*2);
-        if(dim == 0){
-            dim = 1;
-        }
-        else{
-            dim=dim*2;
-        }
+        array = ridimensiona(array, dim + DEFAULT_DIMENSION);
+        dim += DEFAULT_DIMENSION;
     }
     array[size()] = t;
     ++_size;

@@ -1,9 +1,15 @@
 #include "partitapage.h"
 #include "checklist.h"
+#include <QMessageBox>
+
 
 PartitaPage::PartitaPage(SquadreModel *sm, ArbitriModel *am, QWidget *parent) :
-    QWizardPage(parent), squadre(sm), arbitri(am)
+    QWizardPage(parent), squadre(sm), arbitri(am),
+    s1GiocChecked(0), s1AllChecked(0), s2GiocChecked(0), s2AllChecked(0)
 { 
+    for(int i=0; i<squadre->size(); ++i){
+        squadre->at(i)->sortByName();
+    }
     layout = new QVBoxLayout;
     createView();
     createLayout();
@@ -18,6 +24,10 @@ PartitaPage::PartitaPage(SquadreModel *sm, ArbitriModel *am, QWidget *parent) :
 }
 
 void PartitaPage::createView(){
+    nomeButton = new QRadioButton(tr("Nome"), this);
+    nomeButton->setChecked(true);
+    numeroButton = new QRadioButton(tr("Numero"), this);
+
     squadra1ComboBox = new QComboBox;
     squadra1ComboBox->setModel(squadre);
 
@@ -30,20 +40,14 @@ void PartitaPage::createView(){
     arbitro2ComboBox = new QComboBox;
     arbitro2ComboBox->setModel(arbitri);
 
-    squadra1 = new CheckList(squadre->at(squadra1ComboBox->currentIndex()));
-    squadra2 = new CheckList(squadre->at(squadra2ComboBox->currentIndex()));
+    squadra1 = new CheckList(squadre->at(squadra1ComboBox->currentIndex()), this);
+    squadra2 = new CheckList(squadre->at(squadra2ComboBox->currentIndex()), this);
 
     squadra1List = new QListView;
     squadra1List->setModel(squadra1);
-    connect(squadra1ComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateList()));
-    connect(squadra1List, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(checkItem(CheckList*, QModelIndex)));
-    connect(squadra1ComboBox, SIGNAL(currentIndexChanged(int)), squadra1List, SLOT(update()));
 
     squadra2List = new QListView;
     squadra2List->setModel(squadra2);
-    connect(squadra2ComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateList()));
-    connect(squadra1List, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(checkItem(CheckList*, QModelIndex)));
-    connect(squadra2ComboBox, SIGNAL(currentIndexChanged(int)), squadra2List, SLOT(update()));
 
     categoriaLabel = new QLabel(tr("Categoria: "));
 
@@ -52,12 +56,23 @@ void PartitaPage::createView(){
     categoria->addItem(tr("Nazionale"));
     categoria->addItem(tr("Internazionale"));
 
+    connect(nomeButton, SIGNAL(clicked()), this, SLOT(sort()));
+    connect(numeroButton, SIGNAL(clicked()), this, SLOT(sort()));
+
+    connect(squadra1ComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateList()));
+    connect(squadra1, SIGNAL(dataChanged(QModelIndex,QModelIndex)), squadra1List, SLOT(update()));
+    connect(squadra1List, SIGNAL(clicked(QModelIndex)), this, SLOT(checkItem(CheckList*, QModelIndex)));
+
+    connect(squadra2ComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateList()));
+    connect(squadra2, SIGNAL(dataChanged(QModelIndex,QModelIndex)), squadra2List, SLOT(update()));
+    connect(squadra2List, SIGNAL(clicked(QModelIndex)), this, SLOT(checkItem(CheckList*, QModelIndex)));
 }
 
 void PartitaPage::createLayout(){
     squadra1Group = new QGroupBox(tr("In Casa"));
     squadra2Group = new QGroupBox(tr("Ospiti"));
     arbitriGroup = new QGroupBox(tr("Arbitri"));
+    radioGroup = new QGroupBox(tr("Ordina per:"));
 
     QVBoxLayout* squadra1Layout = new QVBoxLayout;
     squadra1Layout->addWidget(squadra1ComboBox);
@@ -71,12 +86,18 @@ void PartitaPage::createLayout(){
     arbitriLayout->addWidget(arbitro1ComboBox);
     arbitriLayout->addWidget(arbitro2ComboBox);
 
+    QVBoxLayout* radioLayout = new QVBoxLayout;
+    radioLayout->addWidget(nomeButton);
+    radioLayout->addWidget(numeroButton);
+
     squadra1Group->setLayout(squadra1Layout);
     squadra2Group->setLayout(squadra2Layout);
     arbitriGroup->setLayout(arbitriLayout);
+    radioGroup->setLayout(radioLayout);
 
     QHBoxLayout* squadreLayout = new QHBoxLayout;
     squadreLayout->addWidget(squadra1Group);
+    squadreLayout->addWidget(radioGroup);
     squadreLayout->addWidget(squadra2Group);
 
     QHBoxLayout* categoriaLayout = new QHBoxLayout;
@@ -88,6 +109,13 @@ void PartitaPage::createLayout(){
     layout->addWidget(arbitriGroup);
 }
 
+Squadra* PartitaPage::homeTeam() const{
+    return squadre->at(squadra1ComboBox->currentIndex());
+}
+
+Squadra* PartitaPage::guestTeam() const{
+    return squadre->at(squadra2ComboBox->currentIndex());
+}
 
 int PartitaPage::nextId() const{
     return -1;
@@ -106,23 +134,86 @@ bool PartitaPage::validatePage() const{
 
 }
 
+
 QString PartitaPage::getCategoria() const{
     return categoria->currentText();
 }
 
 void PartitaPage::updateList(){
-    squadra1->createList(squadre->at(squadra1ComboBox->currentIndex()));
-    squadra2->createList(squadre->at(squadra2ComboBox->currentIndex()));
-    emit update();
+    if(squadra1ComboBox->currentIndex() != -1){
+        squadra1->createList(squadre->at(squadra1ComboBox->currentIndex()));
+    }
+    if(squadra2ComboBox->currentIndex() != -1){
+        squadra2->createList(squadre->at(squadra2ComboBox->currentIndex()));
+    }
 }
 
 void PartitaPage::checkItem(CheckList* clist, QModelIndex index){
     bool ischeck = clist->data(index, Qt::CheckStateRole).toBool();
     if(ischeck){
-        clist->setData(index, Qt::Unchecked, Qt::Unchecked);
+        if(clist == squadra1){
+            if(dynamic_cast<Giocatore*>(homeTeam()->at(index.row()))){
+                s1GiocChecked--;
+            }
+            else if(dynamic_cast<Allenatore*>(homeTeam()->at(index.row()))){
+                s1AllChecked--;
+            }
+        }
+        else if(clist == squadra2){
+            if(dynamic_cast<Giocatore*>(guestTeam()->at(index.row()))){
+                s2GiocChecked--;
+            }
+            else if(dynamic_cast<Allenatore*>(guestTeam()->at(index.row()))){
+                s2AllChecked--;
+            }
+        }
+        clist->setData(index, Qt::Unchecked, Qt::CheckStateRole);
     }
     else{
-        clist->setData(index, Qt::Checked, Qt::Checked);
+        bool ok = false;
+        if(clist == squadra1){
+            if(dynamic_cast<Giocatore*>(homeTeam()->at(index.row())) && s1GiocChecked<maxGiocatori){
+                s1GiocChecked++;
+                ok = true;
+            }
+            else if(dynamic_cast<Allenatore*>(homeTeam()->at(index.row())) && s1AllChecked<maxAllenatori){
+                s1AllChecked++;
+                ok = true;
+            }
+        }
+        else if(clist == squadra2){
+            if(dynamic_cast<Giocatore*>(guestTeam()->at(index.row())) && s2GiocChecked<maxGiocatori){
+                s2GiocChecked++;
+                ok = true;
+            }
+            else if(dynamic_cast<Allenatore*>(guestTeam()->at(index.row())) && s2AllChecked<maxAllenatori){
+                s2AllChecked++;
+                ok = true;
+            }
+        }
+        if(ok){
+            clist->setData(index, Qt::Checked, Qt::CheckStateRole);
+        }
+        else{
+            QMessageBox::warning(this, tr("Numero massimo raggiunto"),
+                                 tr("E' stato raggiunto il numero massimo di giocatori (%1) "
+                                    "o allenatori (%2) consentiti a referto").arg(maxGiocatori, maxAllenatori));
+        }
     }
-    emit update();
+
+}
+
+void PartitaPage::sort(){
+    if(nomeButton->isChecked()){
+        for(int i=0; i<squadre->size(); ++i){
+            squadre->at(i)->sortByName();
+        }
+    }
+    else if(numeroButton->isChecked()){
+        for(int i=0; i<squadre->size(); ++i){
+            squadre->at(i)->sortByNumber();
+        }
+    }
+
+    updateList();
 }

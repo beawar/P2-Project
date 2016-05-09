@@ -28,7 +28,6 @@ signals:
 
 public slots:
     void exportPng();
-    void newPartita();
 };
 
 #endif // TABS_H

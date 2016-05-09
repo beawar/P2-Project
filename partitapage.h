@@ -9,6 +9,7 @@
 #include <QGroupBox>
 #include <QSpinBox>
 #include <QLabel>
+#include <QRadioButton>
 #include "checklist.h"
 #include "squadremodel.h"
 #include "arbitrimodel.h"
@@ -18,8 +19,11 @@ class PartitaPage : public QWizardPage
 {
     Q_OBJECT
 private:
+    enum {maxGiocatori = 14, maxAllenatori = 2};
     void createView();
     void createLayout();
+    Squadra* homeTeam() const;
+    Squadra* guestTeam() const;
 
     SquadreModel* squadre;
     ArbitriModel* arbitri;
@@ -29,6 +33,10 @@ private:
     QGroupBox* squadra1Group;
     QGroupBox* squadra2Group;
     QGroupBox* arbitriGroup;
+    QGroupBox* radioGroup;
+
+    QRadioButton* nomeButton;
+    QRadioButton* numeroButton;
 
     QComboBox* squadra1ComboBox;
     QComboBox* squadra2ComboBox;
@@ -44,9 +52,15 @@ private:
     CheckList* squadra1;
     CheckList* squadra2;
 
+    int s1GiocChecked;
+    int s1AllChecked;
+    int s2GiocChecked;
+    int s2AllChecked;
+
 private slots:
     void updateList();
     void checkItem(CheckList* clist, QModelIndex index);
+    void sort();
 
 public:
     explicit PartitaPage(SquadreModel* sm, ArbitriModel* am, QWidget *parent = 0);

@@ -7,7 +7,7 @@ CheckList::CheckList(Squadra *s, QObject *parent) :
 {
     if(squadra){
         for(int i=0; i<squadra->size(); ++i){
-            strList<<(squadra->at(i)->getInfo());
+            strList.push_back(squadra->at(i)->getInfo());
         }
     }
     setStringList(strList);
@@ -15,7 +15,7 @@ CheckList::CheckList(Squadra *s, QObject *parent) :
 
 Qt::ItemFlags CheckList::flags(const QModelIndex &index) const{
     if(index.isValid()){
-        return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemNeverHasChildren;
+        return Qt::ItemIsEnabled | Qt::ItemIsUserCheckable | Qt::ItemNeverHasChildren;
     }
 }
 
@@ -24,24 +24,32 @@ QVariant CheckList::data(const QModelIndex &index, int role) const{
         return QVariant();
     }
     else if(role == Qt::CheckStateRole){
-        return squadra->at(index.row())->isChecked();
+        return squadra->at(index.row())->isChecked() ?
+                    Qt::Checked : Qt::Unchecked;
     }
-    else{
-        return QStringListModel::data(index, role);
+    else if(role == Qt::DisplayRole){
+        if(index.row()<strList.size()){
+            return strList[index.row()];
+        }
     }
+    return QVariant();
 }
 
 bool CheckList::setData(const QModelIndex &index, const QVariant &value, int role){
-    if(!index.isValid() || role == Qt::CheckStateRole){
+    if(!index.isValid()){
         return false;
     }
-    else if(value == Qt::Checked){
-        squadra->at(index.row())->setChecked(true);
-        return true;
-    }
-    else if(value == Qt::Unchecked){
-        squadra->at(index.row())->setChecked(false);
-        return true;
+    else if(role == Qt::CheckStateRole){
+        if(value == Qt::Checked){
+            squadra->at(index.row())->setChecked(true);
+            emit dataChanged(index, index);
+            return true;
+        }
+        else if(value == Qt::Unchecked){
+            squadra->at(index.row())->setChecked(false);
+            emit dataChanged(index, index);
+            return true;
+        }
     }
     else{
         return false;
@@ -57,6 +65,7 @@ void CheckList::createList(Squadra *s){
             strList.push_back(squadra->at(i)->getInfo());
         }
         setStringList(strList);
+
     }
 }
 

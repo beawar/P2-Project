@@ -14,7 +14,7 @@ LinePartita::LinePartita(Tesserato* t, QWidget *parent) :
 }
 
 void LinePartita::createButtons(){
-    ammoButton = new PushButton("./Images/giallo.png");
+    ammoButton = new PushButton(QIcon("./Images/giallo.png"));
     ammoButton->resize(100, 100);
     connect(ammoButton, SIGNAL(clicked()), this, SLOT(leftclickAmmo()));
     connect(ammoButton, SIGNAL(rightClicked()), this, SLOT(rightclickAmmo()));

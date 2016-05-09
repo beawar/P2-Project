@@ -70,5 +70,8 @@ void NewWizard::accept(){
                                                                         "informazioni immesse"), QMessageBox::Ok);
         }
     }
+    else{
+        close();
+    }
 }
 

@@ -23,9 +23,6 @@ QVariant SquadreModel::data(const QModelIndex &index, int role) const{
     if(role == Qt::DisplayRole){
         return squadra->getNome();
     }
-    else if(role == NomeRole){
-        return squadra->getNome();
-    }
     else if(role == SocietaRole){
         return squadra->getSocieta();
     }
@@ -43,6 +40,9 @@ QVariant SquadreModel::data(const QModelIndex &index, int role) const{
     }
     else if(role == PuntiRole){
         return squadra->getPunti();
+    }
+    else if(role == DifferenzaRetiRole){
+        return squadra->getDifferenzaReti();
     }
     else{
         return QVariant::Invalid;
@@ -125,11 +125,36 @@ Squadra& SquadreModel::operator [] (int i) const{
     return *(squadre[i]);
 }
 Squadra* SquadreModel::at(int i) const{
-    if(i>0 && i<=squadre.size()){
+    if(i>=0 && i<=squadre.size()){
         return squadre.at(i);
     }
     else{
         return 0;
+    }
+}
+
+void SquadreModel::sort(int column, Qt::SortOrder order){
+    if(column == PuntiRole && order == Qt::AscendingOrder){
+        for(int i=1; i<squadre.size(); ++i){
+            bool ordinato = false;
+            for(int j=i-1; j>=0 && !ordinato; --j){
+                Squadra* s1 = squadre.at(j+1);
+                Squadra* s2 = squadre.at(j);
+                if(s1->getPunti() > s2->getPunti()
+                        || (s1->getPunti() == s2->getPunti()
+                            && s1->getDifferenzaReti() > s2->getDifferenzaReti())
+                        || (s1->getPunti() == s2->getPunti()
+                            && s1->getDifferenzaReti() == s2->getDifferenzaReti()
+                            && s1->getTiriSegnati() > s2->getTiriSegnati())){
+                    Squadra* temp = s1;
+                    s1 = s2;
+                    s2 = temp;
+                }
+                else{
+                    ordinato = true;
+                }
+            }
+        }
     }
 }
 

@@ -12,7 +12,7 @@ private:
     QList<Squadra*> squadre;
 public:
     enum {NomeRole = Qt::UserRole+1, SocietaRole, VittorieRole,
-                      PareggiRole, SconfitteRole, PenalitaRole, PuntiRole};
+                      PareggiRole, SconfitteRole, PenalitaRole, PuntiRole, DifferenzaRetiRole};
 
     explicit SquadreModel(QObject *parent = 0);
 
@@ -30,6 +30,8 @@ public:
     bool isEmpty() const;
     Squadra& operator [](int) const;
     Squadra* at(int i) const;
+
+    void sort(int column = PuntiRole, Qt::SortOrder order = Qt::AscendingOrder);
 
     void clear();
 signals:

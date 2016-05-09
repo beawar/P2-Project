@@ -71,7 +71,9 @@ public:
     bool operator == (const Squadra&) const;
     void sortByName();
     void sortByNumber();
+
     void clear();
+    void clearAll();
 
     unsigned int size() const;
 };
