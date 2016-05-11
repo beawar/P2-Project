@@ -135,8 +135,11 @@ void MainWindow::showPartita(){
     Squadra* guest = newWizard->getGuestTeam();
     Arbitro* a1 = newWizard->getArbitro1();
     Arbitro* a2 = newWizard->getArbitro2();
+
     tabs = new Tabs(home, guest, a1, a2, this);
     exportAct->setEnabled(true);
+    connect(exportAct, SIGNAL(triggered()), tabs, SLOT(exportPng()));
+
     setCentralWidget(tabs);
 }
 
@@ -160,7 +163,6 @@ void MainWindow::createActions(){
     exportAct = new QAction(tr("Esporta"), this);
     exportAct->setShortcut(QKeySequence(tr("Ctrl+E")));
     exportAct->setEnabled(false);
-    connect(exportAct, SIGNAL(triggered()), tabs, SLOT(exportPng()));
 
     editAct = new QAction(tr("E&dita"), this);
     connect(editAct, SIGNAL(triggered()), this, SLOT(edit()));

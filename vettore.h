@@ -3,6 +3,9 @@
 
 #include "iterator.h"
 #include <stddef.h>
+
+#include <QTextStream>
+
 #define DEFAULT_DIMENSION 10
 
 template <class T>
@@ -55,6 +58,7 @@ public:
     const_iterator cbegin() const;
     const_iterator cend() const;
 
+    iterator copia(iterator from_pos, iterator from_to, iterator to_pos);
     iterator insert(iterator, const_reference);
     iterator insert(iterator, size_type, const_reference);
     iterator erase(iterator);
@@ -244,25 +248,61 @@ typename Vettore<T>::const_iterator Vettore<T>::cend() const{
     const_iterator iaux(&array[size()]);
     return iaux;
 }
+
+template <class T>
+typename Vettore<T>::iterator Vettore<T>::copia(iterator from_pos, iterator from_to, iterator to_pos){
+    while(from_pos != from_to){
+        *to_pos = *from_pos;
+        from_pos++;
+        to_pos++;
+    }
+    return to_pos;
+}
+
 template <class T>
 typename Vettore<T>::iterator Vettore<T>::insert(iterator it, const_reference x){
-    for(iterator i(&array[size()]); i>it; --i){
-        if(dim==size()){
-            array = ridimensiona(array, dim + DEFAULT_DIMENSION);
-            dim += DEFAULT_DIMENSION;
-        }
-        *i = *(--i);
+/*  T* aux = new T[dim+1];
+    iterator iaux;
+    iaux = copia(begin(), it, iaux);
+    if(*iaux != 0){
+        *iaux = x;
     }
-    *it=x;
-    return it;
+    else{
+
+    }
+    iterator r = iaux;
+    iaux = copia(it, end(), ++iaux);
+    delete [] array;
+    array = aux;
+    return r;
+
+
+    ----------------------------------------------
+    DA VEDERE NON FUNZIONA
+    ----------------------------------------------
+*/
 }
 
 template <class T>
 typename Vettore<T>::iterator Vettore<T>::insert(iterator it, size_type n, const_reference x){
-    for(int i=0; i<n; ++i){
-        it = insert(it, x);
+/*
+    T* aux = new T[dim+1];
+    iterator iaux = copia(begin(), it, iterator(aux));
+    iterator r = iaux;
+    while(n>0){
+        *iaux = x;
+        iaux++;
+        n--;
     }
-    return it;
+    iaux = copia(it, end(), iaux);
+    delete [] array;
+    array = aux;
+    dim++;
+    _size++;
+    return r;
+
+*/
+
 }
 
 template <class T>

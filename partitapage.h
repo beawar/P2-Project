@@ -59,7 +59,8 @@ private:
 
 private slots:
     void updateList();
-    void checkItem(CheckList* clist, QModelIndex index);
+    void checkItemS1(QModelIndex index);
+    void checkItemS2(QModelIndex index);
     void sort();
 
 public:

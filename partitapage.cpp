@@ -61,11 +61,13 @@ void PartitaPage::createView(){
 
     connect(squadra1ComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateList()));
     connect(squadra1, SIGNAL(dataChanged(QModelIndex,QModelIndex)), squadra1List, SLOT(update()));
-    connect(squadra1List, SIGNAL(clicked(QModelIndex)), this, SLOT(checkItem(CheckList*, QModelIndex)));
+    connect(squadra1, SIGNAL(dataChanged(QModelIndex,QModelIndex)), squadra2List, SLOT(update()));
+    //connect(squadra1List, SIGNAL(clicked(QModelIndex)), this, SLOT(checkItemS1(QModelIndex)));
 
     connect(squadra2ComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateList()));
     connect(squadra2, SIGNAL(dataChanged(QModelIndex,QModelIndex)), squadra2List, SLOT(update()));
-    connect(squadra2List, SIGNAL(clicked(QModelIndex)), this, SLOT(checkItem(CheckList*, QModelIndex)));
+    connect(squadra2, SIGNAL(dataChanged(QModelIndex,QModelIndex)), squadra1List, SLOT(update()));
+    //connect(squadra2List, SIGNAL(clicked(QModelIndex)), this, SLOT(checkItemS2(QModelIndex)));
 }
 
 void PartitaPage::createLayout(){
@@ -148,51 +150,29 @@ void PartitaPage::updateList(){
     }
 }
 
-void PartitaPage::checkItem(CheckList* clist, QModelIndex index){
-    bool ischeck = clist->data(index, Qt::CheckStateRole).toBool();
+void PartitaPage::checkItemS1(QModelIndex index){
+    bool ischeck = squadra1->data(index, Qt::CheckStateRole).toBool();
     if(ischeck){
-        if(clist == squadra1){
             if(dynamic_cast<Giocatore*>(homeTeam()->at(index.row()))){
                 s1GiocChecked--;
             }
             else if(dynamic_cast<Allenatore*>(homeTeam()->at(index.row()))){
                 s1AllChecked--;
-            }
-        }
-        else if(clist == squadra2){
-            if(dynamic_cast<Giocatore*>(guestTeam()->at(index.row()))){
-                s2GiocChecked--;
-            }
-            else if(dynamic_cast<Allenatore*>(guestTeam()->at(index.row()))){
-                s2AllChecked--;
-            }
-        }
-        clist->setData(index, Qt::Unchecked, Qt::CheckStateRole);
+            }   
+        squadra1->setData(index, Qt::Unchecked, Qt::CheckStateRole);
     }
     else{
         bool ok = false;
-        if(clist == squadra1){
-            if(dynamic_cast<Giocatore*>(homeTeam()->at(index.row())) && s1GiocChecked<maxGiocatori){
-                s1GiocChecked++;
-                ok = true;
-            }
-            else if(dynamic_cast<Allenatore*>(homeTeam()->at(index.row())) && s1AllChecked<maxAllenatori){
-                s1AllChecked++;
-                ok = true;
-            }
+        if(dynamic_cast<Giocatore*>(homeTeam()->at(index.row())) && s1GiocChecked<maxGiocatori){
+            s1GiocChecked++;
+            ok = true;
         }
-        else if(clist == squadra2){
-            if(dynamic_cast<Giocatore*>(guestTeam()->at(index.row())) && s2GiocChecked<maxGiocatori){
-                s2GiocChecked++;
-                ok = true;
-            }
-            else if(dynamic_cast<Allenatore*>(guestTeam()->at(index.row())) && s2AllChecked<maxAllenatori){
-                s2AllChecked++;
-                ok = true;
-            }
+        else if(dynamic_cast<Allenatore*>(homeTeam()->at(index.row())) && s1AllChecked<maxAllenatori){
+            s1AllChecked++;
+            ok = true;
         }
         if(ok){
-            clist->setData(index, Qt::Checked, Qt::CheckStateRole);
+            squadra1->setData(index, Qt::Checked, Qt::CheckStateRole);
         }
         else{
             QMessageBox::warning(this, tr("Numero massimo raggiunto"),
@@ -201,6 +181,38 @@ void PartitaPage::checkItem(CheckList* clist, QModelIndex index){
         }
     }
 
+}
+
+void PartitaPage::checkItemS2(QModelIndex index){
+    bool ischeck = squadra2->data(index, Qt::CheckStateRole).toBool();
+    if(ischeck){
+        if(dynamic_cast<Giocatore*>(guestTeam()->at(index.row()))){
+            s2GiocChecked--;
+        }
+        else if(dynamic_cast<Allenatore*>(guestTeam()->at(index.row()))){
+            s2AllChecked--;
+        }
+        squadra2->setData(index, Qt::Unchecked, Qt::CheckStateRole);
+    }
+    else{
+        bool ok = false;
+        if(dynamic_cast<Giocatore*>(guestTeam()->at(index.row())) && s2GiocChecked<maxGiocatori){
+            s2GiocChecked++;
+            ok = true;
+        }
+        else if(dynamic_cast<Allenatore*>(guestTeam()->at(index.row())) && s2AllChecked<maxAllenatori){
+            s2AllChecked++;
+            ok = true;
+        }
+        if(ok){
+            squadra2->setData(index, Qt::Checked, Qt::CheckStateRole);
+        }
+        else{
+            QMessageBox::warning(this, tr("Numero massimo raggiunto"),
+                                 tr("E' stato raggiunto il numero massimo di giocatori (%1) "
+                                    "o allenatori (%2) consentiti a referto").arg(maxGiocatori, maxAllenatori));
+        }
+    }
 }
 
 void PartitaPage::sort(){
