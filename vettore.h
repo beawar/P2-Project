@@ -281,6 +281,16 @@ typename Vettore<T>::iterator Vettore<T>::insert(iterator it, const_reference x)
     DA VEDERE NON FUNZIONA
     ----------------------------------------------
 */
+    iterator i = end()-1;
+    if(capacity() == size()){
+        array = ridimensiona(array, d+DEFAULT_DIMENSION);
+        dim += DEFAULT_DIMENSION;
+    }
+    for(; i>it; --i){
+        *(i++) = *i;
+    }
+    *i = x;
+    return i;
 }
 
 template <class T>
@@ -301,7 +311,11 @@ typename Vettore<T>::iterator Vettore<T>::insert(iterator it, size_type n, const
     _size++;
     return r;
 
-*/
+*/ 
+    for(int i=0; i<n; ++i){
+        it = insert(it, x);
+    }
+    return it;
 
 }
 
