@@ -225,10 +225,10 @@ void Squadra::sortByName(){
             if(!inserito){
                 giocatori.push_back(gioc);
             }
-            for(int i=0; i<giocatori.size(); ++i){
+            /*for(int i=0; i<giocatori.size(); ++i){
                 out<<"["<<i<<"] = "<<giocatori.at(i)->getCognome()<<" "<<giocatori.at(i)->getNome()
                   <<"pos = "<<giocatori.at(i)<<"\n";
-            }
+            }*/
         }
         else{
             Allenatore* all = dynamic_cast<Allenatore*>(*it);

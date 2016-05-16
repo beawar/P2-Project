@@ -12,6 +12,7 @@ template <class T>
 class Vettore
 {
     friend class Iterator<T>;
+
 private:
     typedef T value_type;
     typedef value_type& reference;
@@ -261,57 +262,21 @@ typename Vettore<T>::iterator Vettore<T>::copia(iterator from_pos, iterator from
 
 template <class T>
 typename Vettore<T>::iterator Vettore<T>::insert(iterator it, const_reference x){
-/*  T* aux = new T[dim+1];
-    iterator iaux;
-    iaux = copia(begin(), it, iaux);
-    if(*iaux != 0){
-        *iaux = x;
-    }
-    else{
-
-    }
-    iterator r = iaux;
-    iaux = copia(it, end(), ++iaux);
-    delete [] array;
-    array = aux;
-    return r;
-
-
-    ----------------------------------------------
-    DA VEDERE NON FUNZIONA
-    ----------------------------------------------
-*/
-    iterator i = end()-1;
     if(capacity() == size()){
-        array = ridimensiona(array, d+DEFAULT_DIMENSION);
+        array = ridimensiona(array, dim+DEFAULT_DIMENSION);
         dim += DEFAULT_DIMENSION;
     }
-    for(; i>it; --i){
-        *(i++) = *i;
+    for(iterator i=end(); i>it; --i){
+        iterator j = i-1;
+        *i = *j;
     }
-    *i = x;
-    return i;
+    *it = x;
+    _size++;
+    return it;
 }
 
 template <class T>
 typename Vettore<T>::iterator Vettore<T>::insert(iterator it, size_type n, const_reference x){
-/*
-    T* aux = new T[dim+1];
-    iterator iaux = copia(begin(), it, iterator(aux));
-    iterator r = iaux;
-    while(n>0){
-        *iaux = x;
-        iaux++;
-        n--;
-    }
-    iaux = copia(it, end(), iaux);
-    delete [] array;
-    array = aux;
-    dim++;
-    _size++;
-    return r;
-
-*/ 
     for(int i=0; i<n; ++i){
         it = insert(it, x);
     }
@@ -356,7 +321,7 @@ void Vettore<T>::clear(){
 
 template <class T>
 void Vettore<T>::push_back(const_reference t){
-    if(dim == size()){
+    if(capacity() == size()){
         array = ridimensiona(array, dim + DEFAULT_DIMENSION);
         dim += DEFAULT_DIMENSION;
     }
