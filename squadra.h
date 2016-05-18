@@ -44,8 +44,7 @@ public:
     void addPareggio(const int& =1);
     void addSconfitta(const int& =1);
 
-    void addPenalita(const unsigned int&);
-    void removePenalita (const unsigned int&);
+    void addPenalita(const int&);
     int getPenalita() const;
 
     int getPunti() const;
@@ -62,8 +61,10 @@ public:
     int getDifferenzaReti() const;
 
     void addTesserato (Tesserato*) throw(Err_Tesserato);
-    void changeTesserato(Tesserato*, const Tesserato&);
-    void removeTesserato(Tesserato &);
+    void modificaTesserato(Tesserato*, const Tesserato&);
+    void removeTesserato(Tesserato*);
+
+    void modifica(const Squadra&);
 
     Tesserato* trova(Tesserato &) const;
     Tesserato* at (int) const;

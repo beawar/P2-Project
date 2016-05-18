@@ -55,6 +55,15 @@ void ArbitriModel::addArbitro(Arbitro *a){
     arbitri.push_back(a);
 }
 
+void ArbitriModel::modificaArbitro(Arbitro *vecchio, const Arbitro &nuovo) const{
+    vecchio->modifica(nuovo);
+}
+
+void ArbitriModel::removeArbitro(Arbitro *a){
+    arbitri.removeAll(a);
+    delete a;
+}
+
 unsigned int ArbitriModel::size() const{
     return arbitri.size();
 }

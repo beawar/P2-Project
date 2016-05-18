@@ -8,7 +8,7 @@ PersonaPage::PersonaPage(SquadreModel *sm, ArbitriModel* am, QWidget *parent)
     createEditor();
     createLayout();
 
-    emit changeEditor();
+    changeEditor();
 
     setLayout(layout);
 }

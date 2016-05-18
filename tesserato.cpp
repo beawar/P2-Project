@@ -29,6 +29,20 @@ void Tesserato::setAnno(const QDate &a){
   annoNascita=a;
 }
 
+void Tesserato::modifica(const Tesserato &t){
+    if(*this != t){
+        if(nome != t.nome){
+            setNome(t.nome);
+        }
+        if(cognome != t.cognome){
+            setCognome(t.cognome);
+        }
+        if(annoNascita != t.annoNascita){
+            setAnno(t.annoNascita);
+        }
+    }
+}
+
 bool Tesserato::operator ==(const Tesserato& t) const{
     return nome==t.nome && cognome==t.cognome && annoNascita==t.annoNascita;
 }

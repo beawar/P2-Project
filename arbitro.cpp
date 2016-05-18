@@ -3,6 +3,28 @@
 Arbitro::Arbitro(const QString& n, const QString& c, const QDate& d, const unsigned int &l)
     :Tesserato(n, c, d), livello(l), partiteRegionali(0), partiteNazionali(0), partiteInternaz(0) {}
 
+void Arbitro::modifica(const Arbitro&a){
+    if(*this != a){
+        Tesserato::modifica(a);
+        if(livello != a.livello){
+            setLivello(a.livello);
+        }
+        if(partiteRegionali != a.partiteRegionali){
+            addPRegionale(a.partiteRegionali);
+            aumentaLivello();
+        }
+        if(partiteNazionali != a.partiteNazionali){
+            addPNazionale(a.partiteNazionali);
+            aumentaLivello();
+        }
+        if(partiteInternaz != a.partiteInternaz){
+            addPInternaz(a.partiteInternaz);
+            aumentaLivello();
+        }
+
+    }
+}
+
 unsigned int Arbitro::getLivello() const{
     return livello;
 }
@@ -63,5 +85,3 @@ void Arbitro::aumentaLivello(){
         livello = 0;
     }
 }
-
-void Arbitro::clear() {}

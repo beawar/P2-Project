@@ -5,6 +5,8 @@ unsigned int Allenatore::max2Minuti = 1;
 Allenatore::Allenatore(const QString& n, const QString& c, const QDate& d)
     :Tesserato(n, c, d), ammonizione(false), dueMinuti(false), esclusione(false){}
 
+
+
 bool Allenatore::isAmmonito() const{
     return isAmmonito();
 }
@@ -16,7 +18,6 @@ int Allenatore::get2Minuti() const{
 bool Allenatore::isEscluso() const{
     return esclusione;
 }
-
 
 void Allenatore::ammonito(const bool& add) throw(Err_Ammonizione){
     if(add){

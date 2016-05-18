@@ -6,7 +6,7 @@
 #include <QGridLayout>
 
 MainWindow::MainWindow(QWidget *parent) :
-  QMainWindow(parent), tabs(0), fileOpen(tr("Senza Titolo")),  xml(&squadre, &arbitri)
+  QMainWindow(parent), tabs(0), editor(0), fileOpen(""),  xml(&squadre, &arbitri)
 {
     widget = new QWidget;
     setCentralWidget(widget);
@@ -59,6 +59,8 @@ void MainWindow::open(){
             xml.readFile(fileName);
             fileOpen = fileName;
             creaClassifica();
+            editor = new Editor(&squadre, &arbitri, this);
+            editAct->setEnabled(true);
         }
         catch(Err_Open e){
             QMessageBox::critical(this, tr("Errore!"), tr("Si è verificato un errore nell'apertura del file"), QMessageBox::Ok);
@@ -85,6 +87,7 @@ void MainWindow::save(){
             file.close();
         }
         else{
+            saveAs();
         }
     }
 }
@@ -115,7 +118,7 @@ void MainWindow::exportPng(){
 
 
 void MainWindow::edit(){
-
+    editor->show();
 }
 
 void MainWindow::about(){
@@ -165,6 +168,7 @@ void MainWindow::createActions(){
     exportAct->setEnabled(false);
 
     editAct = new QAction(tr("E&dita"), this);
+    editAct->setEnabled(false);
     connect(editAct, SIGNAL(triggered()), this, SLOT(edit()));
 
     exitAct = new QAction(tr("&Esci"), this);
@@ -214,7 +218,6 @@ void MainWindow::creaClassifica(){
     header[5] = new QLabel(tr("S")); //Sconfitte
     header[6] = new QLabel(tr("Pen")); //Penalità
     header[7] = new QLabel(tr("DR")); //Differenza Reti
-
 
     squadre.sort();
 

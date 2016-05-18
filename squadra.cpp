@@ -54,12 +54,8 @@ void Squadra::addSconfitta(const int & x){
     sconfitte+x <0 ? sconfitte=0 : sconfitte+=x;
 }
 
-void Squadra::addPenalita(const unsigned int & x){
-    penalita+=x;
-}
-
-void Squadra::removePenalita(const unsigned int & x){
-    penalita-=x;
+void Squadra::addPenalita(const int & x){
+     penalita+x <0 ? penalita=0 : penalita+=x;
 }
 
 int Squadra::getPenalita() const{
@@ -164,15 +160,26 @@ void Squadra::addTesserato(Tesserato *t) throw(Err_Tesserato){
     }
 }
 
-void Squadra::changeTesserato(Tesserato* cur, const Tesserato & n){
-    Tesserato* nuovo = const_cast<Tesserato*>(&n);
-    delete cur;
-    cur = nuovo;
+void Squadra::modificaTesserato(Tesserato* cur, const Tesserato& nuovo){
+    cur->modifica(nuovo);
 }
 
-void Squadra::removeTesserato(Tesserato& t){
-    if(trova(t)){
-        tesserati.erase(&t);
+void Squadra::removeTesserato(Tesserato* t){
+    if(trova(*t)){
+        tesserati.erase(t);
+        delete t;
+    }
+}
+
+void Squadra::modifica(const Squadra& s){
+    if(nome != s.nome){
+        setNome(s.nome);
+    }
+    if(societa != s.societa){
+        setSocieta(s.societa);
+    }
+    if(penalita != s.penalita){
+        addPenalita(s.penalita);
     }
 }
 

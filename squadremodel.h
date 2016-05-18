@@ -19,12 +19,15 @@ public:
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole ) const;
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+    QVariant headerData(int section, Qt::Orientation orientation = Qt::Horizontal, int role = Qt::DisplayRole) const;
 
     Squadra* trova(const Squadra& s) const;
     void addSquadra(Squadra *);
-    void addTesserato(Tesserato *, const Squadra&);
-    bool modificaTesserato(const Squadra& , Tesserato *, const Tesserato&);
+    void modificaSquadra(Squadra*, const Squadra&) const;
+    void removeSquadra(Squadra*);
+
+    void addTesserato(Tesserato *, const Squadra&) const;
+    void modificaTesserato(const Squadra& , Tesserato *, const Tesserato&) const;
 
     unsigned int size() const;
     bool isEmpty() const;

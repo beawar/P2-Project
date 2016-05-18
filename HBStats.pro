@@ -34,7 +34,8 @@ SOURCES += main.cpp \
     checklist.cpp \
     partita.cpp \
     linepartita.cpp \
-    pushbutton.cpp
+    pushbutton.cpp \
+    editor.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -61,7 +62,8 @@ HEADERS  += \
     checklist.h \
     partita.h \
     linepartita.h \
-    pushbutton.h
+    pushbutton.h \
+    editor.h
 
 FORMS    +=
 

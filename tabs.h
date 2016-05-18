@@ -16,6 +16,9 @@ private:
     Arbitro* a1;
     Arbitro* a2;
 
+    QString pngOpen1;
+    QString pngOpen2;
+
     Stat* statTeam1;
     Stat* statTeam2;
     Partita* partita;

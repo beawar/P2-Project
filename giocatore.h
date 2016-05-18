@@ -39,6 +39,8 @@ public:
     void set2Minuti (int =1) throw (Err_DueMinuti);
     void escluso (const bool& =true) throw (Err_Esclusione);
 
+    virtual void modifica(const Giocatore&);
+
     virtual bool operator ==(const Giocatore&) const;
     virtual bool operator !=(const Giocatore&) const;
     virtual bool operator <(const Giocatore&) const;

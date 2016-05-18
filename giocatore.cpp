@@ -87,6 +87,15 @@ void Giocatore::escluso(const bool& add) throw(Err_Esclusione){
     }
 }
 
+void Giocatore::modifica(const Giocatore &g){
+    if(*this != g){
+        Tesserato::modifica(g);
+        if(numero != g.numero){
+            setNumero(g.numero);
+        }
+    }
+}
+
 bool Giocatore::operator ==(const Giocatore& t) const{
     return Tesserato::operator ==(t) && numero==t.numero;
 }

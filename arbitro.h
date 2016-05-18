@@ -15,6 +15,8 @@ private:
 public:
     Arbitro(const QString& ="", const QString& ="", const QDate& =QDate::currentDate(), const unsigned int& = 0);
 
+    virtual void modifica(const Arbitro&);
+
     unsigned int getLivello () const;
 
     void setLivello (const unsigned int &);
@@ -24,7 +26,7 @@ public:
 
     unsigned int getPartite() const;
 
-    void clear();
+    virtual void clear(){}
 
 };
 

@@ -60,8 +60,8 @@ public:
     const_iterator cend() const;
 
     iterator copia(iterator from_pos, iterator from_to, iterator to_pos);
-    iterator insert(iterator, const_reference);
-    iterator insert(iterator, size_type, const_reference);
+    iterator insert(iterator, value_type);
+    iterator insert(iterator, size_type, value_type);
     iterator erase(iterator);
     iterator erase(iterator, iterator);
     void erase (const_reference);
@@ -261,7 +261,8 @@ typename Vettore<T>::iterator Vettore<T>::copia(iterator from_pos, iterator from
 }
 
 template <class T>
-typename Vettore<T>::iterator Vettore<T>::insert(iterator it, const_reference x){
+typename Vettore<T>::iterator Vettore<T>::insert(iterator it, value_type x){
+    /*
     if(capacity() == size()){
         array = ridimensiona(array, dim+DEFAULT_DIMENSION);
         dim += DEFAULT_DIMENSION;
@@ -273,10 +274,20 @@ typename Vettore<T>::iterator Vettore<T>::insert(iterator it, const_reference x)
     *it = x;
     _size++;
     return it;
+    */
+    iterator i = it;
+    value_type a = *it;
+    while(it!=end()){
+        a = *it;
+        *it = x;
+        x = a;
+        it++;
+    }
+    return i;
 }
 
 template <class T>
-typename Vettore<T>::iterator Vettore<T>::insert(iterator it, size_type n, const_reference x){
+typename Vettore<T>::iterator Vettore<T>::insert(iterator it, size_type n, value_type x){
     for(int i=0; i<n; ++i){
         it = insert(it, x);
     }

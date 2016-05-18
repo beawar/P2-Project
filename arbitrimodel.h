@@ -21,6 +21,9 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
     void addArbitro(Arbitro* a);
+    void modificaArbitro(Arbitro* vecchio, const Arbitro& nuovo) const;
+    void removeArbitro(Arbitro*);
+
     unsigned int size() const;
     Arbitro* trova(const Arbitro&) const;
     Arbitro* at(int i) const;

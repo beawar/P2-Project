@@ -66,6 +66,8 @@ QVariant SquadreModel::headerData(int section, Qt::Orientation orientation, int 
                 return tr("Pt");
             case 6:
                 return tr("Pen");
+            case 7:
+                return tr("DR");
             default:
                 return "";
         }
@@ -94,8 +96,17 @@ void SquadreModel::addSquadra(Squadra* s){
     }
 }
 
-void SquadreModel::addTesserato(Tesserato* t, const Squadra& s){
-    for(QList<Squadra*>::iterator it = squadre.begin(); it!=squadre.end(); ++it){
+void SquadreModel::modificaSquadra(Squadra *vecchia, const Squadra &nuova) const{
+    vecchia->modifica(nuova);
+}
+
+void SquadreModel::removeSquadra(Squadra *s){
+    squadre.removeAll(s);
+    delete s;
+}
+
+void SquadreModel::addTesserato(Tesserato* t, const Squadra& s) const{
+    for(QList<Squadra*>::const_iterator it = squadre.cbegin(); it!=squadre.cend(); ++it){
         if((*it)->getNome() == s.getNome()){
             (*it)->addTesserato(t);
 
@@ -103,14 +114,12 @@ void SquadreModel::addTesserato(Tesserato* t, const Squadra& s){
     }
 }
 
-bool SquadreModel::modificaTesserato(const Squadra& squadra, Tesserato* vecchio,  const Tesserato & nuovo){
-    for(QList<Squadra*>::iterator it=squadre.begin(); it!=squadre.end(); ++it){
+void SquadreModel::modificaTesserato(const Squadra& squadra, Tesserato* vecchio,  const Tesserato & nuovo) const{
+    for(QList<Squadra*>::const_iterator it=squadre.cbegin(); it!=squadre.cend(); ++it){
         if(**it == squadra && (*it)->trova(*vecchio)){
-            (*it)->changeTesserato(vecchio, nuovo);
-            return true;
+            (*it)->modificaTesserato(vecchio, nuovo);
         }
     }
-    return false;
 }
 
 unsigned int SquadreModel::size() const{

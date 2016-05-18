@@ -40,8 +40,8 @@ void PartitaPage::createView(){
     arbitro2ComboBox = new QComboBox;
     arbitro2ComboBox->setModel(arbitri);
 
-    squadra1 = new CheckList(squadre->at(squadra1ComboBox->currentIndex()), this);
-    squadra2 = new CheckList(squadre->at(squadra2ComboBox->currentIndex()), this);
+    squadra1 = new CheckList(squadre->at(squadra1ComboBox->currentIndex()), true, this);
+    squadra2 = new CheckList(squadre->at(squadra2ComboBox->currentIndex()), true, this);
 
     squadra1List = new QListView;
     squadra1List->setModel(squadra1);
@@ -60,14 +60,14 @@ void PartitaPage::createView(){
     connect(numeroButton, SIGNAL(clicked()), this, SLOT(sort()));
 
     connect(squadra1ComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateList()));
+    connect(squadra1List, SIGNAL(clicked(QModelIndex)), this, SLOT(checkItemS1(QModelIndex)));
     connect(squadra1, SIGNAL(dataChanged(QModelIndex,QModelIndex)), squadra1List, SLOT(update()));
     connect(squadra1, SIGNAL(dataChanged(QModelIndex,QModelIndex)), squadra2List, SLOT(update()));
-    //connect(squadra1List, SIGNAL(clicked(QModelIndex)), this, SLOT(checkItemS1(QModelIndex)));
 
     connect(squadra2ComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateList()));
     connect(squadra2, SIGNAL(dataChanged(QModelIndex,QModelIndex)), squadra2List, SLOT(update()));
     connect(squadra2, SIGNAL(dataChanged(QModelIndex,QModelIndex)), squadra1List, SLOT(update()));
-    //connect(squadra2List, SIGNAL(clicked(QModelIndex)), this, SLOT(checkItemS2(QModelIndex)));
+
 }
 
 void PartitaPage::createLayout(){

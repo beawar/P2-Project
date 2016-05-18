@@ -2,12 +2,15 @@
 #include <QVBoxLayout>
 #include "squadremodel.h"
 
-CheckList::CheckList(Squadra *s, QObject *parent) :
-    QStringListModel(parent), squadra(s)
+CheckList::CheckList(Squadra *s, bool checkable, QObject *parent) :
+    QStringListModel(parent), squadra(s), checkableItems(checkable)
 {
     if(squadra){
         for(int i=0; i<squadra->size(); ++i){
             strList.push_back(squadra->at(i)->getInfo());
+            if(dynamic_cast<Portiere*>(squadra->at(i))){
+                strList.push_back(tr(" (P)"));
+            }
         }
     }
     setStringList(strList);
@@ -15,7 +18,12 @@ CheckList::CheckList(Squadra *s, QObject *parent) :
 
 Qt::ItemFlags CheckList::flags(const QModelIndex &index) const{
     if(index.isValid()){
-        return Qt::ItemIsEnabled | Qt::ItemIsUserCheckable | Qt::ItemNeverHasChildren;
+        if(itemsAreCheckable()){
+            return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemNeverHasChildren;
+        }
+        else{
+            return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemNeverHasChildren;
+        }
     }
 }
 
@@ -23,7 +31,7 @@ QVariant CheckList::data(const QModelIndex &index, int role) const{
     if(!index.isValid()){
         return QVariant();
     }
-    else if(role == Qt::CheckStateRole){
+    else if(itemsAreCheckable() && role == Qt::CheckStateRole){
         return squadra->at(index.row())->isChecked() ?
                     Qt::Checked : Qt::Unchecked;
     }
@@ -39,7 +47,7 @@ bool CheckList::setData(const QModelIndex &index, const QVariant &value, int rol
     if(!index.isValid()){
         return false;
     }
-    else if(role == Qt::CheckStateRole){
+    else if(itemsAreCheckable() && role == Qt::CheckStateRole){
         if(value == Qt::Checked){
             squadra->at(index.row())->setChecked(true);
             emit dataChanged(index, index);
@@ -69,3 +77,6 @@ void CheckList::createList(Squadra *s){
     }
 }
 
+bool CheckList::itemsAreCheckable() const{
+    return checkableItems;
+}

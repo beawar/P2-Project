@@ -14,6 +14,7 @@
 #include "arbitrimodel.h"
 #include "xmlhandler.h"
 #include "tabs.h"
+#include "editor.h"
 
 class MainWindow : public QMainWindow
 {
@@ -30,6 +31,7 @@ private:
     QMenu* helpMenu;
 
     Tabs* tabs;
+    Editor* editor;
 
     QAction* newAct;
     QAction* openAct;

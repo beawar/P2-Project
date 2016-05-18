@@ -29,6 +29,8 @@ public:
   void setCognome(const QString&);
   void setAnno(const QDate&);
 
+  virtual void modifica(const Tesserato&);
+
   virtual bool operator ==(const Tesserato&) const;
   virtual bool operator !=(const Tesserato&) const;
   virtual bool operator <(const Tesserato&) const;
