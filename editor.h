@@ -40,9 +40,9 @@ private:
     QGroupBox* radioGroup;
     QButtonGroup* radioButtonGroup;
 
-    QPushButton* insertButton;
+    /*QPushButton* insertButton;
     QPushButton* removeButton;
-    QPushButton* okButton;
+    QPushButton* okButton;*/
 
     QLabel* squadraLabel;
     QComboBox* squadreComboBox;
@@ -74,9 +74,11 @@ private:
 
     QVBoxLayout* mainLayout;
     QHBoxLayout* pushLayout;
-    QHBoxLayout* tesseratoLayout;
-    QHBoxLayout* squadraLayout;
-    QHBoxLayout* arbitroLayout;
+    QWidget* tesseratoWidget;
+    QWidget* squadraWidget;
+    QWidget* arbitroWidget;
+
+    QWidget* mainWidget;
 
 public:
     explicit Editor(SquadreModel* sm, ArbitriModel* am, QWidget *parent = 0);
