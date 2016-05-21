@@ -289,6 +289,7 @@ void Editor::updateLayout(){
     switch (radioButtonGroup->checkedId()) {
         case id_tesserato:
             layouts->setCurrentWidget(tesseratoWidget);
+            itemSelected(listView->currentIndex());
             break;
         case id_squadra:
             layouts->setCurrentWidget(squadraWidget);
@@ -300,7 +301,6 @@ void Editor::updateLayout(){
 
             break;
     }
-    itemSelected(listView->currentIndex());
     updateList(squadreComboBox->currentIndex());
 }
 
