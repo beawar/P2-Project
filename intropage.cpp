@@ -4,7 +4,7 @@
 IntroPage::IntroPage(SquadreModel* sm, ArbitriModel *am, QWidget *parent) :
     QWizardPage(parent), squadre(sm), arbitri(am)
 {
-    helpLabel = new QLabel(tr("Crea un nuovo giocatore, allenatore o arbitro"));
+    helpLabel = new QLabel(tr("Crea un nuovo giocatore, allenatore o arbitro"), this);
     helpLabel->setWordWrap(true);
     createButtons();
     createLayouts();
@@ -31,17 +31,17 @@ void IntroPage::setLabelText(){
 }
 
 void IntroPage::createButtons(){
-    personaRadioButton = new QRadioButton(tr("Persona"));
+    personaRadioButton = new QRadioButton(tr("Persona"), this);
     personaRadioButton->setChecked(true);
     connect(personaRadioButton, SIGNAL(clicked()), this, SLOT(setLabelText()));
 
-    squadraRadioButton = new QRadioButton(tr("Squadra"));
+    squadraRadioButton = new QRadioButton(tr("Squadra"), this);
     connect(squadraRadioButton, SIGNAL(clicked()), this, SLOT(setLabelText()));
 
-    partitaRadioButton = new QRadioButton(tr("Partita"));
+    partitaRadioButton = new QRadioButton(tr("Partita"), this);
     connect(partitaRadioButton, SIGNAL(clicked()), this, SLOT(setLabelText()));
 
-    radioButtonGroup = new QButtonGroup;
+    radioButtonGroup = new QButtonGroup(this);
     radioButtonGroup->addButton(personaRadioButton, persona);
     radioButtonGroup->addButton(squadraRadioButton, squadra);
     radioButtonGroup->addButton(partitaRadioButton, partita);
@@ -52,9 +52,9 @@ void IntroPage::createButtons(){
 }
 
 void IntroPage::createLayouts(){
-    mainGroup = new QGroupBox(tr("Crea nuovo:"));
+    mainGroup = new QGroupBox(tr("Crea nuovo:"), this);
 
-    QVBoxLayout* buttonsLayout = new QVBoxLayout;
+    QVBoxLayout* buttonsLayout = new QVBoxLayout();
     buttonsLayout->addWidget(personaRadioButton);
     buttonsLayout->addWidget(squadraRadioButton);
     buttonsLayout->addWidget(partitaRadioButton);
@@ -62,7 +62,7 @@ void IntroPage::createLayouts(){
 
     mainGroup->setLayout(buttonsLayout);
 
-    layout = new QVBoxLayout;
+    layout = new QVBoxLayout();
     layout->addWidget(mainGroup);
     layout->addWidget(helpLabel);
 

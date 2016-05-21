@@ -5,7 +5,7 @@ LineStat::LineStat(const Tesserato *t, QWidget *parent) :
     QWidget(parent), tess(t)
 {
     createLabels();
-    QHBoxLayout* hbLayout = new QHBoxLayout;
+    QHBoxLayout* hbLayout = new QHBoxLayout();
 
     hbLayout->addWidget(numero);
     hbLayout->addWidget(cognome);
@@ -20,21 +20,21 @@ LineStat::LineStat(const Tesserato *t, QWidget *parent) :
 }
 
 void LineStat::createLabels(){
-    cognome = new QLabel(tess->getCognome());
+    cognome = new QLabel(tess->getCognome(), this);
     cognome->setBaseSize(500, 100);
-    nome = new QLabel(tess->getNome());
+    nome = new QLabel(tess->getNome(), this);
     nome->setBaseSize(500, 100);
-    numero = new QLabel;
+    numero = new QLabel(this);
     numero->setBaseSize(100, 100);
-    ammo = new QLabel;
+    ammo = new QLabel(this);
     ammo->setBaseSize(100, 100);
-    dueMin = new QLabel;
+    dueMin = new QLabel(this);
     dueMin->setBaseSize(200, 100);
-    escl = new QLabel;
+    escl = new QLabel(this);
     escl->setBaseSize(100, 100);
-    reti = new QLabel;
+    reti = new QLabel(this);
     reti->setBaseSize(500, 100);
-    perc = new QLabel;
+    perc = new QLabel(this);
     perc->setBaseSize(200, 100);
     const Giocatore* g = dynamic_cast<const Giocatore*>(tess);
     if(g){

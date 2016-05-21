@@ -15,6 +15,7 @@ public:
                       PareggiRole, SconfitteRole, PenalitaRole, PuntiRole, DifferenzaRetiRole};
 
     explicit SquadreModel(QObject *parent = 0);
+    ~SquadreModel();
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;

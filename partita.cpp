@@ -4,11 +4,11 @@
 Partita::Partita(Squadra *home, Squadra *guest, Arbitro *a1, Arbitro *a2, QWidget *parent) :
     QWidget(parent), homeTeam(home), guestTeam(guest)
 {
-    mainLayout = new QVBoxLayout;
+    mainLayout = new QVBoxLayout();
 
-    QLabel* homeName = new QLabel(homeTeam->getNome());
+    QLabel* homeName = new QLabel(homeTeam->getNome(), this);
     homeName->setAlignment(Qt::AlignRight);
-    QLabel* guestName = new QLabel(guestTeam->getNome());
+    QLabel* guestName = new QLabel(guestTeam->getNome(), this);
     guestName->setAlignment(Qt::AlignLeft);
 
     QFont font;
@@ -17,11 +17,11 @@ Partita::Partita(Squadra *home, Squadra *guest, Arbitro *a1, Arbitro *a2, QWidge
     homeName->setFont(font);
     guestName->setFont(font);
 
-    punteggio = new QLabel(tr("%1 : %2").arg(homeTeam->getTiriSegnati()).arg(guestTeam->getTiriSegnati()));
+    punteggio = new QLabel(tr("%1 : %2").arg(homeTeam->getTiriSegnati()).arg(guestTeam->getTiriSegnati()), this);
     punteggio->setAlignment(Qt::AlignHCenter);
     punteggio->setFont(font);
 
-    QLabel* arbitriLabel = new QLabel(tr("Arbitri"));
+    QLabel* arbitriLabel = new QLabel(tr("Arbitri"), this);
     QFont corsivo;
     corsivo.setPointSize(20);
     corsivo.setItalic(true);
@@ -34,16 +34,16 @@ Partita::Partita(Squadra *home, Squadra *guest, Arbitro *a1, Arbitro *a2, QWidge
     createHomeLayout();
     createGuestLayout();
 
-    QHBoxLayout* goals = new QHBoxLayout;
+    QHBoxLayout* goals = new QHBoxLayout();
     goals->addWidget(homeName, 1);
     goals->addWidget(punteggio, 1);
     goals->addWidget(guestName);
 
-    QHBoxLayout* teams = new QHBoxLayout;
+    QHBoxLayout* teams = new QHBoxLayout();
     teams->addWidget(homeGroup);
     teams->addWidget(guestGroup);
 
-    QHBoxLayout* arbitriLayout = new QHBoxLayout;
+    QHBoxLayout* arbitriLayout = new QHBoxLayout();
     arbitriLayout->addWidget(arbitriLabel);
     arbitriLayout->addWidget(arbitro1);
     arbitriLayout->addWidget(arbitro2);
@@ -65,9 +65,9 @@ Squadra* Partita::getGuestTeam() const{
 }
 
 void Partita::createHomeLayout(){
-    homeGroup = new QGroupBox;
+    homeGroup = new QGroupBox(this);
 
-    QVBoxLayout* homeLayout = new QVBoxLayout;
+    QVBoxLayout* homeLayout = new QVBoxLayout();
 
     for(int i=0; i<homeTeam->size(); ++i){
         if(homeTeam->at(i)->isChecked()){
@@ -82,9 +82,9 @@ void Partita::createHomeLayout(){
 }
 
 void Partita::createGuestLayout(){
-    guestGroup = new QGroupBox;
+    guestGroup = new QGroupBox(this);
 
-    QVBoxLayout* guestLayout = new QVBoxLayout;
+    QVBoxLayout* guestLayout = new QVBoxLayout();
 
     for(int i=0; i<guestTeam->size(); ++i){
         if(guestTeam->at(i)->isChecked()){

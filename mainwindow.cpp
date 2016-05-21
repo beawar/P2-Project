@@ -8,10 +8,10 @@
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent), tabs(0), editor(0), fileOpen(""),  xml(&squadre, &arbitri)
 {
-    widget = new QWidget;
+    widget = new QWidget(this);
     setCentralWidget(widget);
 
-    QWidget* topFiller = new QWidget;
+    QWidget* topFiller = new QWidget(this);
     topFiller->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     QLabel* appLabel = new QLabel("Handball Stats by Beatrice Guerra");
@@ -21,10 +21,10 @@ MainWindow::MainWindow(QWidget *parent) :
     font.setBold(true);
     appLabel->setFont(font);
 
-    QWidget* bottomFiller = new QWidget;
+    QWidget* bottomFiller = new QWidget(this);
     bottomFiller->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    QVBoxLayout* layout = new QVBoxLayout;
+    QVBoxLayout* layout = new QVBoxLayout();
     layout->addWidget(topFiller);
     layout->addWidget(appLabel);
     layout->addWidget(bottomFiller);
@@ -202,39 +202,38 @@ void MainWindow::createMenus(){
 
 void MainWindow::creaClassifica(){
 
-    delete widget;
-    widget = new QWidget;
+    qDeleteAll(widget->children());
 
     QFont font;
     font.setBold(true);
     font.setPointSize(16);
 
     QLabel* header[8];
-    header[0] = new QLabel("N°");
-    header[1] = new QLabel(tr("Nome"));
-    header[2] = new QLabel(tr("Punti"));
-    header[3] = new QLabel(tr("V")); //Vittorie
-    header[4] = new QLabel(tr("P")); //Pareggi
-    header[5] = new QLabel(tr("S")); //Sconfitte
-    header[6] = new QLabel(tr("Pen")); //Penalità
-    header[7] = new QLabel(tr("DR")); //Differenza Reti
+    header[0] = new QLabel("N°", this);
+    header[1] = new QLabel(tr("Nome"), this);
+    header[2] = new QLabel(tr("Punti"), this);
+    header[3] = new QLabel(tr("V"), this); //Vittorie
+    header[4] = new QLabel(tr("P"), this); //Pareggi
+    header[5] = new QLabel(tr("S"), this); //Sconfitte
+    header[6] = new QLabel(tr("Pen"), this); //Penalità
+    header[7] = new QLabel(tr("DR"), this); //Differenza Reti
 
     squadre.sort();
 
     QLabel* teamsLabel[squadre.size()][8];
 
     for(int i=0; i<squadre.size(); ++i){
-        teamsLabel[i][0] = new QLabel(QString::number(i+1));
+        teamsLabel[i][0] = new QLabel(QString::number(i+1), this);
         teamsLabel[i][1] = new QLabel(squadre.at(i)->getNome());
-        teamsLabel[i][2] = new QLabel(QString::number(squadre.at(i)->getPunti()));
-        teamsLabel[i][3] = new QLabel(QString::number(squadre.at(i)->getVittorie()));
-        teamsLabel[i][4] = new QLabel(QString::number(squadre.at(i)->getPareggi()));
-        teamsLabel[i][5] = new QLabel(QString::number(squadre.at(i)->getSconfitte()));
-        teamsLabel[i][6] = new QLabel(QString::number(squadre.at(i)->getPenalita()));
-        teamsLabel[i][7] = new QLabel(QString::number(squadre.at(i)->getDifferenzaReti()));
+        teamsLabel[i][2] = new QLabel(QString::number(squadre.at(i)->getPunti()), this);
+        teamsLabel[i][3] = new QLabel(QString::number(squadre.at(i)->getVittorie()), this);
+        teamsLabel[i][4] = new QLabel(QString::number(squadre.at(i)->getPareggi()), this);
+        teamsLabel[i][5] = new QLabel(QString::number(squadre.at(i)->getSconfitte()), this);
+        teamsLabel[i][6] = new QLabel(QString::number(squadre.at(i)->getPenalita()), this);
+        teamsLabel[i][7] = new QLabel(QString::number(squadre.at(i)->getDifferenzaReti()), this);
     }
 
-    QGridLayout* classifica = new QGridLayout;
+    QGridLayout* classifica = new QGridLayout();
     for(int i=0; i<8; ++i){
         header[i]->setFont(font);
         header[i]->setAlignment(Qt::AlignHCenter);
@@ -251,18 +250,18 @@ void MainWindow::creaClassifica(){
         }
     }
 
-    QWidget* topFiller = new QWidget;
+    QWidget* topFiller = new QWidget(this);
     topFiller->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    QWidget* bottomFiller = new QWidget;
+    QWidget* bottomFiller = new QWidget(this);
     bottomFiller->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    QHBoxLayout* classificaLayout = new QHBoxLayout;
+    QHBoxLayout* classificaLayout = new QHBoxLayout();
     classificaLayout->addStretch(20);
     classificaLayout->addLayout(classifica);
     classificaLayout->addStretch(20);
 
-    QVBoxLayout* layout = new QVBoxLayout;
+    QVBoxLayout* layout = new QVBoxLayout();
     layout->addWidget(topFiller);
     layout->addLayout(classificaLayout);
     layout->addWidget(bottomFiller);
@@ -270,7 +269,4 @@ void MainWindow::creaClassifica(){
     classifica->setAlignment(layout, Qt::AlignHCenter);
 
     widget->setLayout(layout);
-    setCentralWidget(widget);
-
 }
-

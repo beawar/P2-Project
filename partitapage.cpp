@@ -10,7 +10,7 @@ PartitaPage::PartitaPage(SquadreModel *sm, ArbitriModel *am, QWidget *parent) :
     for(int i=0; i<squadre->size(); ++i){
         squadre->at(i)->sortByName();
     }
-    layout = new QVBoxLayout;
+    layout = new QVBoxLayout();
     createView();
     createLayout();
 
@@ -28,28 +28,28 @@ void PartitaPage::createView(){
     nomeButton->setChecked(true);
     numeroButton = new QRadioButton(tr("Numero"), this);
 
-    squadra1ComboBox = new QComboBox;
+    squadra1ComboBox = new QComboBox(this);
     squadra1ComboBox->setModel(squadre);
 
-    squadra2ComboBox = new QComboBox;
+    squadra2ComboBox = new QComboBox(this);
     squadra2ComboBox->setModel(squadre);
 
-    arbitro1ComboBox = new QComboBox;
+    arbitro1ComboBox = new QComboBox(this);
     arbitro1ComboBox->setModel(arbitri);
 
-    arbitro2ComboBox = new QComboBox;
+    arbitro2ComboBox = new QComboBox(this);
     arbitro2ComboBox->setModel(arbitri);
 
     squadra1 = new CheckList(squadre->at(squadra1ComboBox->currentIndex()), true, this);
     squadra2 = new CheckList(squadre->at(squadra2ComboBox->currentIndex()), true, this);
 
-    squadra1List = new QListView;
+    squadra1List = new QListView(this);
     squadra1List->setModel(squadra1);
 
-    squadra2List = new QListView;
+    squadra2List = new QListView(this);
     squadra2List->setModel(squadra2);
 
-    categoriaLabel = new QLabel(tr("Categoria: "));
+    categoriaLabel = new QLabel(tr("Categoria: "), this);
 
     categoria = new QComboBox(this);
     categoria->addItem(tr("Regionale"));
@@ -71,24 +71,24 @@ void PartitaPage::createView(){
 }
 
 void PartitaPage::createLayout(){
-    squadra1Group = new QGroupBox(tr("In Casa"));
-    squadra2Group = new QGroupBox(tr("Ospiti"));
-    arbitriGroup = new QGroupBox(tr("Arbitri"));
-    radioGroup = new QGroupBox(tr("Ordina per:"));
+    squadra1Group = new QGroupBox(tr("In Casa"), this);
+    squadra2Group = new QGroupBox(tr("Ospiti"), this);
+    arbitriGroup = new QGroupBox(tr("Arbitri"), this);
+    radioGroup = new QGroupBox(tr("Ordina per:"), this);
 
-    QVBoxLayout* squadra1Layout = new QVBoxLayout;
+    QVBoxLayout* squadra1Layout = new QVBoxLayout();
     squadra1Layout->addWidget(squadra1ComboBox);
     squadra1Layout->addWidget(squadra1List);
 
-    QVBoxLayout* squadra2Layout = new QVBoxLayout;
+    QVBoxLayout* squadra2Layout = new QVBoxLayout();
     squadra2Layout->addWidget(squadra2ComboBox);
     squadra2Layout->addWidget(squadra2List);
 
-    QHBoxLayout* arbitriLayout = new QHBoxLayout;
+    QHBoxLayout* arbitriLayout = new QHBoxLayout();
     arbitriLayout->addWidget(arbitro1ComboBox);
     arbitriLayout->addWidget(arbitro2ComboBox);
 
-    QVBoxLayout* radioLayout = new QVBoxLayout;
+    QVBoxLayout* radioLayout = new QVBoxLayout();
     radioLayout->addWidget(nomeButton);
     radioLayout->addWidget(numeroButton);
 
@@ -97,12 +97,12 @@ void PartitaPage::createLayout(){
     arbitriGroup->setLayout(arbitriLayout);
     radioGroup->setLayout(radioLayout);
 
-    QHBoxLayout* squadreLayout = new QHBoxLayout;
+    QHBoxLayout* squadreLayout = new QHBoxLayout();
     squadreLayout->addWidget(squadra1Group);
     squadreLayout->addWidget(radioGroup);
     squadreLayout->addWidget(squadra2Group);
 
-    QHBoxLayout* categoriaLayout = new QHBoxLayout;
+    QHBoxLayout* categoriaLayout = new QHBoxLayout();
     categoriaLayout->addWidget(categoriaLabel);
     categoriaLayout->addWidget(categoria);
 

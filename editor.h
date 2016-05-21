@@ -16,6 +16,7 @@
 #include <QLabel>
 #include <QSpinBox>
 #include <QDateEdit>
+#include <QStackedLayout>
 #include <QItemSelection>
 #include "arbitrimodel.h"
 #include "squadremodel.h"
@@ -40,9 +41,9 @@ private:
     QGroupBox* radioGroup;
     QButtonGroup* radioButtonGroup;
 
-    /*QPushButton* insertButton;
+    QPushButton* editButton;
     QPushButton* removeButton;
-    QPushButton* okButton;*/
+    QPushButton* okButton;
 
     QLabel* squadraLabel;
     QComboBox* squadreComboBox;
@@ -71,14 +72,12 @@ private:
     QLabel* livelloLabel;
     QSpinBox* livelloEdit;
 
-
+    QStackedLayout* layouts;
     QVBoxLayout* mainLayout;
     QHBoxLayout* pushLayout;
     QWidget* tesseratoWidget;
     QWidget* squadraWidget;
     QWidget* arbitroWidget;
-
-    QWidget* mainWidget;
 
 public:
     explicit Editor(SquadreModel* sm, ArbitriModel* am, QWidget *parent = 0);
@@ -96,7 +95,7 @@ private slots:
     void rimuoviArbitro();
     void updateList(int);
     void updateLayout();
-    void itemSelected(QModelIndex, QModelIndex);
+    void itemSelected(QModelIndex);
 
 public slots:
 

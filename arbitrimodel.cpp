@@ -97,3 +97,9 @@ bool ArbitriModel::isEmpty() const{
 void ArbitriModel::clear(){
     arbitri.clear();
 }
+
+ArbitriModel::~ArbitriModel(){
+    for(QList<Arbitro*>::iterator it = arbitri.begin(); it != arbitri.end(); it++){
+        delete *it;
+    }
+}

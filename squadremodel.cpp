@@ -101,6 +101,7 @@ void SquadreModel::modificaSquadra(Squadra *vecchia, const Squadra &nuova) const
 }
 
 void SquadreModel::removeSquadra(Squadra *s){
+    s->clearAll();
     squadre.removeAll(s);
     delete s;
 }
@@ -169,4 +170,10 @@ void SquadreModel::sort(int column, Qt::SortOrder order){
 
 void SquadreModel::clear(){
     squadre.clear();
+}
+
+SquadreModel::~SquadreModel(){
+    for(QList<Squadra*>::iterator it = squadre.begin(); it != squadre.end(); it++){
+        delete *it;
+    }
 }

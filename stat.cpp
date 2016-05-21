@@ -6,7 +6,7 @@ Stat::Stat(Squadra *s, QWidget *parent) :
 {
     createHeader();
 
-    QVBoxLayout* layout = new QVBoxLayout;
+    QVBoxLayout* layout = new QVBoxLayout();
     layout->addLayout(headerLayout);
 
     for(int i=0; i<squadra->size(); ++i){
@@ -18,23 +18,23 @@ Stat::Stat(Squadra *s, QWidget *parent) :
 }
 
 void Stat::createHeader(){
-    headerLayout = new QHBoxLayout;
+    headerLayout = new QHBoxLayout();
 
-    numero = new QLabel("N°");
+    numero = new QLabel("N°", this);
     numero->setBaseSize(100, 100);
-    cognome = new QLabel(tr("Cognome"));
+    cognome = new QLabel(tr("Cognome"), this);
     cognome->setBaseSize(500, 100);
-    nome = new QLabel(tr("Nome"));
+    nome = new QLabel(tr("Nome"), this);
     nome->setBaseSize(500, 100);
-    ammo = new QLabel("Amm.");
+    ammo = new QLabel("Amm.", this);
     ammo->setBaseSize(100, 100);
-    dueMin = new QLabel("2 Min.");
+    dueMin = new QLabel("2 Min.", this);
     dueMin->setBaseSize(200, 100);
-    escl = new QLabel("Escl.");
+    escl = new QLabel("Escl.", this);
     escl->setBaseSize(100, 100);
-    reti = new QLabel("Reti (Rigori)");
+    reti = new QLabel("Reti (Rigori)", this);
     reti->setBaseSize(500, 100);
-    perc = new QLabel("%");
+    perc = new QLabel("%", this);
     perc->setBaseSize(200, 100);
 
     headerLayout->addWidget(numero);

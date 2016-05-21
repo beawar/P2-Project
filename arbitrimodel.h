@@ -12,8 +12,8 @@ private:
     QList<Arbitro*> arbitri;
 public:
     enum {ArbitroRole = Qt::UserRole+1, NomeRole, CognomeRole, DataRole, LivelloRole};
-
     explicit ArbitriModel(QObject *parent = 0);
+    ~ArbitriModel();
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;

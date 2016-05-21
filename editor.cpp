@@ -8,21 +8,27 @@ Editor::Editor(SquadreModel*sm, ArbitriModel*am, QWidget *parent) :
     createSquadraEditor();
     createArbitroEditor();
 
-    mainWidget =
-    mainLayout = new QVBoxLayout(this);
+    layouts = new QStackedLayout();
+    layouts->addWidget(tesseratoWidget);
+    layouts->addWidget(squadraWidget);
+    layouts->addWidget(arbitroWidget);
+
+    QHBoxLayout* editorLayout = new QHBoxLayout;
+    editorLayout->addWidget(listView);
+    editorLayout->addLayout(layouts);
+
+    mainLayout = new QVBoxLayout();
     mainLayout->addWidget(radioGroup);
-    mainLayout->addWidget(tesseratoWidget);
-    mainLayout->addWidget(squadraWidget);
-    mainLayout->addWidget(arbitroWidget);
+    mainLayout->addLayout(editorLayout);
     mainLayout->addLayout(pushLayout);
-    pushLayout->setAlignment(mainLayout, Qt::AlignBottom);
+    pushLayout->setAlignment(mainLayout, Qt::AlignRight);
 
-
-    //updateLayout();
-
+    setLayout(mainLayout);
     setWindowTitle(tr("Editor"));
     setMinimumSize(sizeHint());
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    updateList(squadreComboBox->currentIndex());
 }
 
 void Editor::createMainEditor(){
@@ -37,28 +43,30 @@ void Editor::createMainEditor(){
     radioButtonGroup->addButton(arbitroRadio, id_arbitro);
     connect(radioButtonGroup, SIGNAL(buttonClicked(int)), this, SLOT(updateLayout()));
 
-    QPushButton* insertButton = new QPushButton(tr("Inserisci"), this);
-    QPushButton* removeButton = new QPushButton(tr("Elimina"), this);
-    QPushButton* okButton = new QPushButton(tr("Ok"), this);
+    editButton = new QPushButton(tr("Modifica"), this);
+    editButton->setEnabled(false);
+    removeButton = new QPushButton(tr("Elimina"), this);
+    removeButton->setEnabled(false);
+    okButton = new QPushButton(tr("Ok"), this);
 
-    connect(insertButton, SIGNAL(clicked()), this, SLOT(modifica()));
+    connect(editButton, SIGNAL(clicked()), this, SLOT(modifica()));
     connect(removeButton, SIGNAL(clicked()), this, SLOT(rimuovi()));
     connect(okButton, SIGNAL(clicked()), this, SLOT(close()));
 
     listView = new QListView(this);
-    connect(listView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-            this, SLOT(itemSelected(QModelIndex, QModelIndex)));
+    connect(listView, SIGNAL(clicked(QModelIndex)),this, SLOT(itemSelected(QModelIndex)));
+    connect(listView, SIGNAL(activated(QModelIndex)), this, SLOT(itemSelected(QModelIndex)));
 
-    QHBoxLayout* radioLayout = new QHBoxLayout(this);
-    radioLayout->addWidget(radioButtonGroup->button(id_tesserato));
-    radioLayout->addWidget(radioButtonGroup->button(id_squadra));
-    radioLayout->addWidget(radioButtonGroup->button(id_arbitro));
+    QHBoxLayout* radioLayout = new QHBoxLayout();
+    radioLayout->addWidget(tesseratoRadio);
+    radioLayout->addWidget(squadraRadio);
+    radioLayout->addWidget(arbitroRadio);
 
     radioGroup = new QGroupBox(tr("Scegli cosa modificare:"), this);
     radioGroup->setLayout(radioLayout);
 
-    pushLayout = new QHBoxLayout(this);
-    pushLayout->addWidget(insertButton);
+    pushLayout = new QHBoxLayout();
+    pushLayout->addWidget(editButton);
     pushLayout->addWidget(removeButton);
     pushLayout->addWidget(okButton);
 }
@@ -86,31 +94,20 @@ void Editor::createTesseratoEditor(){
     numeroEdit = new QSpinBox(this);
     numeroEdit->setRange(1, 99);
 
-    QGridLayout* gridTLayout = new QGridLayout(this);
-    gridTLayout->addWidget(nomeTLabel, 1, 1);
-    gridTLayout->addWidget(nomeTEdit, 1, 2, 1, 2);
-    gridTLayout->addWidget(cognomeTLabel, 2, 1);
-    gridTLayout->addWidget(cognomeTEdit, 2, 2, 1, 2);
-    gridTLayout->addWidget(dataTLabel, 3, 1);
-    gridTLayout->addWidget(dataTEdit, 3, 2);
-    gridTLayout->addWidget(numeroLabel, 4, 1);
-    gridTLayout->addWidget(numeroEdit, 4, 2);
-
-    QHBoxLayout* comboBoxLayout = new QHBoxLayout(this);
-    comboBoxLayout->addWidget(squadraLabel);
-    comboBoxLayout->addWidget(squadreComboBox);
-
-    QVBoxLayout* listaLayout = new QVBoxLayout(this);
-    listaLayout->addLayout(comboBoxLayout);
-    listaLayout->addWidget(listView);
-
-    QHBoxLayout* tesseratoLayout = new QHBoxLayout(this);
-    tesseratoLayout->addLayout(gridTLayout);
-    tesseratoLayout->addLayout(listaLayout);
+    QGridLayout* gridTLayout = new QGridLayout();
+    gridTLayout->addWidget(squadraLabel, 1, 1);
+    gridTLayout->addWidget(squadreComboBox, 1, 2);
+    gridTLayout->addWidget(nomeTLabel, 2, 1);
+    gridTLayout->addWidget(nomeTEdit, 2, 2);
+    gridTLayout->addWidget(cognomeTLabel, 3, 1);
+    gridTLayout->addWidget(cognomeTEdit, 3, 2);
+    gridTLayout->addWidget(dataTLabel, 4, 1);
+    gridTLayout->addWidget(dataTEdit, 4, 2);
+    gridTLayout->addWidget(numeroLabel, 5, 1);
+    gridTLayout->addWidget(numeroEdit, 5, 2);
 
     tesseratoWidget = new QWidget(this);
-    tesseratoWidget->setLayout(tesseratoLayout);
-    tesseratoWidget->setMaximumSize(tesseratoWidget->sizeHint());
+    tesseratoWidget->setLayout(gridTLayout);
 }
 
 void Editor::createSquadraEditor(){
@@ -122,25 +119,21 @@ void Editor::createSquadraEditor(){
     societaLabel->setAlignment(Qt::AlignLeft);
     societaEdit = new QLineEdit(this);
 
-    penalitaLabel = new QLabel(tr("Penalità;"), this);
+    penalitaLabel = new QLabel(tr("Penalità:"), this);
     penalitaLabel->setAlignment(Qt::AlignLeft);
     penalitaEdit = new QSpinBox(this);
     penalitaEdit->setRange(0, +99);
 
-    QGridLayout* gridSLayout = new QGridLayout(this);
+    QGridLayout* gridSLayout = new QGridLayout();
     gridSLayout->addWidget(nomeSLabel, 1, 1);
-    gridSLayout->addWidget(nomeSEdit, 1, 2, 1, 2);
+    gridSLayout->addWidget(nomeSEdit, 1, 2);
     gridSLayout->addWidget(societaLabel, 2, 1);
-    gridSLayout->addWidget(societaEdit, 2, 2, 1, 2);
+    gridSLayout->addWidget(societaEdit, 2, 2);
     gridSLayout->addWidget(penalitaLabel, 3, 1);
     gridSLayout->addWidget(penalitaEdit, 3, 2);
 
-    QHBoxLayout* squadraLayout = new QHBoxLayout(this);
-    squadraLayout->addWidget(listView);
-    squadraLayout->addLayout(gridSLayout);
-
     squadraWidget = new QWidget(this);
-    squadraWidget->setLayout(squadraLayout);
+    squadraWidget->setLayout(gridSLayout);
 }
 
 void Editor::createArbitroEditor(){
@@ -159,22 +152,18 @@ void Editor::createArbitroEditor(){
     livelloEdit = new QSpinBox(this);
     livelloEdit->setRange(0, 3);
 
-    QGridLayout* gridALayout = new QGridLayout(this);
+    QGridLayout* gridALayout = new QGridLayout();
     gridALayout->addWidget(nomeALabel, 1, 1);
-    gridALayout->addWidget(nomeAEdit, 1, 2, 1, 2);
+    gridALayout->addWidget(nomeAEdit, 1, 2);
     gridALayout->addWidget(cognomeALabel, 2, 1);
-    gridALayout->addWidget(cognomeAEdit, 2, 2, 1, 2);
+    gridALayout->addWidget(cognomeAEdit, 2, 2);
     gridALayout->addWidget(dataALabel, 3, 1);
     gridALayout->addWidget(dataAEdit, 3, 2);
     gridALayout->addWidget(livelloLabel, 4, 1);
     gridALayout->addWidget(livelloEdit, 4, 2);
 
-    QHBoxLayout* arbitroLayout = new QHBoxLayout(this);
-    arbitroLayout->addWidget(listView);
-    arbitroLayout->addLayout(gridALayout);
-
     arbitroWidget = new QWidget(this);
-    arbitroWidget->setLayout(arbitroLayout);
+    arbitroWidget->setLayout(gridALayout);
 
 }
 
@@ -201,6 +190,7 @@ void Editor::modificaTesserato(){
         Giocatore g;
         g.setNome(nomeTEdit->text());
         g.setCognome(cognomeTEdit->text());
+        g.setAnno(dataTEdit->date());
         g.setNumero(numeroEdit->value());
         squadra->modificaTesserato(gioc, g);
     }
@@ -210,6 +200,7 @@ void Editor::modificaTesserato(){
             Allenatore a;
             a.setNome(nomeTEdit->text());
             a.setCognome(cognomeTEdit->text());
+            a.setAnno(dataTEdit->date());
             squadra->modificaTesserato(all, a);
         }
     }
@@ -232,24 +223,27 @@ void Editor::modificaArbitro(){
     Arbitro a;
     a.setNome(nomeTEdit->text());
     a.setCognome(cognomeTEdit->text());
+    a.setAnno(dataAEdit->date());
     a.setLivello(livelloEdit->value());
     arbitri->modificaArbitro(arb, a);
     updateList(INT_MIN);
 }
 
 void Editor::rimuovi(){
-    switch(radioButtonGroup->checkedId()){
-        case id_tesserato:
-            rimuoviTesserato();
+    if(listView->selectionModel()->currentIndex().isValid()){
+        switch(radioButtonGroup->checkedId()){
+            case id_tesserato:
+                rimuoviTesserato();
             break;
-        case id_squadra:
-            rimuoviSquadra();
+            case id_squadra:
+                rimuoviSquadra();
             break;
-        case id_arbitro:
-            rimuoviArbitro();
+            case id_arbitro:
+                rimuoviArbitro();
             break;
-        default:
+            default:
             break;
+        }
     }
 }
 
@@ -294,33 +288,27 @@ void Editor::updateLayout(){
 
     switch (radioButtonGroup->checkedId()) {
         case id_tesserato:
-            tesseratoWidget->setVisible(true);
-            squadraWidget->hide();
-            arbitroWidget->hide();
+            layouts->setCurrentWidget(tesseratoWidget);
             break;
         case id_squadra:
-            tesseratoWidget->hide();
-            squadraWidget->setVisible(true);
-            arbitroWidget->hide();
+            layouts->setCurrentWidget(squadraWidget);
             break;
         case id_arbitro:
-            tesseratoWidget->hide();
-            squadraWidget->hide();
-            arbitroWidget->setVisible(true);
+           layouts->setCurrentWidget(arbitroWidget);
             break;
         default:
-            tesseratoWidget->hide();
-            squadraWidget->hide();
-            arbitroWidget->hide();
+
             break;
     }
+    itemSelected(listView->currentIndex());
     updateList(squadreComboBox->currentIndex());
 }
 
-void Editor::itemSelected(QModelIndex current, QModelIndex previous){
-    Q_UNUSED(previous);
+void Editor::itemSelected(QModelIndex current){
     if(!current.isValid()){
         switch (radioButtonGroup->checkedId()) {
+            editButton->setEnabled(false);
+            removeButton->setEnabled(false);
             case id_tesserato:
                 nomeTEdit->clear();
                 cognomeTEdit->clear();
@@ -343,6 +331,8 @@ void Editor::itemSelected(QModelIndex current, QModelIndex previous){
         }
     }
     else{
+        editButton->setEnabled(true);
+        removeButton->setEnabled(true);
         Squadra* squadra = squadre->at(squadreComboBox->currentIndex());
         switch(radioButtonGroup->checkedId()){
             case id_tesserato:
@@ -375,4 +365,5 @@ void Editor::itemSelected(QModelIndex current, QModelIndex previous){
             break;
         }
     }
+    update();
 }

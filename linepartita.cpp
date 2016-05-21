@@ -5,7 +5,7 @@
 LinePartita::LinePartita(Tesserato* t, QWidget *parent) :
     QWidget(parent), tesserato(t)
 {
-    info = new QLabel(t->getInfo());
+    info = new QLabel(t->getInfo(), this);
     if(dynamic_cast<Giocatore*>(tesserato) || dynamic_cast<Allenatore*>(tesserato)){
         createButtons();
     }
@@ -14,28 +14,28 @@ LinePartita::LinePartita(Tesserato* t, QWidget *parent) :
 }
 
 void LinePartita::createButtons(){
-    ammoButton = new PushButton(QIcon("./Images/giallo.png"));
+    ammoButton = new PushButton(QIcon("./HBStats/Images/giallo.png"), "", this);
     ammoButton->resize(100, 100);
     connect(ammoButton, SIGNAL(clicked()), this, SLOT(leftclickAmmo()));
     connect(ammoButton, SIGNAL(rightClicked()), this, SLOT(rightclickAmmo()));
 
-    dueMinButton = new PushButton("2'");
+    dueMinButton = new PushButton("2'", this);
     dueMinButton->resize(100, 100);
     connect(dueMinButton, SIGNAL(clicked()), this, SLOT(leftclickdueMin()));
     connect(dueMinButton, SIGNAL(rightClicked()), this, SLOT(rightclickdueMin()));
 
-    esclButton = new PushButton(QIcon("./Images/rosso.png"));
+    esclButton = new PushButton(QIcon("./Images/rosso.png"), "", this);
     esclButton->resize(100, 100);
     connect(esclButton, SIGNAL(clicked()), this, SLOT(leftclickEscl()));
     connect(esclButton, SIGNAL(rightClicked()), this, SLOT(rightclickEscl()));
 
-    tiroButton = new PushButton(QIcon("./Images/ball.jpg"));
+    tiroButton = new PushButton(QIcon("./Images/ball.jpg"), "", this);
     tiroButton->resize(100, 100);
     tiroButton->setCheckable(true);
     connect(tiroButton, SIGNAL(clicked()), this, SLOT(leftclickTiro()));
     connect(tiroButton, SIGNAL(rightClicked()), this, SLOT(rightclickTiro()));
 
-    rigoreButton = new PushButton("7m");
+    rigoreButton = new PushButton("7m", this);
     rigoreButton->resize(100, 100);
     rigoreButton->setCheckable(true);
     connect(rigoreButton, SIGNAL(clicked()), this, SLOT(leftclickRigore()));
@@ -45,12 +45,12 @@ void LinePartita::createButtons(){
 
 void LinePartita::createLayout(){
 
-    layout = new QHBoxLayout;
+    layout = new QHBoxLayout();
     layout->addWidget(info);
     if(!dynamic_cast<Arbitro*>(tesserato)){
         Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
         if(g){
-            goalLabel = new QLabel(QString::number(g->getTiriSegnati()));
+            goalLabel = new QLabel(QString::number(g->getTiriSegnati()), this);
             goalLabel->resize(200, 100);
             layout->addWidget(goalLabel);
             layout->addWidget(tiroButton);

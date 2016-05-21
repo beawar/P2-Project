@@ -12,10 +12,10 @@ NewWizard::NewWizard(SquadreModel *sm, ArbitriModel *am, QWidget *parent) :
         am = new ArbitriModel;
     }
 
-    introP = new IntroPage(sm, am);
-    personaP = new PersonaPage(sm, am);
-    squadraP = new SquadraPage(sm);
-    partitaP = new PartitaPage(sm, am);
+    introP = new IntroPage(sm, am, this);
+    personaP = new PersonaPage(sm, am, this);
+    squadraP = new SquadraPage(sm, this);
+    partitaP = new PartitaPage(sm, am, this);
 
     setPage(Page_Intro, introP);
     setPage(Page_Persona, personaP);
