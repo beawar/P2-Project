@@ -83,6 +83,7 @@ public:
     explicit Editor(SquadreModel* sm, ArbitriModel* am, QWidget *parent = 0);
 
 signals:
+    void dataChanged();
 
 private slots:
     void modifica();

@@ -8,7 +8,7 @@ Allenatore::Allenatore(const QString& n, const QString& c, const QDate& d)
 
 
 bool Allenatore::isAmmonito() const{
-    return isAmmonito();
+    return ammonizione;
 }
 
 int Allenatore::get2Minuti() const{

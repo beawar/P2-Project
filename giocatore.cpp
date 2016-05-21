@@ -130,6 +130,9 @@ bool Giocatore::operator >=(const Giocatore& t) const{
 
 QString Giocatore::getInfo() const{
     QString info;
+    if(getNumero() < 10){
+        info.append("  ");
+    }
     info.append(QString::number(getNumero()) + "   ");
     info.append(Tesserato::getInfo());
     return info;

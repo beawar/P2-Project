@@ -55,7 +55,6 @@ void Editor::createMainEditor(){
 
     listView = new QListView(this);
     connect(listView, SIGNAL(clicked(QModelIndex)),this, SLOT(itemSelected(QModelIndex)));
-    connect(listView, SIGNAL(activated(QModelIndex)), this, SLOT(itemSelected(QModelIndex)));
 
     QHBoxLayout* radioLayout = new QHBoxLayout();
     radioLayout->addWidget(tesseratoRadio);
@@ -215,14 +214,15 @@ void Editor::modificaSquadra(){
     nuova.addPenalita(penalitaEdit->value());
     squadre->modificaSquadra(squadre->at(index), nuova);
     updateList(INT_MIN);
+    emit dataChanged();
 }
 
 void Editor::modificaArbitro(){
     int index = listView->selectionModel()->currentIndex().row();
     Arbitro* arb = arbitri->at(index);
     Arbitro a;
-    a.setNome(nomeTEdit->text());
-    a.setCognome(cognomeTEdit->text());
+    a.setNome(nomeAEdit->text());
+    a.setCognome(cognomeAEdit->text());
     a.setAnno(dataAEdit->date());
     a.setLivello(livelloEdit->value());
     arbitri->modificaArbitro(arb, a);
@@ -281,6 +281,9 @@ void Editor::updateList(int index){
         default:
             break;
     }
+    connect(listView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(itemSelected(QModelIndex)));
+    listView->setCurrentIndex(QModelIndex());
+    itemSelected(listView->currentIndex());
     update();
 }
 
@@ -312,7 +315,7 @@ void Editor::itemSelected(QModelIndex current){
             case id_tesserato:
                 nomeTEdit->clear();
                 cognomeTEdit->clear();
-                dataTEdit->clear();
+                dataTEdit->setDate(QDate::currentDate());
                 numeroEdit->clear();
             break;
             case id_squadra:
@@ -323,7 +326,7 @@ void Editor::itemSelected(QModelIndex current){
             case id_arbitro:
                 nomeAEdit->clear();
                 cognomeAEdit->clear();
-                dataAEdit->clear();
+                dataAEdit->setDate(QDate::currentDate());
                 livelloEdit->clear();
                 break;
             default:

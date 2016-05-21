@@ -1,8 +1,6 @@
 #include "squadra.h"
 #include "allenatore.h"
 
-#include <QTextStream>
-
 unsigned int Squadra::maxAmmonizioni = 3;
 unsigned int Squadra::maxEsclusioni = 4;
 unsigned int Squadra::puntiVittoria = 3;
@@ -214,8 +212,6 @@ bool Squadra::operator ==(const Squadra& s) const{
 }
 
 void Squadra::sortByName(){
-    QTextStream out(stdout);
-    out<<getNome()<<"\n";
     Vettore<Tesserato*> giocatori;
     Vettore<Tesserato*> allenatori;
     for(Vettore<Tesserato*>::iterator it = tesserati.begin(); it != tesserati.end(); ++it){
@@ -232,10 +228,6 @@ void Squadra::sortByName(){
             if(!inserito){
                 giocatori.push_back(gioc);
             }
-            /*for(int i=0; i<giocatori.size(); ++i){
-                out<<"["<<i<<"] = "<<giocatori.at(i)->getCognome()<<" "<<giocatori.at(i)->getNome()
-                  <<"pos = "<<giocatori.at(i)<<"\n";
-            }*/
         }
         else{
             Allenatore* all = dynamic_cast<Allenatore*>(*it);
@@ -256,8 +248,6 @@ void Squadra::sortByName(){
 }
 
 void Squadra::sortByNumber(){
-    QTextStream out(stdout);
-    out<<getNome()<<"\n";
     Vettore<Tesserato*> giocatori;
     Vettore<Tesserato*> allenatori;
     for(Vettore<Tesserato*>::iterator it = tesserati.begin(); it != tesserati.end(); ++it){
@@ -273,10 +263,6 @@ void Squadra::sortByNumber(){
             }
             if(!inserito){
                 giocatori.push_back(gioc);
-            }
-            for(int i=0; i<giocatori.size(); ++i){
-                out<<"["<<i<<"] = "<<giocatori.at(i)->getCognome()<<" "<<giocatori.at(i)->getNome()
-                  <<"pos = "<<giocatori.at(i)<<"\n";
             }
         }
         else{

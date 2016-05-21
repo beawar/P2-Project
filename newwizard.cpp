@@ -29,6 +29,8 @@ NewWizard::NewWizard(SquadreModel *sm, ArbitriModel *am, QWidget *parent) :
         setMaximumSize(500, 360);
     }
 
+    connect(squadraP, SIGNAL(squadraCreata()), this, SLOT(nuovaSquadra()));
+
 }
 
 Squadra* NewWizard::getHomeTeam() const{
@@ -73,5 +75,9 @@ void NewWizard::accept(){
     else{
         close();
     }
+}
+
+void NewWizard::nuovaSquadra(){
+    emit partitaCreata();
 }
 

@@ -22,7 +22,6 @@ class MainWindow : public QMainWindow
 private:
     void createActions();
     void createMenus();
-    void creaClassifica();
 
     QWidget* widget;
 
@@ -61,6 +60,7 @@ private slots:
     void about();
     void aboutQt();
     void showPartita();
+    void creaClassifica();
 
 public:
   explicit MainWindow(QWidget *parent = 0);

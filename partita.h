@@ -38,6 +38,7 @@ public:
 signals:
 
 private slots:
+    void updatePunteggio();
 
 public slots:
 

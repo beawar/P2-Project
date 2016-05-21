@@ -51,6 +51,7 @@ void SquadraPage::insertTeam(){
     squadre->addSquadra(new Squadra(nomeEdit->text(), societaEdit->text()));
     nomeEdit->clear();
     societaEdit->clear();
+    emit squadraCreata();
 }
 
 int SquadraPage::nextId() const{

@@ -154,10 +154,12 @@ void XmlHandler::readGiocatore(const Squadra& squadra){
     Q_ASSERT(xmlReader.isStartElement() && xmlReader.name() == "Giocatore");
 
     Giocatore* giocatore = new Giocatore;
+    bool portiere = false;
 
     while(!xmlReader.isEndElement()){
         if(xmlReader.name() == "Portiere"){
             giocatore = static_cast<Portiere*>(giocatore);
+            portiere = true;
         }
         else if(xmlReader.name() == "Nome"){
             QString nome = xmlReader.readElementText();
@@ -178,6 +180,9 @@ void XmlHandler::readGiocatore(const Squadra& squadra){
         xmlReader.readNext();
     }
     squadreModel->addTesserato(giocatore, squadra);
+    if(portiere){
+        xmlReader.readNext();
+    }
 }
 
 void XmlHandler::readAllenatore(const Squadra& squadra){

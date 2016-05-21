@@ -44,6 +44,7 @@ void MainWindow::newFile(){
     newWizard = new NewWizard(&squadre, &arbitri, this);
     newWizard->show();
     connect(newWizard, SIGNAL(partitaCreata()), this, SLOT(showPartita()));
+    connect(newWizard, SIGNAL(squadraCreata()), this, SLOT(creaClassifica()));
 }
 
 void MainWindow::open(){
@@ -60,6 +61,7 @@ void MainWindow::open(){
             fileOpen = fileName;
             creaClassifica();
             editor = new Editor(&squadre, &arbitri, this);
+            connect(editor, SIGNAL(dataChanged()), this, SLOT(creaClassifica()));
             editAct->setEnabled(true);
         }
         catch(Err_Open e){

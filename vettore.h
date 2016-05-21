@@ -4,8 +4,6 @@
 #include "iterator.h"
 #include <stddef.h>
 
-#include <QTextStream>
-
 #define DEFAULT_DIMENSION 10
 
 template <class T>
@@ -262,28 +260,17 @@ typename Vettore<T>::iterator Vettore<T>::copia(iterator from_pos, iterator from
 
 template <class T>
 typename Vettore<T>::iterator Vettore<T>::insert(iterator it, value_type x){
-    /*
     if(capacity() == size()){
-        array = ridimensiona(array, dim+DEFAULT_DIMENSION);
+        array = ridimensiona(array, capacity() + DEFAULT_DIMENSION);
         dim += DEFAULT_DIMENSION;
     }
-    for(iterator i=end(); i>it; --i){
-        iterator j = i-1;
-        *i = *j;
+    for(iterator i(&array[size()-1]); i >= it; --i){
+        iterator aux = i+1;
+        *aux = *i;
     }
     *it = x;
-    _size++;
+    ++_size;
     return it;
-    */
-    iterator i = it;
-    value_type a = *it;
-    while(it!=end()){
-        a = *it;
-        *it = x;
-        x = a;
-        it++;
-    }
-    return i;
 }
 
 template <class T>
@@ -298,7 +285,7 @@ typename Vettore<T>::iterator Vettore<T>::insert(iterator it, size_type n, value
 template <class T>
 typename Vettore<T>::iterator Vettore<T>::erase(iterator it){
     for(iterator i=it; i<end(); ++i){
-        **i = **(++i);
+        *i = *(i+1);
     }
     pop_back();
     return it;

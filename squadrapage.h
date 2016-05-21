@@ -36,6 +36,7 @@ public:
     int nextId() const;
 
 signals:
+    void squadraCreata();
 
 public slots:
 

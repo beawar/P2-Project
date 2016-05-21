@@ -20,7 +20,8 @@ private:
     void createButtons();
     void createLayout();
 
-    QLabel* info;
+    QLabel* numeroLabel;
+    QLabel* nomeLabel;
     QLabel* goalLabel;
     PushButton* tiroButton;
     QPushButton* rigoreButton;
@@ -47,10 +48,25 @@ public:
     explicit LinePartita(Tesserato* t, QWidget *parent = 0);
 
 signals:
-    void valueChanged();
+    void tiro(int, bool);
+    void rigore(int, bool);
+    void ammonizione(bool);
+    void dueMinuti(bool);
+    void esclusione(bool);
 
 public slots:
 
 };
+
+/* LEGENDA CLICK PER TIRI\RIGORI:
+ *      - left click = aggiungi segnato;
+ *      - left doubleclick = aggiungi sbagliato;
+ *      - right click = rimuovi segnato;
+ *      - right doubleclick = rimuovi sbagliato;
+ *
+ * IN GENERALE:
+ *      -left click = aggiungi;
+ *      -right click = rimuovi;
+ */
 
 #endif // LINEPARTITA_H

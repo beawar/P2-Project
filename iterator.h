@@ -40,6 +40,8 @@ public:
     bool operator >(const Iterator&) const;
     bool operator >=(const Iterator&) const;
 
+    Iterator& operator =(pointer);
+    Iterator& operator =(const Iterator&);
     Iterator& operator ++();
     Iterator operator ++(int);
     Iterator& operator--();
@@ -93,6 +95,18 @@ bool Iterator<T, is_const>::operator >=(const Iterator<T, is_const>& it) const{
 }
 
 template <class T, bool is_const>
+Iterator<T, is_const>& Iterator<T, is_const>::operator =(pointer x) {
+    punt = x;
+    return *this;
+}
+
+template <class T, bool is_const>
+Iterator<T, is_const>& Iterator<T, is_const>::operator =(const Iterator<T, is_const>& it) {
+    punt = it.punt;
+    return *this;
+}
+
+template <class T, bool is_const>
 Iterator<T, is_const>& Iterator<T, is_const>::operator ++() {
     if(punt)
         ++punt;
@@ -101,9 +115,8 @@ Iterator<T, is_const>& Iterator<T, is_const>::operator ++() {
 
 template <class T, bool is_const>
 Iterator<T, is_const> Iterator<T, is_const>::operator ++(int x) {
-    Iterator<T, is_const> temp;
+    Iterator<T, is_const> temp = *this;
     if(punt){
-        temp = *this;
         ++punt;
     }
     return temp;
@@ -118,9 +131,8 @@ Iterator<T, is_const>& Iterator<T, is_const>::operator --() {
 
 template <class T, bool is_const>
 Iterator<T, is_const> Iterator<T, is_const>::operator --(int x) {
-    Iterator<T, is_const> temp;
+    Iterator<T, is_const> temp = *this;
     if(punt){
-        temp = *this;
         --punt;
     }
     return temp;
@@ -135,11 +147,8 @@ Iterator<T, is_const>& Iterator<T, is_const>::operator +=(int x) {
 
 template <class T, bool is_const>
 Iterator<T, is_const> Iterator<T, is_const>::operator +(int x) {
-    Iterator<T, is_const> temp;
-    if(punt){
-        temp = *this;
-        punt+=x;
-    }
+    Iterator<T, is_const> temp = *this;
+    temp += x;
     return temp;
 }
 
@@ -152,11 +161,8 @@ Iterator<T, is_const>& Iterator<T, is_const>::operator -=(int x) {
 
 template <class T, bool is_const>
 Iterator<T, is_const> Iterator<T, is_const>::operator -(int x) {
-    Iterator<T, is_const> temp;
-    if(punt){
-        temp = *this;
-        punt-=x;
-    }
+    Iterator<T, is_const> temp = *this;
+    temp += x;
     return temp;
 }
 

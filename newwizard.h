@@ -25,6 +25,9 @@ private:
     SquadreModel* squadre;
     ArbitriModel* arbitri;
 
+private slots:
+    void nuovaSquadra();
+
 public:
     enum {Page_Intro, Page_Persona, Page_Squadra, Page_Partita};
     explicit NewWizard( SquadreModel* sm =0, ArbitriModel* am =0, QWidget *parent = 0);
@@ -37,6 +40,7 @@ public:
 
 signals:
     void partitaCreata();
+    void squadraCreata();
 };
 
 #endif // NEWWIZARD_H

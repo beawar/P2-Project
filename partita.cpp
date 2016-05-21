@@ -21,22 +21,30 @@ Partita::Partita(Squadra *home, Squadra *guest, Arbitro *a1, Arbitro *a2, QWidge
     punteggio->setAlignment(Qt::AlignHCenter);
     punteggio->setFont(font);
 
-    QLabel* arbitriLabel = new QLabel(tr("Arbitri"), this);
+    QLabel* arbitriLabel = new QLabel(tr("Arbitri:"), this);
     QFont corsivo;
     corsivo.setPointSize(20);
     corsivo.setItalic(true);
     corsivo.setBold(true);
     arbitriLabel->setFont(corsivo);
 
-    LinePartita* arbitro1 = new LinePartita(a1, this);
-    LinePartita* arbitro2 = new LinePartita(a2, this);
+    QFont arbitriFont;
+    arbitriFont.setPointSize(15);
+
+    QString arb1str = a1->getCognome() + " " + a1->getNome();
+    QLabel* arbitro1Label = new QLabel(arb1str, this);
+    arbitro1Label->setFont(arbitriFont);
+
+    QString arb2str = a2->getCognome() + " " + a2->getNome();
+    QLabel* arbitro2Label = new QLabel(arb2str, this);
+    arbitro2Label->setFont(arbitriFont);
 
     createHomeLayout();
     createGuestLayout();
 
     QHBoxLayout* goals = new QHBoxLayout();
-    goals->addWidget(homeName, 1);
-    goals->addWidget(punteggio, 1);
+    goals->addWidget(homeName);
+    goals->addWidget(punteggio);
     goals->addWidget(guestName);
 
     QHBoxLayout* teams = new QHBoxLayout();
@@ -45,15 +53,14 @@ Partita::Partita(Squadra *home, Squadra *guest, Arbitro *a1, Arbitro *a2, QWidge
 
     QHBoxLayout* arbitriLayout = new QHBoxLayout();
     arbitriLayout->addWidget(arbitriLabel);
-    arbitriLayout->addWidget(arbitro1);
-    arbitriLayout->addWidget(arbitro2);
+    arbitriLayout->addWidget(arbitro1Label);
+    arbitriLayout->addWidget(arbitro2Label);
 
     mainLayout->addLayout(goals);
     mainLayout->addLayout(teams);
     mainLayout->addLayout(arbitriLayout);
 
     setLayout(mainLayout);
-
 }
 
 Squadra* Partita::getHomeTeam() const{
@@ -72,7 +79,7 @@ void Partita::createHomeLayout(){
     for(int i=0; i<homeTeam->size(); ++i){
         if(homeTeam->at(i)->isChecked()){
             homeLines[i] = new LinePartita(homeTeam->at(i), this);
-            connect(homeLines[i], SIGNAL(LinePartita::valueChanged()), this, SLOT(update()));
+            connect(homeLines[i], SIGNAL(tiro(bool)), this, SLOT(updatePunteggio(bool)));
             homeLayout->addWidget(homeLines[i]);
         }
     }
@@ -89,10 +96,14 @@ void Partita::createGuestLayout(){
     for(int i=0; i<guestTeam->size(); ++i){
         if(guestTeam->at(i)->isChecked()){
             guestLines[i] = new LinePartita(guestTeam->at(i), this);
-            connect(guestLines[i], SIGNAL(LinePartita::valueChanged()), this, SLOT(update()));
+            connect(guestLines[i], SIGNAL(LinePartita::tiro(bool)), this, SLOT(updatePunteggio(bool)));
             guestLayout->addWidget(guestLines[i]);
         }
     }
 
     guestGroup->setLayout(guestLayout);
+}
+
+void Partita::updatePunteggio(){
+    punteggio->setText(tr("%1 : %2").arg(homeTeam->getTiriSegnati()).arg(guestTeam->getTiriSegnati()));
 }
