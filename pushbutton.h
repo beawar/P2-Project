@@ -13,8 +13,10 @@ public:
     PushButton(const QString& s, QWidget *parent = 0);
 private slots:
     void mousePressEvent(QMouseEvent *e);
+    void mouseDoubleClickEvent(QMouseEvent *);
 signals:
  void rightClicked();
+ void rightDoubleClicked();
 public slots:
 
 };
