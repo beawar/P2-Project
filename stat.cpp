@@ -38,7 +38,7 @@ void Stat::createHeader(){
     escl->setMinimumSize(50, 50);
     reti = new QLabel(tr("Reti (Rigori)"), this);
     reti->setMinimumSize(100, 50);
-    parate = new Qlabe(tr("Parate (Rigori)"), this);
+    parate = new QLabel(tr("Parate (Rigori)"), this);
     parate->setMinimumSize(100, 50);
     perc = new QLabel("%", this);
     perc->setMinimumSize(100, 50);

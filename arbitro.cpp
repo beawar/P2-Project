@@ -52,17 +52,17 @@ void Arbitro::setLivello(const unsigned int &x){
     }
 }
 
-void Arbitro::addPRegionale(intx){
+void Arbitro::addPRegionale(int x){
     (partiteRegionali+x)<0 ? partiteRegionali=0 : partiteRegionali+=x;
     aumentaLivello();
 }
 
-void Arbitro::addPNazionale(intx){
+void Arbitro::addPNazionale(int x){
     (partiteNazionali+x)<0 ? partiteNazionali=0 : partiteNazionali+=x;
     aumentaLivello();
 }
 
-void Arbitro::addPInternaz(intx){
+void Arbitro::addPInternaz(int x){
     (partiteInternaz+x)<0 ? partiteInternaz=0 : partiteInternaz+=x;
     aumentaLivello();
 }

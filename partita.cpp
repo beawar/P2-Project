@@ -93,7 +93,7 @@ void Partita::createHomeLayout(){
                 homeRadio[giocatoriCount] = new QRadioButton(this);
                 lineLayout[giocatoriCount] = new QHBoxLayout;
                 lineLayout[giocatoriCount]->addWidget(homeRadio[giocatoriCount]);
-                lineLayout[giocatoriCount]->addWidget(homeTeam[i], 0, Qt::AlignRight);
+                lineLayout[giocatoriCount]->addWidget(homeLines[i], 0, Qt::AlignRight);
 
                 homePortiere->addButton(homeRadio[giocatoriCount], i);
 
@@ -111,7 +111,7 @@ void Partita::createHomeLayout(){
             connect(homeLines[i], SIGNAL(ammonizione(bool)), this, SLOT(ammonizioneHome(bool)));
             connect(homeLines[i], SIGNAL(dueMinuti(bool)), this, SLOT(dueMinutiHome(bool)));
             connect(homeLines[i], SIGNAL(esclusione(bool)), this, SLOT(esclusioneHome(bool)));
-            connect(homePortiere->button(i), SIGNAL(clicked()), this, SLOT(cambiaPortiereHome());
+            connect(homePortiere->button(i), SIGNAL(clicked()), this, SLOT(cambiaPortiereHome()));
         }
     }
 
@@ -134,7 +134,7 @@ void Partita::createGuestLayout(){
                 guestRadio[giocatoriCount] = new QRadioButton(this);
                 lineLayout[giocatoriCount] = new QHBoxLayout;
                 lineLayout[giocatoriCount]->addWidget(guestRadio[giocatoriCount]);
-                lineLayout[giocatoriCount]->addWidget(guestTeam[i], 0, Qt::AlignRight);
+                lineLayout[giocatoriCount]->addWidget(guestLines[i], 0, Qt::AlignRight);
 
                 guestPortiere->addButton(guestRadio[giocatoriCount], i);
 
@@ -152,7 +152,7 @@ void Partita::createGuestLayout(){
             connect(guestLines[i], SIGNAL(ammonizione(bool)), this, SLOT(ammonizioneGuest(bool)));
             connect(guestLines[i], SIGNAL(dueMinuti(bool)), this, SLOT(dueMinutiGuest(bool)));
             connect(guestLines[i], SIGNAL(esclusione(bool)), this, SLOT(esclusioneGuest(bool)));
-            connect(guestPortiere->button(i), SIGNAL(clicked()), this, SLOT(cambiaPortiereGuest());
+            connect(guestPortiere->button(i), SIGNAL(clicked()), this, SLOT(cambiaPortiereGuest()));
         }
     }
 
@@ -215,8 +215,9 @@ void Partita::cambiaPortiereHome(){
                                           "Continuare?"),
                                        QMessageBox::Ok | QMessageBox::Cancel);
         if(ret == QMessageBox::Ok){
-            Giocatore* temp = homeTeam->at(homePortiere->checkedId());
-            homeTeam->at(homePortiere->checkedId()) = new Portiere(*temp);
+            Giocatore* temp = dynamic_cast<Giocatore*>(homeTeam->at(homePortiere->checkedId()));
+            homeTeam->at(homePortiere->checkedId()) = new Portiere;
+            homeTeam->at(homePortiere->checkedId()) = *temp;
             delete temp;
             currentPortiereHome = homePortiere->checkedId();
         }
