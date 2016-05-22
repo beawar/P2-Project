@@ -54,7 +54,7 @@ void IntroPage::createButtons(){
 void IntroPage::createLayouts(){
     mainGroup = new QGroupBox(tr("Crea nuovo:"), this);
 
-    QVBoxLayout* buttonsLayout = new QVBoxLayout();
+    QVBoxLayout* buttonsLayout = new QVBoxLayout;
     buttonsLayout->addWidget(personaRadioButton);
     buttonsLayout->addWidget(squadraRadioButton);
     buttonsLayout->addWidget(partitaRadioButton);
@@ -62,7 +62,7 @@ void IntroPage::createLayouts(){
 
     mainGroup->setLayout(buttonsLayout);
 
-    layout = new QVBoxLayout();
+    layout = new QVBoxLayout;
     layout->addWidget(mainGroup);
     layout->addWidget(helpLabel);
 

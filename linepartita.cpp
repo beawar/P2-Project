@@ -22,6 +22,7 @@ LinePartita::LinePartita(Tesserato* t, QWidget *parent) :
 }
 
 void LinePartita::createButtons(){
+
     ammoButton = new PushButton(QIcon(":/images/giallo"), "", this);
     ammoButton->setMinimumSize(50, 50);
     ammoButton->setMaximumSize(50, 50);
@@ -32,35 +33,36 @@ void LinePartita::createButtons(){
     dueMinButton->setMinimumSize(50, 50);
     dueMinButton->setMaximumSize(50, 50);
     connect(dueMinButton, SIGNAL(clicked()), this, SLOT(leftclickdueMin()));
-//TO DO: DOUBLE CLICK
     connect(dueMinButton, SIGNAL(rightClicked()), this, SLOT(rightclickdueMin()));
 
     esclButton = new PushButton(QIcon(":/images/rosso"), "", this);
     esclButton->setMinimumSize(50, 50);
     esclButton->setMaximumSize(50, 50);
     connect(esclButton, SIGNAL(clicked()), this, SLOT(leftclickEscl()));
-//TO DO: DOUBLE CLICK
     connect(esclButton, SIGNAL(rightClicked()), this, SLOT(rightclickEscl()));
 
     tiroButton = new PushButton(QIcon(":/images/palla"), "", this);
     tiroButton->setMinimumSize(50, 50);
     tiroButton->setMaximumSize(50, 50);
     connect(tiroButton, SIGNAL(clicked()), this, SLOT(leftclickTiro()));
-//TO DO: DOUBLE CLICK
+    connect(tiroButton, SIGNAL(leftDoubleClicked()), this, SLOT(leftdoubleclickTiro()));
     connect(tiroButton, SIGNAL(rightClicked()), this, SLOT(rightclickTiro()));
+    connect(tiroButton, SIGNAL(rightDoubleClicked()), this, SLOT(rightdoubleclickTiro()));
 
     rigoreButton = new PushButton("7m", this);
     rigoreButton->setMinimumSize(50, 50);
     rigoreButton->setMaximumSize(50, 50);
     connect(rigoreButton, SIGNAL(clicked()), this, SLOT(leftclickRigore()));
-//TO DO: DOUBLE CLICK
+    connect(rigoreButton, SIGNAL(leftDoubleClicked()), this, SLOT(leftdoubleclickRigore()));
     connect(rigoreButton, SIGNAL(rightClicked()), this, SLOT(rightclickRigore()));
+    connect(rigoreButton, SIGNAL(rightDoubleClicked()), this, SLOT(rightdoubleclickRigore()));
+
 
 }
 
 void LinePartita::createLayout(){
 
-    layout = new QHBoxLayout();
+    layout = new QHBoxLayout;
     layout->addWidget(numeroLabel);
     layout->addWidget(nomeLabel);
     if(!dynamic_cast<Arbitro*>(tesserato)){
@@ -174,7 +176,7 @@ void LinePartita::leftclickdueMin(){
 }
 
 void LinePartita::rightclickEscl(){
-    esclButton->autoFillBackground();
+    esclButton->setStyleSheet("background-color: ");
     Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
     if(g){
         g->escluso(false);
@@ -222,53 +224,64 @@ void LinePartita::leftclickEscl(){
 
 void LinePartita::rightclickTiro(){
     Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
-    if(tiroButton->isChecked()){
-        g->setTiro(-1, true);
-        emit tiro(-1, true);
-    }
-    else{
-        g->setTiro(-1, false);
-        emit tiro(-1, false);
-    }
-    update();
+    g->setTiro(-1, true);
+    QMessageBox::warning(this, tr("Tiro rimosso"), tr("E' stato rimosso un tiro segnato"), QMessageBox::Ok);
+    emit tiro(-1, true);
+    updateGoals();
+}
+
+void LinePartita::rightdoubleclickTiro(){
+    Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
+    g->setTiro(-1, false);
+    QMessageBox::warning(this, tr("Tiro rimosso"), tr("E' stato rimosso un tiro sbagliato"), QMessageBox::Ok);
+    emit tiro(-1, false);
+    updateGoals();
 }
 
 void LinePartita::leftclickTiro(){
     Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
-    if(tiroButton->isChecked()){
-        g->setTiro(1, true);
-        emit tiro(1, true);
-    }
-    else{
-        g->setTiro(1, false);
-        emit tiro(1, false);
-    }
-    update();
+    g->setTiro(1, true);
+    emit tiro(1, true);
+    updateGoals();
+}
+
+void LinePartita::leftdoubleclickTiro(){
+    Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
+    g->setTiro(1, false);
+    emit tiro(1, false);
+    updateGoals();
 }
 
 void LinePartita::rightclickRigore(){
     Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
-    if(g->isChecked()){
-        g->setRigore(-1, true);
-        emit rigore(-1, true);
-    }
-    else{
-        g->setRigore(-1, false);
-        emit rigore(-1, false);
-    }
-    update();
+    g->setRigore(-1, true);
+    QMessageBox::warning(this, tr("Rigore rimosso"), tr("E' stato rimosso un rigore segnato"), QMessageBox::Ok);
+    emit rigore(-1, true);
+    updateGoals();
+}
+
+void LinePartita::rightdoubleclickRigore(){
+    Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
+    g->setRigore(-1, false);
+    QMessageBox::warning(this, tr("Rigore rimosso"), tr("E' stato rimosso un rigore sbagliato"), QMessageBox::Ok);
+    emit rigore(-1, false);
+    updateGoals();
 }
 
 void LinePartita::leftclickRigore(){
     Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
-    if(g->isChecked()){
-        g->setRigore(1, true);
-        emit rigore(1, true);
-    }
-    else{
-        g->setRigore(1, false);
-        emit rigore(1, false);
-    }
-    update();
+    g->setRigore(1, true);
+    emit rigore(1, true);
+    updateGoals();
 }
 
+void LinePartita::leftdoubleclickRigore(){
+    g->setRigore(1, false);
+    emit rigore(1, false);
+}
+
+void LinePartita::updateGoals(){
+    Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
+    goalLabel->setText(QString::number(g->getTiriSegnati()));
+    update();
+}

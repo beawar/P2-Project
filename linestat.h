@@ -5,6 +5,7 @@
 #include "tesserato.h"
 #include "giocatore.h"
 #include "allenatore.h"
+#include "portiere.h"
 #include <QLabel>
 #include <QHBoxLayout>
 
@@ -23,7 +24,9 @@ private:
     QLabel* dueMin;
     QLabel* escl;
     QLabel* reti;
+    QLabel* parate;
     QLabel* perc;
+    QLabel* paratePerc;
 public:
     explicit LineStat(const Tesserato* t, QWidget *parent = 0);
 

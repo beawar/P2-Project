@@ -24,7 +24,9 @@ private:
     QLabel* dueMin;
     QLabel* escl;
     QLabel* reti;
+    QLabel* parate;
     QLabel* perc;
+    QLabel* parateperc;
 
     QHBoxLayout* headerLayout;
 

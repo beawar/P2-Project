@@ -24,7 +24,7 @@ private:
     QLabel* nomeLabel;
     QLabel* goalLabel;
     PushButton* tiroButton;
-    QPushButton* rigoreButton;
+    PushButton* rigoreButton;
     PushButton* ammoButton;
     PushButton* dueMinButton;
     PushButton* esclButton;
@@ -36,13 +36,19 @@ private slots:
     void rightclickdueMin();
     void rightclickEscl();
     void rightclickTiro();
+    void rightdoubleclickTiro();
     void rightclickRigore();
+    void rightdoubleclickRigore();
 
     void leftclickAmmo();
     void leftclickdueMin();
     void leftclickEscl();
     void leftclickTiro();
+    void leftdoubleclickTiro();
     void leftclickRigore();
+    void leftdoubleclickRigore();
+
+    void updateGoals();
 
 public:
     explicit LinePartita(Tesserato* t, QWidget *parent = 0);

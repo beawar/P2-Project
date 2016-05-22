@@ -3,5 +3,6 @@
         <file alias="palla">images/ball.jpg</file>
         <file alias="giallo">images/giallo.png</file>
         <file alias="rosso">images/rosso.png</file>
+        <file>images/Sfondo.png</file>
     </qresource>
 </RCC>

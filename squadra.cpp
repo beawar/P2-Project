@@ -40,19 +40,25 @@ void Squadra::setSocieta(const QString &s){
     societa = s;
 }
 
-void Squadra::addVittoria(const int & x){
+void Squadra::addVittoria(int x, unsigned int fatti, unsigned int subiti){
     vittorie+x <0 ? vittorie=0 : vittorie+=x;
+    goalFatti += fatti;
+    goalSubiti += subiti;
 }
 
-void Squadra::addPareggio(const int & x){
+void Squadra::addPareggio(int x, unsigned int goal){
     pareggi+x <0 ? pareggi=0 : pareggi+=x;
+    goalFatti += goal;
+    goalSubiti += goal;
 }
 
-void Squadra::addSconfitta(const int & x){
+void Squadra::addSconfitta(int x, unsigned int fatti, unsigned int subiti){
     sconfitte+x <0 ? sconfitte=0 : sconfitte+=x;
+    goalFatti += fatti;
+    goalSubiti += subiti;
 }
 
-void Squadra::addPenalita(const int & x){
+void Squadra::addPenalita(int x){
      penalita+x <0 ? penalita=0 : penalita+=x;
 }
 
@@ -66,6 +72,26 @@ int Squadra::getPunti() const{
             - penalita;
 }
 
+void Squadra::setGoalFatti(unsigned int x){
+    goalFatti += x;
+}
+
+void Squadra::setGoalSubiti(unsigned int x){
+    goalSubiti += x;
+}
+
+unsigned int Squadra::getGoalFatti() const{
+    return goalFatti;
+}
+
+unsigned int Squadra::getGoalSubiti() const{
+    return goalSubiti;
+}
+
+int Squadra::getDifferenzaReti() const{
+    return getGoalFatti() - getGoalSubiti();
+}
+
 unsigned int Squadra::getTiriSegnati() const{
     unsigned int tot=0;
     for(Vettore<Tesserato*>::const_iterator cit = tesserati.cbegin(); cit<tesserati.cend(); ++cit){
@@ -77,7 +103,7 @@ unsigned int Squadra::getTiriSegnati() const{
     return tot;
 }
 
- unsigned int Squadra::getGoalSubiti() const{
+ unsigned int Squadra::getTiriSubiti() const{
      unsigned int tot=0;
      for(Vettore<Tesserato*>::const_iterator cit = tesserati.cbegin(); cit<tesserati.cend(); ++cit){
          Portiere* p = dynamic_cast<Portiere*>(*cit);
@@ -140,9 +166,6 @@ double Squadra::getRigoriPerc() const{
     return getRigoriSegnati()*100 /getRigoriTotali();
 }
 
-int Squadra::getDifferenzaReti() const{
-    return getTiriSegnati() - getGoalSubiti();
-}
 
 void Squadra::addTesserato(Tesserato *t) throw(Err_Tesserato){
     if(!dynamic_cast<const Arbitro*>(t)){

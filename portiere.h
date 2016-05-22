@@ -22,6 +22,9 @@ public:
     unsigned int getGoalSubiti () const;
     unsigned int getRigoriSubiti () const;
 
+    double getTiriParatiPerc() const;
+    double getRigoriParatiPerc() const;
+
     void setTiroRicevuto( int = 1, const bool& = false);
     void setRigoreRicevuto(int =1, const bool& = false);
 

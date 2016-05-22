@@ -22,6 +22,7 @@ class MainWindow : public QMainWindow
 private:
     void createActions();
     void createMenus();
+    void createToolBar();
 
     QWidget* widget;
 
@@ -29,6 +30,9 @@ private:
     QMenu* editMenu;
     QMenu* helpMenu;
 
+    QToolBar* toolBar;
+
+    NewWizard* newWizard;
     Tabs* tabs;
     Editor* editor;
 
@@ -41,6 +45,8 @@ private:
     QAction* editAct;
     QAction* aboutAct;
     QAction* aboutQtAct;
+    QAction* resetPartitaAct;
+    QAction* closePartitaAct;
 
     SquadreModel squadre;
     ArbitriModel arbitri;
@@ -48,7 +54,6 @@ private:
     QString fileOpen;
     XmlHandler xml;
 
-    NewWizard* newWizard;
 
 private slots:
     void newFile();

@@ -20,9 +20,9 @@ public:
     unsigned int getLivello () const;
 
     void setLivello (const unsigned int &);
-    void addPRegionale (const int& =1);
-    void addPNazionale(const int& =1);
-    void addPInternaz(const int& =1);
+    void addPRegionale (int =1);
+    void addPNazionale(int =1);
+    void addPInternaz(int =1);
 
     unsigned int getPartite() const;
 

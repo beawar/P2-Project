@@ -25,6 +25,9 @@ void PushButton::mouseDoubleClickEvent(QMouseEvent *e){
     if(e->button() == Qt::RightButton){
         emit rightDoubleClicked();
     }
+    else if(e->button() == Qt::LeftButton){
+        emit leftDoubleClicked();
+    }
     else{
         QPushButton::mouseDoubleClickEvent(e);
     }

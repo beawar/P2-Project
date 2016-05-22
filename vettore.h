@@ -69,7 +69,7 @@ public:
     void pop_back ();
 
     reference at(int) const;
-    reference operator [](const int&) const;
+    reference operator [](int) const;
     reference operator *() const;
 
 };
@@ -339,7 +339,7 @@ typename Vettore<T>::reference Vettore<T>::at (int i) const{
     return array[i];
 }
 template <class T>
-typename Vettore<T>::reference Vettore<T>::operator [](const int& i) const{
+typename Vettore<T>::reference Vettore<T>::operator [](int i) const{
     return array[i];
 }
 

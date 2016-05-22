@@ -82,7 +82,7 @@ void PersonaPage::createEditor(){
 }
 
 void PersonaPage::createLayout(){
-    radioLayout = new QVBoxLayout();
+    radioLayout = new QVBoxLayout;
     radioLayout->addWidget(giocatoreButton);
     radioLayout->addWidget(portiereButton);
     radioLayout->addWidget(allenatoreButton);
@@ -92,7 +92,7 @@ void PersonaPage::createLayout(){
     buttonGroupBox = new QGroupBox(tr("Nuovo"), this);
     buttonGroupBox->setLayout(radioLayout);
 
-    editorLayout = new QGridLayout();
+    editorLayout = new QGridLayout;
     editorLayout->addWidget(nomeLabel, 1, 1);
     editorLayout->addWidget(nomeEdit, 1, 2, 1, 2);
     editorLayout->addWidget(cognomeLabel, 2, 1);
@@ -106,7 +106,7 @@ void PersonaPage::createLayout(){
     editorLayout->addWidget(livelloLabel, 6, 1);
     editorLayout->addWidget(livelloEdit, 6, 2);
 
-    layout = new QHBoxLayout();
+    layout = new QHBoxLayout;
     layout->addWidget(buttonGroupBox);
     layout->addLayout(editorLayout);
     layout->addWidget(insertButton, 3, Qt::AlignBottom);
@@ -187,6 +187,9 @@ void PersonaPage::insertPerson(){
         }
         nomeEdit->clear();
         cognomeEdit->clear();
+        dataEdit->setDate(QDate(1990, 1, 1));
+        numeroEdit->clear();
+        livelloEdit->clear();
     }
     catch(Err_Tesserato e){
         QMessageBox::warning(this, tr("Inserimento non riuscito"),

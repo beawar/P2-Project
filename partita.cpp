@@ -1,15 +1,18 @@
 #include "partita.h"
 #include <QFont>
+#include <QRadioButton>
+#include <QMessageBox>
 
 Partita::Partita(Squadra *home, Squadra *guest, Arbitro *a1, Arbitro *a2, QWidget *parent) :
-    QWidget(parent), homeTeam(home), guestTeam(guest)
+    QWidget(parent), homeTeam(home), guestTeam(guest),
+    goalHome(0), goalGuest(0), currentPortiereHome(0), currentPortiereGuest(0)
 {
-    mainLayout = new QVBoxLayout();
+    mainLayout = new QVBoxLayout;
 
     QLabel* homeName = new QLabel(homeTeam->getNome(), this);
-    homeName->setAlignment(Qt::AlignRight);
+    homeName->setAlignment(Qt::AlignHCenter);
     QLabel* guestName = new QLabel(guestTeam->getNome(), this);
-    guestName->setAlignment(Qt::AlignLeft);
+    guestName->setAlignment(Qt::AlignHCenter);
 
     QFont font;
     font.setBold(true);
@@ -17,9 +20,8 @@ Partita::Partita(Squadra *home, Squadra *guest, Arbitro *a1, Arbitro *a2, QWidge
     homeName->setFont(font);
     guestName->setFont(font);
 
-    punteggio = new QLabel(tr("%1 : %2").arg(homeTeam->getTiriSegnati()).arg(guestTeam->getTiriSegnati()), this);
-    punteggio->setAlignment(Qt::AlignHCenter);
-    punteggio->setFont(font);
+
+    punteggio = new QLabel(tr("%1 : %2").arg(goalHome, goalGuest), this);
 
     QLabel* arbitriLabel = new QLabel(tr("Arbitri:"), this);
     QFont corsivo;
@@ -42,21 +44,26 @@ Partita::Partita(Squadra *home, Squadra *guest, Arbitro *a1, Arbitro *a2, QWidge
     createHomeLayout();
     createGuestLayout();
 
-    QHBoxLayout* goals = new QHBoxLayout();
-    goals->addWidget(homeName);
-    goals->addWidget(punteggio);
-    goals->addWidget(guestName);
+    QHBoxLayout* goalsLayout = new QHBoxLayout;
+    goalsLayout->addWidget(homeName);
+    goalsLayout->addWidget(punteggio);
+    goalsLayout->addWidget(guestName);
 
-    QHBoxLayout* teams = new QHBoxLayout();
+    QGroupBox* goalsGroup = new QGroupBox(this);
+    goalsGroup->setLayout(goalsLayout);
+    goalsGroup->setObjectName("goalsGroup");
+    setStyleSheet("QGroupBox#goalsGroup {border: 2px solid black } ");
+
+    QHBoxLayout* teams = new QHBoxLayout;
     teams->addWidget(homeGroup);
     teams->addWidget(guestGroup);
 
-    QHBoxLayout* arbitriLayout = new QHBoxLayout();
+    QHBoxLayout* arbitriLayout = new QHBoxLayout;
     arbitriLayout->addWidget(arbitriLabel);
     arbitriLayout->addWidget(arbitro1Label);
     arbitriLayout->addWidget(arbitro2Label);
 
-    mainLayout->addLayout(goals);
+    mainLayout->addWidget(goalsGroup);
     mainLayout->addLayout(teams);
     mainLayout->addLayout(arbitriLayout);
 
@@ -73,14 +80,38 @@ Squadra* Partita::getGuestTeam() const{
 
 void Partita::createHomeLayout(){
     homeGroup = new QGroupBox(this);
+    homePortiere = new QButtonGroup(this);
+    QVBoxLayout* homeLayout = new QVBoxLayout;
+    QHBoxLayout* lineLayout[maxGiocatori];
+    QRadioButton* homeRadio[maxGiocatori];
 
-    QVBoxLayout* homeLayout = new QVBoxLayout();
-
+    int giocatoriCount = 0;
     for(int i=0; i<homeTeam->size(); ++i){
         if(homeTeam->at(i)->isChecked()){
             homeLines[i] = new LinePartita(homeTeam->at(i), this);
-            connect(homeLines[i], SIGNAL(tiro(bool)), this, SLOT(updatePunteggio(bool)));
-            homeLayout->addWidget(homeLines[i]);
+            if(dynamic_cast<Giocatore*>(homeTeam->at(i)) && giocatoriCount<maxGiocatori){
+                homeRadio[giocatoriCount] = new QRadioButton(this);
+                lineLayout[giocatoriCount] = new QHBoxLayout;
+                lineLayout[giocatoriCount]->addWidget(homeRadio[giocatoriCount]);
+                lineLayout[giocatoriCount]->addWidget(homeTeam[i], 0, Qt::AlignRight);
+
+                homePortiere->addButton(homeRadio[giocatoriCount], i);
+
+                homeLayout->addLayout(lineLayout[giocatoriCount]);
+                giocatoriCount++;
+            }
+            else{
+                homeLayout->addWidget(homeLines[i], 0, Qt::AlignRight);
+
+            }
+
+            connect(homeLines[i], SIGNAL(tiro(int, bool)), this, SLOT(updatePunteggio()));
+            connect(homeLines[i], SIGNAL(tiro(int, bool)), this, SLOT(tiroHome(int,bool)));
+            connect(homeLines[i], SIGNAL(rigore(int,bool)), this, SLOT(rigoreHome(int,bool)));
+            connect(homeLines[i], SIGNAL(ammonizione(bool)), this, SLOT(ammonizioneHome(bool)));
+            connect(homeLines[i], SIGNAL(dueMinuti(bool)), this, SLOT(dueMinutiHome(bool)));
+            connect(homeLines[i], SIGNAL(esclusione(bool)), this, SLOT(esclusioneHome(bool)));
+            connect(homePortiere->button(i), SIGNAL(clicked()), this, SLOT(cambiaPortiereHome());
         }
     }
 
@@ -90,14 +121,38 @@ void Partita::createHomeLayout(){
 
 void Partita::createGuestLayout(){
     guestGroup = new QGroupBox(this);
+    guestPortiere = new QButtonGroup(this);
+    QVBoxLayout* guestLayout = new QVBoxLayout;
+    QHBoxLayout* lineLayout[maxGiocatori];
+    QRadioButton* guestRadio[maxGiocatori];
 
-    QVBoxLayout* guestLayout = new QVBoxLayout();
-
+    int giocatoriCount = 0;
     for(int i=0; i<guestTeam->size(); ++i){
         if(guestTeam->at(i)->isChecked()){
             guestLines[i] = new LinePartita(guestTeam->at(i), this);
-            connect(guestLines[i], SIGNAL(LinePartita::tiro(bool)), this, SLOT(updatePunteggio(bool)));
-            guestLayout->addWidget(guestLines[i]);
+            if(dynamic_cast<Giocatore*>(guestTeam->at(i)) && giocatoriCount<maxGiocatori){
+                guestRadio[giocatoriCount] = new QRadioButton(this);
+                lineLayout[giocatoriCount] = new QHBoxLayout;
+                lineLayout[giocatoriCount]->addWidget(guestRadio[giocatoriCount]);
+                lineLayout[giocatoriCount]->addWidget(guestTeam[i], 0, Qt::AlignRight);
+
+                guestPortiere->addButton(guestRadio[giocatoriCount], i);
+
+                guestLayout->addLayout(lineLayout[giocatoriCount]);
+                giocatoriCount++;
+            }
+            else{
+                guestLayout->addWidget(guestLines[i], 0, Qt::AlignRight);
+
+            }
+
+            connect(guestLines[i], SIGNAL(tiro(int, bool)), this, SLOT(updatePunteggio()));
+            connect(guestLines[i], SIGNAL(tiro(int, bool)), this, SLOT(tiroGuest(int,bool)));
+            connect(guestLines[i], SIGNAL(rigore(int,bool)), this, SLOT(rigoreGuest(int,bool)));
+            connect(guestLines[i], SIGNAL(ammonizione(bool)), this, SLOT(ammonizioneGuest(bool)));
+            connect(guestLines[i], SIGNAL(dueMinuti(bool)), this, SLOT(dueMinutiGuest(bool)));
+            connect(guestLines[i], SIGNAL(esclusione(bool)), this, SLOT(esclusioneGuest(bool)));
+            connect(guestPortiere->button(i), SIGNAL(clicked()), this, SLOT(cambiaPortiereGuest());
         }
     }
 
@@ -105,5 +160,108 @@ void Partita::createGuestLayout(){
 }
 
 void Partita::updatePunteggio(){
-    punteggio->setText(tr("%1 : %2").arg(homeTeam->getTiriSegnati()).arg(guestTeam->getTiriSegnati()));
+    punteggio->setText(tr("%1 : %2").arg(goalHome, goalGuest));
+}
+
+void Partita::tiroHome(int val, bool aggiunto){
+    emit tiroHm(val, aggiunto);
+}
+
+void Partita::rigoreHome(int val, bool aggiunto){
+    emit rigoreHm(val, aggiunto);
+}
+
+void Partita::ammonizioneHome(bool aggiunto){
+    emit ammonizioneHm(aggiunto);
+}
+
+void Partita::dueMinutiHome(bool aggiunto){
+    emit dueMinutiHm(aggiunto);
+}
+
+void Partita::esclusioneHome(bool aggiunto){
+    emit esclusioneHm(aggiunto);
+}
+
+void Partita::tiroGuest(int val, bool aggiunto){
+    emit tiroGst(val, aggiunto);
+}
+
+void Partita::rigoreGuest(int val, bool aggiunto){
+    emit rigoreGst(val, aggiunto);
+}
+
+void Partita::ammonizioneGuest(bool aggiunto){
+    emit ammonizioneGst(aggiunto);
+}
+
+void Partita::dueMinutiGuest(bool aggiunto){
+    emit dueMinutiGst(aggiunto);
+}
+
+void Partita::esclusioneGuest(bool aggiunto){
+    emit esclusioneGst(aggiunto);
+}
+
+void Partita::cambiaPortiereHome(){
+    Portiere* p = dynamic_cast<Portiere*>(homeTeam->at(homePortiere->checkedId()));
+    if(p){
+        currentPortiereHome = homePortiere->checkedId();
+    }
+    else{
+        int ret = QMessageBox::warning(this, tr("Conversione necessaria"),
+                                       tr("Il giocatore selezionato non è memorizzato come portire."
+                                          "Per renderlo il portiere corrente è necessaria una conversione.\n"
+                                          "Continuare?"),
+                                       QMessageBox::Ok | QMessageBox::Cancel);
+        if(ret == QMessageBox::Ok){
+            Giocatore* temp = homeTeam->at(homePortiere->checkedId());
+            homeTeam->at(homePortiere->checkedId()) = new Portiere(*temp);
+            delete temp;
+            currentPortiereHome = homePortiere->checkedId();
+        }
+        else{
+            homePortiere->button(currentPortiereHome)->setChecked(true);
+        }
+    }
+}
+
+void Partita::cambiaPortiereGuest(){
+    Portiere* p = dynamic_cast<Portiere*>(guestTeam->at(guestPortiere->checkedId()));
+    if(p){
+        currentPortiereGuest = guestPortiere->checkedId();
+    }
+    else{
+        int ret = QMessageBox::warning(this, tr("Conversione necessaria"),
+                                       tr("Il giocatore selezionato non è memorizzato come portire."
+                                          "Per renderlo il portiere corrente è necessaria una conversione.\n"
+                                          "Continuare?"),
+                                       QMessageBox::Ok | QMessageBox::Cancel);
+        if(ret == QMessageBox::Ok){
+            Giocatore* temp = guestTeam->at(guestPortiere->checkedId());
+            guestTeam->at(guestPortiere->checkedId()) = new Portiere(*temp);
+            delete temp;
+            currentPortiereGuest= guestPortiere->checkedId();
+        }
+        else{
+            guestPortiere->button(currentPortiereGuest)->setChecked(true);
+        }
+    }
+
+}
+
+void Partita::terminaPartita(){
+    if(goalHome > goalGuest){
+        homeTeam->addVittoria(1, goalHome, goalGuest);
+        guestTeam->addSconfitta(1, goalGuest, goalHome);
+    }
+    else if(goalHome == goalGuest){
+        homeTeam->addPareggio(goalHome);
+        guestTeam->addPareggio(goalGuest);
+    }
+    else{
+        homeTeam->addSconfitta(1, goalHome, goalGuest);
+        guestTeam->addVittoria(1, goalGuest, goalHome);
+    }
+    emit partitaTerminata();
 }

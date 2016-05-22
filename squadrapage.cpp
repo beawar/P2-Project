@@ -28,18 +28,18 @@ void SquadraPage::createEditor(){
 }
 
 void SquadraPage::createLayout(){
-    layout = new QVBoxLayout();
+    layout = new QVBoxLayout;
 
 
-    QVBoxLayout* labelLayout = new QVBoxLayout();
+    QVBoxLayout* labelLayout = new QVBoxLayout;
     labelLayout->addWidget(nomeLabel);
     labelLayout->addWidget(societaLabel);
 
-    QVBoxLayout* editLayout = new QVBoxLayout();
+    QVBoxLayout* editLayout = new QVBoxLayout;
     editLayout->addWidget(nomeEdit);
     editLayout->addWidget(societaEdit);
 
-    QHBoxLayout* editorLayout= new QHBoxLayout();
+    QHBoxLayout* editorLayout= new QHBoxLayout;
     editorLayout->addLayout(labelLayout);
     editorLayout->addLayout(editLayout);
 

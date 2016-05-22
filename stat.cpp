@@ -6,36 +6,44 @@ Stat::Stat(Squadra *s, QWidget *parent) :
 {
     createHeader();
 
-    QVBoxLayout* layout = new QVBoxLayout();
+    QVBoxLayout* layout = new QVBoxLayout;
     layout->addLayout(headerLayout);
 
     for(int i=0; i<squadra->size(); ++i){
         persona[i] = new LineStat(squadra->at(i), this);
         layout->addWidget(persona[i]);
     }
+    persona[squadra->size() - 1]->setObjectName("LastPerson");
 
+    setStyleSheet("LineStat {border-top: 1px groove grey }");
+    setStyleSheet("LineStat#LastPerson {border-bottom: 1px groove grey }");
+    setStyleSheet("Stat { background-image: url(qrc:/images/images/Sfondo.png) }");
     setLayout(layout);
 }
 
 void Stat::createHeader(){
-    headerLayout = new QHBoxLayout();
+    headerLayout = new QHBoxLayout;
 
     numero = new QLabel("N°", this);
-    numero->setBaseSize(100, 100);
+    numero->setMinimumSize(50, 50);
     cognome = new QLabel(tr("Cognome"), this);
-    cognome->setBaseSize(500, 100);
+    cognome->setMinimumSize(100, 50);
     nome = new QLabel(tr("Nome"), this);
-    nome->setBaseSize(500, 100);
-    ammo = new QLabel("Amm.", this);
-    ammo->setBaseSize(100, 100);
-    dueMin = new QLabel("2 Min.", this);
-    dueMin->setBaseSize(200, 100);
-    escl = new QLabel("Escl.", this);
-    escl->setBaseSize(100, 100);
-    reti = new QLabel("Reti (Rigori)", this);
-    reti->setBaseSize(500, 100);
+    nome->setMinimumSize(100, 50);
+    ammo = new QLabel(tr("Amm."), this);
+    ammo->setMinimumSize(50, 50);
+    dueMin = new QLabel(tr("2 Min."), this);
+    dueMin->setMinimumSize(80, 50);
+    escl = new QLabel(tr("Escl."), this);
+    escl->setMinimumSize(50, 50);
+    reti = new QLabel(tr("Reti (Rigori)"), this);
+    reti->setMinimumSize(100, 50);
+    parate = new Qlabe(tr("Parate (Rigori)"), this);
+    parate->setMinimumSize(100, 50);
     perc = new QLabel("%", this);
-    perc->setBaseSize(200, 100);
+    perc->setMinimumSize(100, 50);
+    parateperc = new QLabel(tr("% Parate"));
+    parateperc->setMinimumSize(100, 50);
 
     headerLayout->addWidget(numero);
     headerLayout->addWidget(cognome);

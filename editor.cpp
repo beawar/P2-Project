@@ -4,11 +4,15 @@ Editor::Editor(SquadreModel*sm, ArbitriModel*am, QWidget *parent) :
     QDialog(parent), squadre(sm), arbitri(am)
 {   
     createMainEditor();
-    createTesseratoEditor();
-    createSquadraEditor();
-    createArbitroEditor();
+    if(squadre){
+        createTesseratoEditor();
+        createSquadraEditor();
+    }
+    if(arbitri){
+        createArbitroEditor();
+    }
 
-    layouts = new QStackedLayout();
+    layouts = new QStackedLayout;
     layouts->addWidget(tesseratoWidget);
     layouts->addWidget(squadraWidget);
     layouts->addWidget(arbitroWidget);
@@ -17,7 +21,7 @@ Editor::Editor(SquadreModel*sm, ArbitriModel*am, QWidget *parent) :
     editorLayout->addWidget(listView);
     editorLayout->addLayout(layouts);
 
-    mainLayout = new QVBoxLayout();
+    mainLayout = new QVBoxLayout;
     mainLayout->addWidget(radioGroup);
     mainLayout->addLayout(editorLayout);
     mainLayout->addLayout(pushLayout);
@@ -56,7 +60,7 @@ void Editor::createMainEditor(){
     listView = new QListView(this);
     connect(listView, SIGNAL(clicked(QModelIndex)),this, SLOT(itemSelected(QModelIndex)));
 
-    QHBoxLayout* radioLayout = new QHBoxLayout();
+    QHBoxLayout* radioLayout = new QHBoxLayout;
     radioLayout->addWidget(tesseratoRadio);
     radioLayout->addWidget(squadraRadio);
     radioLayout->addWidget(arbitroRadio);
@@ -64,7 +68,7 @@ void Editor::createMainEditor(){
     radioGroup = new QGroupBox(tr("Scegli cosa modificare:"), this);
     radioGroup->setLayout(radioLayout);
 
-    pushLayout = new QHBoxLayout();
+    pushLayout = new QHBoxLayout;
     pushLayout->addWidget(editButton);
     pushLayout->addWidget(removeButton);
     pushLayout->addWidget(okButton);
@@ -93,7 +97,7 @@ void Editor::createTesseratoEditor(){
     numeroEdit = new QSpinBox(this);
     numeroEdit->setRange(1, 99);
 
-    QGridLayout* gridTLayout = new QGridLayout();
+    QGridLayout* gridTLayout = new QGridLayout;
     gridTLayout->addWidget(squadraLabel, 1, 1);
     gridTLayout->addWidget(squadreComboBox, 1, 2);
     gridTLayout->addWidget(nomeTLabel, 2, 1);
@@ -123,7 +127,7 @@ void Editor::createSquadraEditor(){
     penalitaEdit = new QSpinBox(this);
     penalitaEdit->setRange(0, +99);
 
-    QGridLayout* gridSLayout = new QGridLayout();
+    QGridLayout* gridSLayout = new QGridLayout;
     gridSLayout->addWidget(nomeSLabel, 1, 1);
     gridSLayout->addWidget(nomeSEdit, 1, 2);
     gridSLayout->addWidget(societaLabel, 2, 1);
@@ -151,7 +155,7 @@ void Editor::createArbitroEditor(){
     livelloEdit = new QSpinBox(this);
     livelloEdit->setRange(0, 3);
 
-    QGridLayout* gridALayout = new QGridLayout();
+    QGridLayout* gridALayout = new QGridLayout;
     gridALayout->addWidget(nomeALabel, 1, 1);
     gridALayout->addWidget(nomeAEdit, 1, 2);
     gridALayout->addWidget(cognomeALabel, 2, 1);

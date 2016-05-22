@@ -27,11 +27,11 @@ unsigned int Giocatore::getRigoriTotali() const{
 }
 
 double Giocatore::getTiriPerc() const{
-  return tiriSegnati*100/tiriTotali;
+  return (tiriSegnati*100)/tiriTotali;
 }
 
 double Giocatore::getRigoriPerc() const{
-  return rigoriSegnati*100/rigoriTotali;
+  return (rigoriSegnati*100)/rigoriTotali;
 }
 
 bool Giocatore::isAmmonito() const{

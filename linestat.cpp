@@ -5,7 +5,7 @@ LineStat::LineStat(const Tesserato *t, QWidget *parent) :
     QWidget(parent), tess(t)
 {
     createLabels();
-    QHBoxLayout* hbLayout = new QHBoxLayout();
+    QHBoxLayout* hbLayout = new QHBoxLayout;
 
     hbLayout->addWidget(numero);
     hbLayout->addWidget(cognome);
@@ -17,25 +17,34 @@ LineStat::LineStat(const Tesserato *t, QWidget *parent) :
     hbLayout->addWidget(perc);
 
     setLayout(hbLayout);
+    setStyleSheet("QLabel { color: white; font 12pt; }");
 }
 
 void LineStat::createLabels(){
     cognome = new QLabel(tess->getCognome(), this);
-    cognome->setBaseSize(500, 100);
+    cognome->setMinimumSize(100, 50);
     nome = new QLabel(tess->getNome(), this);
-    nome->setBaseSize(500, 100);
+    nome->setMinimumSize(100, 50);
     numero = new QLabel(this);
-    numero->setBaseSize(100, 100);
+    numero->setMinimumSize(50, 50);
+    numero->setMaximumSize(numero->minimumSize());
+    numero->setStyleSheet("font: bold 12pt;"
+                          "color: white;"
+                          "background-color: navy;"
+                          "border 1px solid black;");
+
     ammo = new QLabel(this);
-    ammo->setBaseSize(100, 100);
+    ammo->setMinimumSize(50, 50);
     dueMin = new QLabel(this);
-    dueMin->setBaseSize(200, 100);
+    dueMin->setMinimumSize(80, 50);
     escl = new QLabel(this);
-    escl->setBaseSize(100, 100);
+    escl->setMinimumSize(50, 50);
     reti = new QLabel(this);
-    reti->setBaseSize(500, 100);
+    reti->setMinimumSize(100, 50);
+    parate = new QLabel(this);
+    parate->setMinimumSize(100, 50);
     perc = new QLabel(this);
-    perc->setBaseSize(200, 100);
+    perc->setMinimumSize(200, 50);
     const Giocatore* g = dynamic_cast<const Giocatore*>(tess);
     if(g){
         numero->setText(QString::number(g->getNumero()));
@@ -63,17 +72,30 @@ void LineStat::updateDati(){
         if(g->isEscluso()){
             escl->setText("X");
         }
+        const Portiere* p = dynamic_cast<const Portiere*>(g);
+        if(p){
+            parate->setText(tr("%1 / %2 (%3 / %4)")
+                            .arg(p->getTiriParati(),
+                                 p->getTitiRicevuti(),
+                                 p->getRigoriParati(),
+                                 p->getRigoriRicevuti()));
+            paratePerc->setText(tr("%1% (%2%)")
+                                .arg(p->getTiriParatiPerc(),
+                                     p->getRigoriParatiPerc()));
+        }
     }
     else{
         const Allenatore* all = dynamic_cast<const Allenatore*>(tess);
-        if(all->isAmmonito()){
-            ammo->setText("X");
-        }
-        for(int i=0; i<all->get2Minuti(); ++i){
-            dueMin->setText(dueMin->text().append("X"));
-        }
-        if(all->isEscluso()){
-            escl->setText("X");
+        if(all){
+            if(all->isAmmonito()){
+                ammo->setText("X");
+            }
+            for(int i=0; i<all->get2Minuti(); ++i){
+                dueMin->setText(dueMin->text().append("X"));
+            }
+            if(all->isEscluso()){
+                escl->setText("X");
+            }
         }
     }
 }

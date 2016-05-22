@@ -19,6 +19,15 @@ Tabs::Tabs(Squadra *s1, Squadra *s2, Arbitro *arb1, Arbitro *arb2, QWidget *pare
 
         pngOpen1 = "";
         pngOpen2 = "";
+
+        connect(partita, SIGNAL(ammonizioneHm(bool)), statTeam1, SLOT(updateDati()));
+        connect(partita, SIGNAL(dueMinutiHm(bool)), statTeam1, SLOT(updateDati()));
+        connect(partita, SIGNAL(esclusioneHm(bool)), statTeam1, SLOT(updateDati()));
+
+        connect(partita, SIGNAL(ammonizioneGst(bool)), statTeam2, SLOT(updateDati()));
+        connect(partita, SIGNAL(dueMinutiGst(bool)), statTeam2, SLOT(updateDati()));
+        connect(partita, SIGNAL(esclusioneGst(bool)), statTeam2, SLOT(updateDati()));
+
     }
 }
 

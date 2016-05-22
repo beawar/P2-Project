@@ -27,6 +27,14 @@ unsigned int Portiere::getRigoriSubiti() const{
     return rigoriRicevuti-rigoriParati;
 }
 
+double Portiere::getTiriParatiPerc() const{
+    return (tiriParati*100)/tiriRicevuti;
+}
+
+double Portiere::getRigoriParatiPerc() const{
+    return (rigoriParati*100)/rigoriRicevuti;
+}
+
 void Portiere::setTiroRicevuto(int x, const bool & parato){
     if(parato){
         tiriParati+x <0 ? tiriParati=0 : tiriParati+=x;

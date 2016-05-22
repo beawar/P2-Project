@@ -6,7 +6,8 @@
 #include <QGridLayout>
 
 MainWindow::MainWindow(QWidget *parent) :
-  QMainWindow(parent), tabs(0), editor(0), fileOpen(""),  xml(&squadre, &arbitri)
+  QMainWindow(parent), toolBar(0), newWizard(0),
+  tabs(0), editor(0), fileOpen(""),  xml(&squadre, &arbitri)
 {
     widget = new QWidget(this);
     setCentralWidget(widget);
@@ -24,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QWidget* bottomFiller = new QWidget(this);
     bottomFiller->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    QVBoxLayout* layout = new QVBoxLayout();
+    QVBoxLayout* layout = new QVBoxLayout;
     layout->addWidget(topFiller);
     layout->addWidget(appLabel);
     layout->addWidget(bottomFiller);
@@ -32,6 +33,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     createActions();
     createMenus();
+    createToolBar();
+
 
     setWindowTitle("HandBall Stats by Beatrice Guerra");
     setMinimumSize(sizeHint());
@@ -41,7 +44,10 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 void MainWindow::newFile(){
-    newWizard = new NewWizard(&squadre, &arbitri, this);
+    if(!newWizard){
+        newWizard = new NewWizard(&squadre, &arbitri, this);
+    }
+    newWizard->update();
     newWizard->show();
     connect(newWizard, SIGNAL(partitaCreata()), this, SLOT(showPartita()));
     connect(newWizard, SIGNAL(squadraCreata()), this, SLOT(creaClassifica()));
@@ -59,9 +65,6 @@ void MainWindow::open(){
         try{
             xml.readFile(fileName);
             fileOpen = fileName;
-            creaClassifica();
-            editor = new Editor(&squadre, &arbitri, this);
-            connect(editor, SIGNAL(dataChanged()), this, SLOT(creaClassifica()));
             editAct->setEnabled(true);
         }
         catch(Err_Open e){
@@ -120,6 +123,11 @@ void MainWindow::exportPng(){
 
 
 void MainWindow::edit(){
+    if(editor){
+        editor = new Editor(&squadre, &arbitri, this);
+    }
+    editor->update();
+    connect(editor, SIGNAL(dataChanged()), this, SLOT(creaClassifica()));
     editor->show();
 }
 
@@ -146,6 +154,7 @@ void MainWindow::showPartita(){
     connect(exportAct, SIGNAL(triggered()), tabs, SLOT(exportPng()));
 
     setCentralWidget(tabs);
+    setMinimumSize(sizeHint());
 }
 
 void MainWindow::createActions(){
@@ -183,6 +192,7 @@ void MainWindow::createActions(){
     aboutQtAct = new QAction(tr("&Qt"), this);
     connect(aboutQtAct, SIGNAL(triggered()), this, SLOT(aboutQt()));
 
+
 }
 
 void MainWindow::createMenus(){
@@ -200,6 +210,14 @@ void MainWindow::createMenus(){
     helpMenu = menuBar()->addMenu(tr("&Aiuto"));
     helpMenu->addAction(aboutAct);
     helpMenu->addAction(aboutQtAct);
+}
+
+void MainWindow::createToolBar(){
+    toolBar = addToolBar(tr("Partita"));
+    toolBar->addAction(exportAct);
+    toolBar->addAction(editAct);
+    toolBar->addAction(resetPartitaAct);
+    toolBar->addAction(closePartitaAct);
 }
 
 void MainWindow::creaClassifica(){
@@ -235,7 +253,7 @@ void MainWindow::creaClassifica(){
         teamsLabel[i][7] = new QLabel(QString::number(squadre.at(i)->getDifferenzaReti()), this);
     }
 
-    QGridLayout* classifica = new QGridLayout();
+    QGridLayout* classifica = new QGridLayout;
     for(int i=0; i<8; ++i){
         header[i]->setFont(font);
         header[i]->setAlignment(Qt::AlignHCenter);
@@ -258,12 +276,12 @@ void MainWindow::creaClassifica(){
     QWidget* bottomFiller = new QWidget(this);
     bottomFiller->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    QHBoxLayout* classificaLayout = new QHBoxLayout();
+    QHBoxLayout* classificaLayout = new QHBoxLayout;
     classificaLayout->addStretch(20);
     classificaLayout->addLayout(classifica);
     classificaLayout->addStretch(20);
 
-    QVBoxLayout* layout = new QVBoxLayout();
+    QVBoxLayout* layout = new QVBoxLayout;
     layout->addWidget(topFiller);
     layout->addLayout(classificaLayout);
     layout->addWidget(bottomFiller);

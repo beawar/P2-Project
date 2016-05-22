@@ -17,9 +17,12 @@ private:
     QString societa;
     Vettore<Tesserato*> tesserati;
 
-    int vittorie;
-    int pareggi;
-    int sconfitte;
+    unsigned int vittorie;
+    unsigned int pareggi;
+    unsigned int sconfitte;
+
+    unsigned int goalFatti;
+    unsigned int goalSubiti;
 
     unsigned int penalita;
 
@@ -40,17 +43,24 @@ public:
 
     void setNome (const QString&);
     void setSocieta(const QString&);
-    void addVittoria (const int& =1);
-    void addPareggio(const int& =1);
-    void addSconfitta(const int& =1);
+    void addVittoria (int =1, unsigned int =0, unsigned int =0);
+    void addPareggio(int =1, unsigned int =0);
+    void addSconfitta(int =1, unsigned int =0, unsigned int =0);
 
-    void addPenalita(const int&);
+    void addPenalita(int);
     int getPenalita() const;
 
     int getPunti() const;
 
-    unsigned int getTiriSegnati() const;
+    void setGoalFatti(unsigned int);
+    void setGoalSubiti(unsigned int);
+    unsigned int getGoalFatti() const;
     unsigned int getGoalSubiti() const;
+
+    int getDifferenzaReti() const;
+
+    unsigned int getTiriSegnati() const;
+    unsigned int getTiriSubiti() const;
     unsigned int getTiriTotali() const;
     unsigned int getRigoriSegnati() const;
     unsigned int getRigoriSubiti() const;
@@ -58,7 +68,6 @@ public:
 
     double getTiriPerc() const;
     double getRigoriPerc() const;
-    int getDifferenzaReti() const;
 
     void addTesserato (Tesserato*) throw(Err_Tesserato);
     void modificaTesserato(Tesserato*, const Tesserato&);
