@@ -52,8 +52,8 @@ public:
 
     int getPunti() const;
 
-    void setGoalFatti(unsigned int);
-    void setGoalSubiti(unsigned int);
+    void addGoalFatti(unsigned int);
+    void addGoalSubiti(unsigned int);
     unsigned int getGoalFatti() const;
     unsigned int getGoalSubiti() const;
 
@@ -82,8 +82,8 @@ public:
     void sortByName();
     void sortByNumber();
 
+    void reset();
     void clear();
-    void clearAll();
 
     unsigned int size() const;
 };

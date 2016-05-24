@@ -25,10 +25,10 @@ public:
     double getTiriParatiPerc() const;
     double getRigoriParatiPerc() const;
 
-    void setTiroRicevuto( int = 1, const bool& = false);
-    void setRigoreRicevuto(int =1, const bool& = false);
+    void addTiroRicevuto( int = 1, const bool& = false);
+    void addRigoreRicevuto(int =1, const bool& = false);
 
-    virtual void clear();
+    virtual void reset();
 };
 
 #endif // PORTIERE_H

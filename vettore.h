@@ -24,7 +24,7 @@ private:
     unsigned int _size;
 
     static pointer copia (const Vettore&);
-    static pointer ridimensiona (pointer, int);
+    static pointer ridimensiona (const Vettore<T>&, int);
     static bool confronta (const Vettore &, const Vettore &);
 
 public:
@@ -86,12 +86,12 @@ typename Vettore<T>::pointer Vettore<T>::copia(const Vettore<T>&v){
 }
 
 template <class T>
-typename Vettore<T>::pointer Vettore<T>::ridimensiona(pointer a, int d){
+typename Vettore<T>::pointer Vettore<T>::ridimensiona(const Vettore<T>& v, int d){
     T* aux = new T[d];
-    for(int i=0; i<(d-DEFAULT_DIMENSION); ++i){
-        aux[i] = a[i];
+    for(int i=0; i<(v.size()); ++i){
+        aux[i] = v.array[i];
     }
-    delete [] a;
+    delete [] v.array;
     return aux;
 }
 
@@ -261,7 +261,7 @@ typename Vettore<T>::iterator Vettore<T>::copia(iterator from_pos, iterator from
 template <class T>
 typename Vettore<T>::iterator Vettore<T>::insert(iterator it, value_type x){
     if(capacity() == size()){
-        array = ridimensiona(array, capacity() + DEFAULT_DIMENSION);
+        array = ridimensiona(*this, capacity() + DEFAULT_DIMENSION);
         dim += DEFAULT_DIMENSION;
     }
     for(iterator i(&array[size()-1]); i >= it; --i){
@@ -320,7 +320,7 @@ void Vettore<T>::clear(){
 template <class T>
 void Vettore<T>::push_back(const_reference t){
     if(capacity() == size()){
-        array = ridimensiona(array, dim + DEFAULT_DIMENSION);
+        array = ridimensiona(*this, dim + DEFAULT_DIMENSION);
         dim += DEFAULT_DIMENSION;
     }
     array[size()] = t;
@@ -329,9 +329,8 @@ void Vettore<T>::push_back(const_reference t){
 
 template <class T>
 void Vettore<T>::pop_back(){
-    T* temp = &array[size()-1];
+    if(capacity() - size() > DEFAULT_DIMENSION)
     --_size;
-    delete temp;
 }
 
 template <class T>

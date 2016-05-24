@@ -6,7 +6,15 @@ Stat::Stat(Squadra *s, QWidget *parent) :
 {
     createHeader();
 
+    QFont font;
+    font.setBold(true);
+    font.setItalic(true);
+    font.setPointSize(18);
+    squadraLabel = new QLabel(squadra->getNome(), this);
+    squadraLabel->setFont(font);
+
     QVBoxLayout* layout = new QVBoxLayout;
+    layout->addWidget(squadraLabel);
     layout->addLayout(headerLayout);
 
     for(int i=0; i<squadra->size(); ++i){
@@ -17,7 +25,7 @@ Stat::Stat(Squadra *s, QWidget *parent) :
 
     setStyleSheet("LineStat {border-top: 1px groove grey }");
     setStyleSheet("LineStat#LastPerson {border-bottom: 1px groove grey }");
-    setStyleSheet("Stat { background-image: url(qrc:/images/images/Sfondo.png) }");
+    setStyleSheet("QWidget { background-image: url(qrc:/images/images/Sfondo.png) }");
     setLayout(layout);
 }
 

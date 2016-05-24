@@ -61,6 +61,7 @@ signals:
     void esclusione(bool);
 
 public slots:
+    void reset();
 
 };
 

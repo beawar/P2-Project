@@ -31,6 +31,8 @@ signals:
 
 public slots:
     void exportPng();
+    void reset();
+    void termina();
 };
 
 #endif // TABS_H

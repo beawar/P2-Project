@@ -16,6 +16,9 @@ private:
     void createHeader();
 
     Squadra* squadra;
+    QLabel* squadraLabel;
+    QLabel* percSquadra;
+    QLabel* percParate;
 
     QLabel* numero;
     QLabel* cognome;

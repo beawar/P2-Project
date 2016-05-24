@@ -133,7 +133,7 @@ void LinePartita::leftclickAmmo(){
 void LinePartita::rightclickdueMin(){
     Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
     if(g){
-        g->set2Minuti(-1);
+        g->add2Minuti(-1);
     }
     else{
         Allenatore* a = dynamic_cast<Allenatore*>(tesserato);
@@ -149,7 +149,7 @@ void LinePartita::leftclickdueMin(){
     Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
     if(g){
         try{
-            g->set2Minuti();
+            g->add2Minuti();
             emit dueMinuti(true);
         }
         catch(Err_DueMinuti e){
@@ -224,7 +224,7 @@ void LinePartita::leftclickEscl(){
 
 void LinePartita::rightclickTiro(){
     Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
-    g->setTiro(-1, true);
+    g->addTiro(-1, true);
     QMessageBox::warning(this, tr("Tiro rimosso"), tr("E' stato rimosso un tiro segnato"), QMessageBox::Ok);
     emit tiro(-1, true);
     updateGoals();
@@ -232,7 +232,7 @@ void LinePartita::rightclickTiro(){
 
 void LinePartita::rightdoubleclickTiro(){
     Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
-    g->setTiro(-1, false);
+    g->addTiro(-1, false);
     QMessageBox::warning(this, tr("Tiro rimosso"), tr("E' stato rimosso un tiro sbagliato"), QMessageBox::Ok);
     emit tiro(-1, false);
     updateGoals();
@@ -240,21 +240,21 @@ void LinePartita::rightdoubleclickTiro(){
 
 void LinePartita::leftclickTiro(){
     Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
-    g->setTiro(1, true);
+    g->addTiro(1, true);
     emit tiro(1, true);
     updateGoals();
 }
 
 void LinePartita::leftdoubleclickTiro(){
     Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
-    g->setTiro(1, false);
+    g->addTiro(1, false);
     emit tiro(1, false);
     updateGoals();
 }
 
 void LinePartita::rightclickRigore(){
     Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
-    g->setRigore(-1, true);
+    g->addRigore(-1, true);
     QMessageBox::warning(this, tr("Rigore rimosso"), tr("E' stato rimosso un rigore segnato"), QMessageBox::Ok);
     emit rigore(-1, true);
     updateGoals();
@@ -262,7 +262,7 @@ void LinePartita::rightclickRigore(){
 
 void LinePartita::rightdoubleclickRigore(){
     Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
-    g->setRigore(-1, false);
+    g->addRigore(-1, false);
     QMessageBox::warning(this, tr("Rigore rimosso"), tr("E' stato rimosso un rigore sbagliato"), QMessageBox::Ok);
     emit rigore(-1, false);
     updateGoals();
@@ -270,13 +270,14 @@ void LinePartita::rightdoubleclickRigore(){
 
 void LinePartita::leftclickRigore(){
     Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
-    g->setRigore(1, true);
+    g->addRigore(1, true);
     emit rigore(1, true);
     updateGoals();
 }
 
 void LinePartita::leftdoubleclickRigore(){
-    g->setRigore(1, false);
+    Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
+    g->addRigore(1, false);
     emit rigore(1, false);
 }
 
@@ -284,4 +285,8 @@ void LinePartita::updateGoals(){
     Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
     goalLabel->setText(QString::number(g->getTiriSegnati()));
     update();
+}
+
+void LinePartita::reset(){
+    tesserato->reset();
 }

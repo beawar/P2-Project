@@ -147,11 +147,9 @@ void Partita::createGuestLayout(){
             }
 
             connect(guestLines[i], SIGNAL(tiro(int, bool)), this, SLOT(updatePunteggio()));
+            connect(guestLines[i], SIGNAL(rigore(int,bool)), this, SLOT(updatePunteggio()));
             connect(guestLines[i], SIGNAL(tiro(int, bool)), this, SLOT(tiroGuest(int,bool)));
             connect(guestLines[i], SIGNAL(rigore(int,bool)), this, SLOT(rigoreGuest(int,bool)));
-            connect(guestLines[i], SIGNAL(ammonizione(bool)), this, SLOT(ammonizioneGuest(bool)));
-            connect(guestLines[i], SIGNAL(dueMinuti(bool)), this, SLOT(dueMinutiGuest(bool)));
-            connect(guestLines[i], SIGNAL(esclusione(bool)), this, SLOT(esclusioneGuest(bool)));
             connect(guestPortiere->button(i), SIGNAL(clicked()), this, SLOT(cambiaPortiereGuest()));
         }
     }
@@ -164,43 +162,27 @@ void Partita::updatePunteggio(){
 }
 
 void Partita::tiroHome(int val, bool aggiunto){
-    emit tiroHm(val, aggiunto);
+    Portiere* p = dynamic_cast<Portiere*>(guestTeam->at(currentPortiereGuest));
+    p->addTiroRicevuto(-val, aggiunto);
+    emit dataChanged();
 }
 
 void Partita::rigoreHome(int val, bool aggiunto){
-    emit rigoreHm(val, aggiunto);
-}
-
-void Partita::ammonizioneHome(bool aggiunto){
-    emit ammonizioneHm(aggiunto);
-}
-
-void Partita::dueMinutiHome(bool aggiunto){
-    emit dueMinutiHm(aggiunto);
-}
-
-void Partita::esclusioneHome(bool aggiunto){
-    emit esclusioneHm(aggiunto);
+    Portiere* p = dynamic_cast<Portiere*>(guestTeam->at(currentPortiereGuest));
+    p->addRigoreRicevuto(-val, aggiunto);
+    emit dataChanged();
 }
 
 void Partita::tiroGuest(int val, bool aggiunto){
-    emit tiroGst(val, aggiunto);
+    Portiere* p = dynamic_cast<Portiere*>(homeTeam->at(currentPortiereHome));
+    p->addTiroRicevuto(-val, aggiunto);
+    emit dataChanged();
 }
 
 void Partita::rigoreGuest(int val, bool aggiunto){
-    emit rigoreGst(val, aggiunto);
-}
-
-void Partita::ammonizioneGuest(bool aggiunto){
-    emit ammonizioneGst(aggiunto);
-}
-
-void Partita::dueMinutiGuest(bool aggiunto){
-    emit dueMinutiGst(aggiunto);
-}
-
-void Partita::esclusioneGuest(bool aggiunto){
-    emit esclusioneGst(aggiunto);
+    Portiere* p = dynamic_cast<Portiere*>(homeTeam->at(currentPortiereHome));
+    p->addRigoreRicevuto(-val, aggiunto);
+    emit dataChanged();
 }
 
 void Partita::cambiaPortiereHome(){
@@ -215,10 +197,10 @@ void Partita::cambiaPortiereHome(){
                                           "Continuare?"),
                                        QMessageBox::Ok | QMessageBox::Cancel);
         if(ret == QMessageBox::Ok){
-            Giocatore* temp = dynamic_cast<Giocatore*>(homeTeam->at(homePortiere->checkedId()));
-            homeTeam->at(homePortiere->checkedId()) = new Portiere;
-            homeTeam->at(homePortiere->checkedId()) = *temp;
-            delete temp;
+            Tesserato* tesserato = homeTeam->at(homePortiere->checkedId());
+            Portiere* portiere = static_cast<Portiere*>(homeTeam->at(homePortiere->checkedId()));
+            delete tesserato;
+            tesserato = new Portiere(*portiere);
             currentPortiereHome = homePortiere->checkedId();
         }
         else{
@@ -239,10 +221,11 @@ void Partita::cambiaPortiereGuest(){
                                           "Continuare?"),
                                        QMessageBox::Ok | QMessageBox::Cancel);
         if(ret == QMessageBox::Ok){
-            Giocatore* temp = guestTeam->at(guestPortiere->checkedId());
-            guestTeam->at(guestPortiere->checkedId()) = new Portiere(*temp);
-            delete temp;
-            currentPortiereGuest= guestPortiere->checkedId();
+            Tesserato* tesserato = guestTeam->at(guestPortiere->checkedId());
+            Portiere* portiere = static_cast<Portiere*>(guestTeam->at(guestPortiere->checkedId()));
+            delete tesserato;
+            tesserato = new Portiere(*portiere);
+            currentPortiereGuest = guestPortiere->checkedId();
         }
         else{
             guestPortiere->button(currentPortiereGuest)->setChecked(true);
@@ -251,7 +234,7 @@ void Partita::cambiaPortiereGuest(){
 
 }
 
-void Partita::terminaPartita(){
+void Partita::termina(){
     if(goalHome > goalGuest){
         homeTeam->addVittoria(1, goalHome, goalGuest);
         guestTeam->addSconfitta(1, goalGuest, goalHome);
@@ -264,5 +247,13 @@ void Partita::terminaPartita(){
         homeTeam->addSconfitta(1, goalHome, goalGuest);
         guestTeam->addVittoria(1, goalGuest, goalHome);
     }
-    emit partitaTerminata();
+}
+
+void Partita::reset(){
+    goalHome = 0;
+    goalGuest = 0;
+
+    for(int i = 0; i<homeTeam->size(); ++i){
+        homeLines[i]->reset();
+    }
 }

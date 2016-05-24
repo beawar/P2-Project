@@ -72,11 +72,11 @@ int Squadra::getPunti() const{
             - penalita;
 }
 
-void Squadra::setGoalFatti(unsigned int x){
+void Squadra::addGoalFatti(unsigned int x){
     goalFatti += x;
 }
 
-void Squadra::setGoalSubiti(unsigned int x){
+void Squadra::addGoalSubiti(unsigned int x){
     goalSubiti += x;
 }
 
@@ -307,14 +307,14 @@ void Squadra::sortByNumber(){
 
 }
 
-void Squadra::clear(){
+void Squadra::reset(){
     vittorie = 0;
     pareggi = 0;
     sconfitte = 0;
     penalita = 0;
 }
 
-void Squadra::clearAll(){
+void Squadra::clear(){
     delete[] &tesserati;
 }
 

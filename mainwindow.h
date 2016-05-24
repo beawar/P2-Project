@@ -47,6 +47,7 @@ private:
     QAction* aboutQtAct;
     QAction* resetPartitaAct;
     QAction* closePartitaAct;
+    QAction* classificaAct;
 
     SquadreModel squadre;
     ArbitriModel arbitri;
@@ -64,8 +65,10 @@ private slots:
     void edit();
     void about();
     void aboutQt();
+
     void showPartita();
     void creaClassifica();
+    void terminaPartita();
 
 public:
   explicit MainWindow(QWidget *parent = 0);

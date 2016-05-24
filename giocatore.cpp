@@ -50,19 +50,19 @@ void Giocatore::setNumero(unsigned int n){
     numero=n;
 }
 
-void Giocatore::setTiro(int x, const bool& segnato){
+void Giocatore::addTiro(int x, const bool& segnato){
     if(segnato){
         (tiriSegnati+x)<0 ? tiriSegnati=0 : tiriSegnati+=x;
     }
     (tiriTotali+x)<0 ? tiriTotali=0 : tiriSegnati+=x;
 }
 
-void Giocatore::setRigore(int x, const bool& segnato){
+void Giocatore::addRigore(int x, const bool& segnato){
     if(segnato){
         (rigoriSegnati+x)<0 ? rigoriSegnati=0 : rigoriSegnati+=x;
     }
     (rigoriTotali+x)<0 ? rigoriTotali=0 : rigoriTotali+=x ;
-    setTiro(x, segnato);
+    addTiro(x, segnato);
 }
 
 void Giocatore::ammonito(const bool& add) throw(Err_Ammonizione){
@@ -74,7 +74,7 @@ void Giocatore::ammonito(const bool& add) throw(Err_Ammonizione){
     }
 }
 
-void Giocatore::set2Minuti(int x) throw(Err_DueMinuti){
+void Giocatore::add2Minuti(int x) throw(Err_DueMinuti){
     (dueMinuti+x <0 || dueMinuti+x>3) ? throw Err_DueMinuti(): dueMinuti+=x;
 }
 
@@ -138,7 +138,7 @@ QString Giocatore::getInfo() const{
     return info;
 }
 
-void Giocatore::clear(){
+void Giocatore::reset(){
     tiriSegnati = 0;
     tiriTotali = 0;
     rigoriSegnati = 0;

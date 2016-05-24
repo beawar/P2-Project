@@ -10,26 +10,27 @@ MainWindow::MainWindow(QWidget *parent) :
   tabs(0), editor(0), fileOpen(""),  xml(&squadre, &arbitri)
 {
     widget = new QWidget(this);
-    setCentralWidget(widget);
+    QPixmap logo(":/images/images/HBStats_Icon_Sfondo.png");
+    logo = logo.scaled(500, 500, Qt::KeepAspectRatio);
+    QLabel* logoLabel = new QLabel(this);
+    logoLabel->setPixmap(logo);
 
     QWidget* topFiller = new QWidget(this);
     topFiller->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-    QLabel* appLabel = new QLabel("Handball Stats by Beatrice Guerra");
-    appLabel->setAlignment(Qt::AlignCenter);
-    QFont font = appLabel->font();
-    font.setPointSize(20);
-    font.setBold(true);
-    appLabel->setFont(font);
 
     QWidget* bottomFiller = new QWidget(this);
     bottomFiller->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     QVBoxLayout* layout = new QVBoxLayout;
     layout->addWidget(topFiller);
-    layout->addWidget(appLabel);
+    layout->addWidget(logoLabel);
     layout->addWidget(bottomFiller);
+
+    layout->setAlignment(logoLabel, Qt::AlignHCenter);
+
     widget->setLayout(layout);
+
+    setCentralWidget(widget);
 
     createActions();
     createMenus();
@@ -39,7 +40,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowTitle("HandBall Stats by Beatrice Guerra");
     setMinimumSize(sizeHint());
 
-    resize(720, 560);
+    setMinimumSize(sizeHint());
 
 }
 
@@ -123,8 +124,11 @@ void MainWindow::exportPng(){
 
 
 void MainWindow::edit(){
-    if(editor){
+    if(!editor){
         editor = new Editor(&squadre, &arbitri, this);
+    }
+    for(int i=0; i<squadre.size(); ++i){
+        squadre[i].sortByName();
     }
     editor->update();
     connect(editor, SIGNAL(dataChanged()), this, SLOT(creaClassifica()));
@@ -150,23 +154,27 @@ void MainWindow::showPartita(){
     Arbitro* a2 = newWizard->getArbitro2();
 
     tabs = new Tabs(home, guest, a1, a2, this);
+
+    classificaAct->setEnabled(false);
     exportAct->setEnabled(true);
+
     connect(exportAct, SIGNAL(triggered()), tabs, SLOT(exportPng()));
+    connect(resetPartitaAct, SIGNAL(triggered()), tabs, SLOT(reset()));
 
     setCentralWidget(tabs);
     setMinimumSize(sizeHint());
 }
 
 void MainWindow::createActions(){
-    newAct = new QAction(tr("&Nuovo"), this);
+    newAct = new QAction(QIcon(":/images/images/new.png"), tr("&Nuovo"), this);
     newAct->setShortcut(QKeySequence::New);
     connect(newAct, SIGNAL(triggered()), this, SLOT(newFile()));
 
-    openAct = new QAction(tr("&Apri"), this);
+    openAct = new QAction(QIcon(":/images/images/open.png"), tr("&Apri"), this);
     openAct->setShortcut(QKeySequence::Open);
     connect(openAct, SIGNAL(triggered()), this, SLOT(open()));
 
-    saveAct = new QAction(tr("&Salva"), this);
+    saveAct = new QAction(QIcon(":/images/images/save.png"), tr("&Salva"), this);
     saveAct->setShortcut(QKeySequence::Save);
     connect(saveAct, SIGNAL(triggered()), this, SLOT(save()));
 
@@ -174,15 +182,15 @@ void MainWindow::createActions(){
     saveAsAct->setShortcut(QKeySequence::SaveAs);
     connect(saveAsAct, SIGNAL(triggered()), this, SLOT(saveAs()));
 
-    exportAct = new QAction(tr("Esporta"), this);
+    exportAct = new QAction(QIcon(":/images/images/export.png"), tr("Esporta"), this);
     exportAct->setShortcut(QKeySequence(tr("Ctrl+E")));
     exportAct->setEnabled(false);
 
-    editAct = new QAction(tr("E&dita"), this);
+    editAct = new QAction(QIcon(":/images/images/edit.png"), tr("E&dita"), this);
     editAct->setEnabled(false);
     connect(editAct, SIGNAL(triggered()), this, SLOT(edit()));
 
-    exitAct = new QAction(tr("&Esci"), this);
+    exitAct = new QAction(QIcon(":/images/images/quit.png"), tr("&Esci"), this);
     exitAct->setShortcut(QKeySequence::Quit);
     connect(exitAct, SIGNAL(triggered()), this, SLOT(close()));
 
@@ -192,6 +200,16 @@ void MainWindow::createActions(){
     aboutQtAct = new QAction(tr("&Qt"), this);
     connect(aboutQtAct, SIGNAL(triggered()), this, SLOT(aboutQt()));
 
+    resetPartitaAct = new QAction(QIcon(":/images/images/reset.png"), tr("Reset Partita"), this);
+    resetPartitaAct->setEnabled(false);
+
+    closePartitaAct = new QAction(QIcon(":/images/images/termina.png"), tr("Termina Partita"), this);
+    closePartitaAct->setEnabled(false);
+    connect(closePartitaAct, SIGNAL(triggered()), this, SLOT(terminaPartita()));
+
+    classificaAct = new QAction(QIcon(":/images/images/cup.png"), tr("Mostra classifica"), this);
+    classificaAct->setEnabled(false);
+    connect(classificaAct, SIGNAL(triggered()), this, SLOT(creaClassifica()));
 
 }
 
@@ -206,6 +224,11 @@ void MainWindow::createMenus(){
 
     editMenu = menuBar()->addMenu(tr("&Modifica"));
     editMenu->addAction(editAct);
+    editMenu->addSeparator();
+    editMenu->addAction(resetPartitaAct);
+    editMenu->addAction(closePartitaAct);
+    editMenu->addSeparator();
+    editMenu->addAction(classificaAct);
 
     helpMenu = menuBar()->addMenu(tr("&Aiuto"));
     helpMenu->addAction(aboutAct);
@@ -289,4 +312,9 @@ void MainWindow::creaClassifica(){
     classifica->setAlignment(layout, Qt::AlignHCenter);
 
     widget->setLayout(layout);
+}
+
+void MainWindow::terminaPartita(){
+    classificaAct->setEnabled(true);
+    tabs->termina();
 }

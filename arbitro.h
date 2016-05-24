@@ -26,7 +26,7 @@ public:
 
     unsigned int getPartite() const;
 
-    virtual void clear(){}
+    virtual void reset(){}
 
 };
 

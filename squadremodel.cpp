@@ -101,7 +101,7 @@ void SquadreModel::modificaSquadra(Squadra *vecchia, const Squadra &nuova) const
 }
 
 void SquadreModel::removeSquadra(Squadra *s){
-    s->clearAll();
+    s->clear();
     squadre.removeAll(s);
     delete s;
 }

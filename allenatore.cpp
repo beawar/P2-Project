@@ -53,7 +53,7 @@ QString Allenatore::getInfo() const{
     return info;
 }
 
-void Allenatore::clear(){
+void Allenatore::reset(){
     ammonizione = false;
     dueMinuti = 0;
     esclusione = false;

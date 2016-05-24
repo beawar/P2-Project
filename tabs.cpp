@@ -20,6 +20,7 @@ Tabs::Tabs(Squadra *s1, Squadra *s2, Arbitro *arb1, Arbitro *arb2, QWidget *pare
         pngOpen1 = "";
         pngOpen2 = "";
 
+        connect(partita, SIGNAL(tiroHm(int,bool)), statTeam1, SLOT(updateDati()));
         connect(partita, SIGNAL(ammonizioneHm(bool)), statTeam1, SLOT(updateDati()));
         connect(partita, SIGNAL(dueMinutiHm(bool)), statTeam1, SLOT(updateDati()));
         connect(partita, SIGNAL(esclusioneHm(bool)), statTeam1, SLOT(updateDati()));
@@ -68,4 +69,16 @@ void Tabs::exportPng(){
             }
         }
     }
+}
+
+
+void Tabs::reset(){
+    partita->reset();
+    statTeam1->updateDati();
+    statTeam2->updateDati();
+}
+
+void Tabs::termina(){
+    partita->termina();
+    partita->setEnabled(false);
 }

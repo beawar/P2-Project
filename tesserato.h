@@ -42,7 +42,7 @@ public:
   bool isChecked() const;
 
   virtual QString getInfo() const;
-  virtual void clear() =0;
+  virtual void reset() =0;
 
 };
 

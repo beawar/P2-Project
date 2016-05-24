@@ -1,8 +1,21 @@
 <RCC>
     <qresource prefix="/images">
-        <file alias="palla">images/ball.jpg</file>
-        <file alias="giallo">images/giallo.png</file>
-        <file alias="rosso">images/rosso.png</file>
-        <file>images/Sfondo.png</file>
+        <file>images/giallo.png</file>
+        <file>images/rosso.png</file>
+        <file>images/HBStats_Icon.png</file>
+        <file>images/HBStats_Icon_Sfondo.png</file>
+        <file>images/Logo.png</file>
+        <file>images/Sfondo_logo.png</file>
+        <file>images/edit.png</file>
+        <file>images/footbal.png</file>
+        <file>images/new.png</file>
+        <file>images/open.png</file>
+        <file>images/quit.png</file>
+        <file>images/reset.png</file>
+        <file>images/save.png</file>
+        <file>images/termina.png</file>
+        <file>images/two_fingers.png</file>
+        <file>images/export.png</file>
+        <file>images/cup.png</file>
     </qresource>
 </RCC>

@@ -24,7 +24,7 @@ public:
     void escluso (const bool& =true) throw (Err_Esclusione);
 
     virtual QString getInfo() const;
-    virtual void clear();
+    virtual void reset();
 };
 
 

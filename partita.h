@@ -46,39 +46,22 @@ public:
     Squadra* getGuestTeam() const;
 
 signals:
-    void tiroHm(int, bool);
-    void rigoreHm(int, bool);
-    void ammonizioneHm(bool);
-    void dueMinutiHm(bool);
-    void esclusioneHm(bool);
-
-    void tiroGst(int, bool);
-    void rigoreGst(int, bool);
-    void ammonizioneGst(bool);
-    void dueMinutiGst(bool);
-    void esclusioneGst(bool);
-
-    void partitaTerminata();
+    void dataChanged();
 
 private slots:
     void updatePunteggio();
     void tiroHome(int, bool);
     void rigoreHome(int, bool);
-    void ammonizioneHome(bool);
-    void dueMinutiHome(bool);
-    void esclusioneHome(bool);
 
     void tiroGuest(int, bool);
     void rigoreGuest(int, bool);
-    void ammonizioneGuest(bool);
-    void dueMinutiGuest(bool);
-    void esclusioneGuest(bool);
 
     void cambiaPortiereHome();
     void cambiaPortiereGuest();
 
 public slots:
-    void terminaPartita();
+    void termina();
+    void reset();
 
 };
 

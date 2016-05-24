@@ -33,10 +33,10 @@ public:
     bool isEscluso () const;
 
     void setNumero(unsigned int);
-    void setTiro (int =1, const bool& =false);
-    void setRigore (int =1, const bool& =false);
+    void addTiro (int =1, const bool& =false);
+    void addRigore (int =1, const bool& =false);
     void ammonito (const bool& =true) throw (Err_Ammonizione);
-    void set2Minuti (int =1) throw (Err_DueMinuti);
+    void add2Minuti (int =1) throw (Err_DueMinuti);
     void escluso (const bool& =true) throw (Err_Esclusione);
 
     virtual void modifica(const Giocatore&);
@@ -49,7 +49,7 @@ public:
     virtual bool operator >=(const Giocatore&) const;
 
     virtual QString getInfo() const;
-    virtual void clear ();
+    virtual void reset();
 };
 
 
