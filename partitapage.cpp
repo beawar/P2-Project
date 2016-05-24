@@ -7,9 +7,9 @@ PartitaPage::PartitaPage(SquadreModel *sm, ArbitriModel *am, QWidget *parent) :
     QWizardPage(parent), squadre(sm), arbitri(am),
     s1GiocChecked(0), s1AllChecked(0), s2GiocChecked(0), s2AllChecked(0)
 { 
-    for(int i=0; i<squadre->size(); ++i){
+    /*for(int i=0; i<squadre->size(); ++i){
         squadre->at(i)->sortByName();
-    }
+    }*/
     layout = new QVBoxLayout;
     createView();
     createLayout();

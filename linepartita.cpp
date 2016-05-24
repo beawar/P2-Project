@@ -6,14 +6,11 @@ LinePartita::LinePartita(Tesserato* t, QWidget *parent) :
     QWidget(parent), tesserato(t)
 {
     numeroLabel = new QLabel(this);
-    numeroLabel->setMinimumSize(50, 50);
-    numeroLabel->setMaximumSize(50, 50);
+    numeroLabel->setMinimumWidth(50);
     nomeLabel = new QLabel(t->getCognome() + " " + t->getNome(), this);
-    nomeLabel->setMinimumSize(200, 50);
-    nomeLabel->setMaximumSize(200, 50);
+    nomeLabel->setMinimumWidth(200);
     goalLabel = new QLabel(this);
-    goalLabel->setMinimumSize(50, 50);
-    goalLabel->setMaximumSize(50, 50);
+    goalLabel->setMinimumWidth(50);
     if(dynamic_cast<Giocatore*>(tesserato) || dynamic_cast<Allenatore*>(tesserato)){
         createButtons();
     }
@@ -24,34 +21,29 @@ LinePartita::LinePartita(Tesserato* t, QWidget *parent) :
 void LinePartita::createButtons(){
 
     ammoButton = new PushButton(QIcon(":/images/giallo"), "", this);
-    ammoButton->setMinimumSize(50, 50);
-    ammoButton->setMaximumSize(50, 50);
+    ammoButton->setMinimumWidth(50);
     connect(ammoButton, SIGNAL(clicked()), this, SLOT(leftclickAmmo()));
     connect(ammoButton, SIGNAL(rightClicked()), this, SLOT(rightclickAmmo()));
 
     dueMinButton = new PushButton("2'", this);
-    dueMinButton->setMinimumSize(50, 50);
-    dueMinButton->setMaximumSize(50, 50);
+    dueMinButton->setMinimumWidth(50);
     connect(dueMinButton, SIGNAL(clicked()), this, SLOT(leftclickdueMin()));
     connect(dueMinButton, SIGNAL(rightClicked()), this, SLOT(rightclickdueMin()));
 
     esclButton = new PushButton(QIcon(":/images/rosso"), "", this);
-    esclButton->setMinimumSize(50, 50);
-    esclButton->setMaximumSize(50, 50);
+    esclButton->setMinimumWidth(50);
     connect(esclButton, SIGNAL(clicked()), this, SLOT(leftclickEscl()));
     connect(esclButton, SIGNAL(rightClicked()), this, SLOT(rightclickEscl()));
 
     tiroButton = new PushButton(QIcon(":/images/palla"), "", this);
-    tiroButton->setMinimumSize(50, 50);
-    tiroButton->setMaximumSize(50, 50);
+    tiroButton->setMinimumWidth(50);
     connect(tiroButton, SIGNAL(clicked()), this, SLOT(leftclickTiro()));
     connect(tiroButton, SIGNAL(leftDoubleClicked()), this, SLOT(leftdoubleclickTiro()));
     connect(tiroButton, SIGNAL(rightClicked()), this, SLOT(rightclickTiro()));
     connect(tiroButton, SIGNAL(rightDoubleClicked()), this, SLOT(rightdoubleclickTiro()));
 
     rigoreButton = new PushButton("7m", this);
-    rigoreButton->setMinimumSize(50, 50);
-    rigoreButton->setMaximumSize(50, 50);
+    rigoreButton->setMinimumWidth(50);
     connect(rigoreButton, SIGNAL(clicked()), this, SLOT(leftclickRigore()));
     connect(rigoreButton, SIGNAL(leftDoubleClicked()), this, SLOT(leftdoubleclickRigore()));
     connect(rigoreButton, SIGNAL(rightClicked()), this, SLOT(rightclickRigore()));

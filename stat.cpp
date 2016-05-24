@@ -60,7 +60,9 @@ void Stat::createHeader(){
     headerLayout->addWidget(dueMin);
     headerLayout->addWidget(escl);
     headerLayout->addWidget(reti);
+    headerLayout->addWidget(parate);
     headerLayout->addWidget(perc);
+    headerLayout->addWidget(parateperc);
 }
 
 void Stat::updateDati(){

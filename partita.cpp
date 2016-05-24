@@ -21,7 +21,7 @@ Partita::Partita(Squadra *home, Squadra *guest, Arbitro *a1, Arbitro *a2, QWidge
     guestName->setFont(font);
 
 
-    punteggio = new QLabel(tr("%1 : %2").arg(goalHome, goalGuest), this);
+    punteggio = new QLabel(tr("%1 : %2").arg(QString::number(goalHome), QString::number(goalGuest)), this);
 
     QLabel* arbitriLabel = new QLabel(tr("Arbitri:"), this);
     QFont corsivo;

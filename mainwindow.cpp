@@ -45,10 +45,11 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 void MainWindow::newFile(){
-    if(!newWizard){
-        newWizard = new NewWizard(&squadre, &arbitri, this);
+    if(newWizard){
+        qDeleteAll(newWizard->children());
+        delete newWizard;
     }
-    newWizard->update();
+    newWizard = new NewWizard(&squadre, &arbitri, this);
     newWizard->show();
     connect(newWizard, SIGNAL(partitaCreata()), this, SLOT(showPartita()));
     connect(newWizard, SIGNAL(squadraCreata()), this, SLOT(creaClassifica()));
@@ -124,12 +125,14 @@ void MainWindow::exportPng(){
 
 
 void MainWindow::edit(){
-    if(!editor){
-        editor = new Editor(&squadre, &arbitri, this);
+    if(editor){
+        qDeleteAll(editor->children());
+        delete editor;
     }
-    for(int i=0; i<squadre.size(); ++i){
-        squadre[i].sortByName();
-    }
+    editor = new Editor(&squadre, &arbitri, this);
+    /*for(int i=0; i<squadre.size(); ++i){
+        squadre.at(i)->sortByName();
+    }*/
     editor->update();
     connect(editor, SIGNAL(dataChanged()), this, SLOT(creaClassifica()));
     editor->show();
@@ -245,7 +248,8 @@ void MainWindow::createToolBar(){
 
 void MainWindow::creaClassifica(){
 
-    qDeleteAll(widget->children());
+    qDeleteAll(widget->layout()->children());
+    delete widget->layout();
 
     QFont font;
     font.setBold(true);

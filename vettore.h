@@ -329,7 +329,10 @@ void Vettore<T>::push_back(const_reference t){
 
 template <class T>
 void Vettore<T>::pop_back(){
-    if(capacity() - size() > DEFAULT_DIMENSION)
+    if(capacity() - size() > DEFAULT_DIMENSION){
+        array = ridimensiona(*this, capacity() - DEFAULT_DIMENSION);
+        dim -= DEFAULT_DIMENSION;
+    }
     --_size;
 }
 

@@ -14,19 +14,22 @@ LineStat::LineStat(const Tesserato *t, QWidget *parent) :
     hbLayout->addWidget(dueMin);
     hbLayout->addWidget(escl);
     hbLayout->addWidget(reti);
+    hbLayout->addWidget(parate);
     hbLayout->addWidget(perc);
+    hbLayout->addWidget(paratePerc);
 
     setLayout(hbLayout);
-    setStyleSheet("QLabel { color: white; font 12pt; }");
+    setStyleSheet("QLabel { color: white;}");
+    setStyleSheet("background-color: ");
 }
 
 void LineStat::createLabels(){
     cognome = new QLabel(tess->getCognome(), this);
-    cognome->setMinimumSize(100, 50);
+    cognome->setMinimumWidth(100);
     nome = new QLabel(tess->getNome(), this);
-    nome->setMinimumSize(100, 50);
+    nome->setMinimumWidth(100);
     numero = new QLabel(this);
-    numero->setMinimumSize(50, 50);
+    numero->setMinimumWidth(50);
     numero->setMaximumSize(numero->minimumSize());
     numero->setStyleSheet("font: bold 12pt;"
                           "color: white;"
@@ -34,17 +37,19 @@ void LineStat::createLabels(){
                           "border 1px solid black;");
 
     ammo = new QLabel(this);
-    ammo->setMinimumSize(50, 50);
+    ammo->setMinimumWidth(50);
     dueMin = new QLabel(this);
-    dueMin->setMinimumSize(80, 50);
+    dueMin->setMinimumWidth(80);
     escl = new QLabel(this);
-    escl->setMinimumSize(50, 50);
+    escl->setMinimumWidth(50);
     reti = new QLabel(this);
-    reti->setMinimumSize(100, 50);
+    reti->setMinimumWidth(100);
     parate = new QLabel(this);
-    parate->setMinimumSize(100, 50);
+    parate->setMinimumWidth(100);
     perc = new QLabel(this);
-    perc->setMinimumSize(200, 50);
+    perc->setMinimumWidth(200);
+    paratePerc = new QLabel(this);
+    paratePerc->setMinimumWidth(200);
     const Giocatore* g = dynamic_cast<const Giocatore*>(tess);
     if(g){
         numero->setText(QString::number(g->getNumero()));
