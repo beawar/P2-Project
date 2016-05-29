@@ -23,11 +23,11 @@ private:
     Squadra* homeTeam;
     Squadra* guestTeam;
 
-    int currentPortiereHome;
-    int currentPortiereGuest;
-
     int goalHome;
     int goalGuest;
+
+    int currentPortiereHome;
+    int currentPortiereGuest;
 
     LinePartita* homeLines[maxGiocatori+maxAllenatori];
     QButtonGroup* homePortiere;

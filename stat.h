@@ -11,7 +11,7 @@ class Stat : public QWidget
 {
     Q_OBJECT
 private:
-    enum { maxPersone = 15};
+    enum { maxPersone = 16};
 
     void createHeader();
 

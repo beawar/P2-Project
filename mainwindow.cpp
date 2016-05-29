@@ -130,10 +130,11 @@ void MainWindow::edit(){
         delete editor;
     }
     editor = new Editor(&squadre, &arbitri, this);
-    /*for(int i=0; i<squadre.size(); ++i){
+    /* ----------------------------------------------------------------------------------------
+    for(int i=0; i<squadre.size(); ++i){
         squadre.at(i)->sortByName();
-    }*/
-    editor->update();
+    }
+    -------------------------------------------------------------------------------------------*/
     connect(editor, SIGNAL(dataChanged()), this, SLOT(creaClassifica()));
     editor->show();
 }
@@ -156,6 +157,10 @@ void MainWindow::showPartita(){
     Arbitro* a1 = newWizard->getArbitro1();
     Arbitro* a2 = newWizard->getArbitro2();
 
+    if(tabs){
+        qDeleteAll(tabs->children());
+        delete tabs;
+    }
     tabs = new Tabs(home, guest, a1, a2, this);
 
     classificaAct->setEnabled(false);

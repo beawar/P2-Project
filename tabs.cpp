@@ -20,15 +20,8 @@ Tabs::Tabs(Squadra *s1, Squadra *s2, Arbitro *arb1, Arbitro *arb2, QWidget *pare
         pngOpen1 = "";
         pngOpen2 = "";
 
-        connect(partita, SIGNAL(tiroHm(int,bool)), statTeam1, SLOT(updateDati()));
-        connect(partita, SIGNAL(ammonizioneHm(bool)), statTeam1, SLOT(updateDati()));
-        connect(partita, SIGNAL(dueMinutiHm(bool)), statTeam1, SLOT(updateDati()));
-        connect(partita, SIGNAL(esclusioneHm(bool)), statTeam1, SLOT(updateDati()));
-
-        connect(partita, SIGNAL(ammonizioneGst(bool)), statTeam2, SLOT(updateDati()));
-        connect(partita, SIGNAL(dueMinutiGst(bool)), statTeam2, SLOT(updateDati()));
-        connect(partita, SIGNAL(esclusioneGst(bool)), statTeam2, SLOT(updateDati()));
-
+        connect(partita, SIGNAL(dataChanged()), statTeam1, SLOT(updateDati()));
+        connect(partita, SIGNAL(dataChanged()), statTeam2, SLOT(updateDati()));
     }
 }
 
@@ -81,4 +74,14 @@ void Tabs::reset(){
 void Tabs::termina(){
     partita->termina();
     partita->setEnabled(false);
+    for(int i = 0; i<team1->size(); ++i){
+        if(team1->at(i)->isChecked()){
+            team1->at(i)->setChecked(false);
+        }
+    }
+    for(int i = 0; i<team2->size(); ++i){
+        if(team2->at(i)->isChecked()){
+            team2->at(i)->setChecked(false);
+        }
+    }
 }

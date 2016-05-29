@@ -25,11 +25,11 @@ LineStat::LineStat(const Tesserato *t, QWidget *parent) :
 
 void LineStat::createLabels(){
     cognome = new QLabel(tess->getCognome(), this);
-    cognome->setMinimumWidth(100);
+    //cognome->setMinimumWidth(100);
     nome = new QLabel(tess->getNome(), this);
-    nome->setMinimumWidth(100);
+    //nome->setMinimumWidth(100);
     numero = new QLabel(this);
-    numero->setMinimumWidth(50);
+    //numero->setMinimumWidth(50);
     numero->setMaximumSize(numero->minimumSize());
     numero->setStyleSheet("font: bold 12pt;"
                           "color: white;"
@@ -37,19 +37,19 @@ void LineStat::createLabels(){
                           "border 1px solid black;");
 
     ammo = new QLabel(this);
-    ammo->setMinimumWidth(50);
+    //ammo->setMinimumWidth(50);
     dueMin = new QLabel(this);
-    dueMin->setMinimumWidth(80);
+    //dueMin->setMinimumWidth(80);
     escl = new QLabel(this);
-    escl->setMinimumWidth(50);
+    //escl->setMinimumWidth(50);
     reti = new QLabel(this);
-    reti->setMinimumWidth(100);
+    //reti->setMinimumWidth(100);
     parate = new QLabel(this);
-    parate->setMinimumWidth(100);
+    //parate->setMinimumWidth(100);
     perc = new QLabel(this);
-    perc->setMinimumWidth(200);
+    //perc->setMinimumWidth(200);
     paratePerc = new QLabel(this);
-    paratePerc->setMinimumWidth(200);
+    //paratePerc->setMinimumWidth(200);
     const Giocatore* g = dynamic_cast<const Giocatore*>(tess);
     if(g){
         numero->setText(QString::number(g->getNumero()));
@@ -80,10 +80,10 @@ void LineStat::updateDati(){
         const Portiere* p = dynamic_cast<const Portiere*>(g);
         if(p){
             parate->setText(tr("%1 / %2 (%3 / %4)")
-                            .arg(p->getTiriParati(),
-                                 p->getTitiRicevuti(),
-                                 p->getRigoriParati(),
-                                 p->getRigoriRicevuti()));
+                            .arg(QString::number(p->getTiriParati()),
+                                 QString::number(p->getTitiRicevuti()),
+                                 QString::number(p->getRigoriParati()),
+                                 QString::number(p->getRigoriRicevuti())));
             paratePerc->setText(tr("%1% (%2%)")
                                 .arg(p->getTiriParatiPerc(),
                                      p->getRigoriParatiPerc()));

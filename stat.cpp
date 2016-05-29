@@ -17,15 +17,19 @@ Stat::Stat(Squadra *s, QWidget *parent) :
     layout->addWidget(squadraLabel);
     layout->addLayout(headerLayout);
 
+    int j = 0;
     for(int i=0; i<squadra->size(); ++i){
-        persona[i] = new LineStat(squadra->at(i), this);
-        layout->addWidget(persona[i]);
+        if(squadra->at(i)->isChecked() && j<maxPersone){
+            persona[j] = new LineStat(squadra->at(i), this);
+            layout->addWidget(persona[j]);
+            j++;
+        }
     }
-    persona[squadra->size() - 1]->setObjectName("LastPerson");
+    persona[j-1]->setObjectName("LastPerson");
 
     setStyleSheet("LineStat {border-top: 1px groove grey }");
     setStyleSheet("LineStat#LastPerson {border-bottom: 1px groove grey }");
-    setStyleSheet("QWidget { background-image: url(qrc:/images/images/Sfondo.png) }");
+    setStyleSheet("Stat { background-image: url(:/images/images/Sfondo_logo.png) }");
     setLayout(layout);
 }
 
@@ -33,25 +37,29 @@ void Stat::createHeader(){
     headerLayout = new QHBoxLayout;
 
     numero = new QLabel("N°", this);
-    numero->setMinimumSize(50, 50);
+    //numero->setMinimumSize(50, 50);
     cognome = new QLabel(tr("Cognome"), this);
-    cognome->setMinimumSize(100, 50);
+    //cognome->setMinimumSize(100, 50);
     nome = new QLabel(tr("Nome"), this);
-    nome->setMinimumSize(100, 50);
-    ammo = new QLabel(tr("Amm."), this);
-    ammo->setMinimumSize(50, 50);
-    dueMin = new QLabel(tr("2 Min."), this);
-    dueMin->setMinimumSize(80, 50);
+    //nome->setMinimumSize(100, 50);
+    ammo = new QLabel(this);
+    ammo->setPixmap(QPixmap(":/images/images/giallo.png").scaled(10, 10));
+    //ammo->setMinimumSize(50, 50);
+    dueMin = new QLabel(this);
+    dueMin->setPixmap(QPixmap(":/images/images/two_fingers.png").scaled(10, 10));
+    //dueMin->setMinimumSize(80, 50);
     escl = new QLabel(tr("Escl."), this);
-    escl->setMinimumSize(50, 50);
+    escl->setPixmap(QPixmap(":/images/images/rosso.png").scaled(10, 10));
+    //escl->setMinimumSize(50, 50);
     reti = new QLabel(tr("Reti (Rigori)"), this);
-    reti->setMinimumSize(100, 50);
+    reti->setPixmap(QPixmap(":/images/images/footbal.png").scaled(10, 10));
+    //reti->setMinimumSize(100, 50);
     parate = new QLabel(tr("Parate (Rigori)"), this);
-    parate->setMinimumSize(100, 50);
+    //parate->setMinimumSize(100, 50);
     perc = new QLabel("%", this);
-    perc->setMinimumSize(100, 50);
+    //perc->setMinimumSize(100, 50);
     parateperc = new QLabel(tr("% Parate"));
-    parateperc->setMinimumSize(100, 50);
+    //parateperc->setMinimumSize(100, 50);
 
     headerLayout->addWidget(numero);
     headerLayout->addWidget(cognome);

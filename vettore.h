@@ -264,12 +264,13 @@ typename Vettore<T>::iterator Vettore<T>::insert(iterator it, value_type x){
         array = ridimensiona(*this, capacity() + DEFAULT_DIMENSION);
         dim += DEFAULT_DIMENSION;
     }
-    for(iterator i(&array[size()-1]); i >= it; --i){
+    int oldSize = size();
+    ++_size;
+    for(iterator i(&array[oldSize-1]); i >= it; --i){
         iterator aux = i+1;
         *aux = *i;
     }
     *it = x;
-    ++_size;
     return it;
 }
 

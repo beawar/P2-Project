@@ -20,8 +20,9 @@ Partita::Partita(Squadra *home, Squadra *guest, Arbitro *a1, Arbitro *a2, QWidge
     homeName->setFont(font);
     guestName->setFont(font);
 
-
     punteggio = new QLabel(tr("%1 : %2").arg(QString::number(goalHome), QString::number(goalGuest)), this);
+    punteggio->setAlignment(Qt::AlignHCenter);
+    punteggio->setFont(font);
 
     QLabel* arbitriLabel = new QLabel(tr("Arbitri:"), this);
     QFont corsivo;
@@ -86,6 +87,8 @@ void Partita::createHomeLayout(){
     QRadioButton* homeRadio[maxGiocatori];
 
     int giocatoriCount = 0;
+    bool portiereTrovato = false;
+
     for(int i=0; i<homeTeam->size(); ++i){
         if(homeTeam->at(i)->isChecked()){
             homeLines[i] = new LinePartita(homeTeam->at(i), this);
@@ -96,6 +99,13 @@ void Partita::createHomeLayout(){
                 lineLayout[giocatoriCount]->addWidget(homeLines[i], 0, Qt::AlignRight);
 
                 homePortiere->addButton(homeRadio[giocatoriCount], i);
+                connect(homePortiere->button(i), SIGNAL(clicked()), this, SLOT(cambiaPortiereHome()));
+
+                if(!portiereTrovato && dynamic_cast<Portiere*>(homeTeam->at(i))){
+                    homeRadio[giocatoriCount]->setChecked(true);
+                    currentPortiereHome = i;
+                    portiereTrovato = true;
+                }
 
                 homeLayout->addLayout(lineLayout[giocatoriCount]);
                 giocatoriCount++;
@@ -107,11 +117,21 @@ void Partita::createHomeLayout(){
 
             connect(homeLines[i], SIGNAL(tiro(int, bool)), this, SLOT(updatePunteggio()));
             connect(homeLines[i], SIGNAL(tiro(int, bool)), this, SLOT(tiroHome(int,bool)));
+            connect(homeLines[i], SIGNAL(rigore(int,bool)), this, SLOT(updatePunteggio()));
             connect(homeLines[i], SIGNAL(rigore(int,bool)), this, SLOT(rigoreHome(int,bool)));
-            connect(homeLines[i], SIGNAL(ammonizione(bool)), this, SLOT(ammonizioneHome(bool)));
-            connect(homeLines[i], SIGNAL(dueMinuti(bool)), this, SLOT(dueMinutiHome(bool)));
-            connect(homeLines[i], SIGNAL(esclusione(bool)), this, SLOT(esclusioneHome(bool)));
-            connect(homePortiere->button(i), SIGNAL(clicked()), this, SLOT(cambiaPortiereHome()));
+        }
+    }
+
+    if(!portiereTrovato){
+        QMessageBox::warning(this, tr("Nessun portiere disponibile"),
+                             tr("In lista non è presente nessun portiere. "
+                                "Verrà selezionato il primo giocatore disponibile."), QMessageBox::Ok);
+        for(int i = 0; i<homeTeam->size() && !portiereTrovato; ++i){
+            if(homeTeam->at(i)->isChecked() && dynamic_cast<Giocatore*>(homeTeam->at(i))){
+                homePortiere->button(i)->setChecked(true);
+                cambiaPortiereHome();
+                portiereTrovato = true;
+            }
         }
     }
 
@@ -127,6 +147,7 @@ void Partita::createGuestLayout(){
     QRadioButton* guestRadio[maxGiocatori];
 
     int giocatoriCount = 0;
+    bool portiereTrovato = false;
     for(int i=0; i<guestTeam->size(); ++i){
         if(guestTeam->at(i)->isChecked()){
             guestLines[i] = new LinePartita(guestTeam->at(i), this);
@@ -137,6 +158,13 @@ void Partita::createGuestLayout(){
                 lineLayout[giocatoriCount]->addWidget(guestLines[i], 0, Qt::AlignRight);
 
                 guestPortiere->addButton(guestRadio[giocatoriCount], i);
+                connect(guestPortiere->button(i), SIGNAL(clicked()), this, SLOT(cambiaPortiereGuest()));
+
+                if(!portiereTrovato && dynamic_cast<Portiere*>(guestTeam->at(i))){
+                    guestRadio[giocatoriCount]->setChecked(true);
+                    currentPortiereGuest = i;
+                    portiereTrovato = true;
+                }
 
                 guestLayout->addLayout(lineLayout[giocatoriCount]);
                 giocatoriCount++;
@@ -147,10 +175,22 @@ void Partita::createGuestLayout(){
             }
 
             connect(guestLines[i], SIGNAL(tiro(int, bool)), this, SLOT(updatePunteggio()));
-            connect(guestLines[i], SIGNAL(rigore(int,bool)), this, SLOT(updatePunteggio()));
             connect(guestLines[i], SIGNAL(tiro(int, bool)), this, SLOT(tiroGuest(int,bool)));
+            connect(guestLines[i], SIGNAL(rigore(int,bool)), this, SLOT(updatePunteggio()));
             connect(guestLines[i], SIGNAL(rigore(int,bool)), this, SLOT(rigoreGuest(int,bool)));
-            connect(guestPortiere->button(i), SIGNAL(clicked()), this, SLOT(cambiaPortiereGuest()));
+        }
+    }
+
+    if(!portiereTrovato){
+        QMessageBox::warning(this, tr("Nessun portiere disponibile"),
+                             tr("In lista non è presente nessun portiere. "
+                                "Verrà selezionato il primo giocatore disponibile."), QMessageBox::Ok);
+        for(int i = 0; i<guestTeam->size() && !portiereTrovato; ++i){
+            if(guestTeam->at(i)->isChecked() && dynamic_cast<Giocatore*>(guestTeam->at(i))){
+                guestPortiere->button(i)->setChecked(true);
+                cambiaPortiereGuest();
+                portiereTrovato = true;
+            }
         }
     }
 
@@ -158,30 +198,43 @@ void Partita::createGuestLayout(){
 }
 
 void Partita::updatePunteggio(){
-    punteggio->setText(tr("%1 : %2").arg(goalHome, goalGuest));
+    punteggio->setText(tr("%1 : %2").arg(QString::number(goalHome),
+                                         QString::number(goalGuest)));
 }
 
-void Partita::tiroHome(int val, bool aggiunto){
+void Partita::tiroHome(int val, bool segnato){
     Portiere* p = dynamic_cast<Portiere*>(guestTeam->at(currentPortiereGuest));
-    p->addTiroRicevuto(-val, aggiunto);
+    if(p){
+        bool parato = !segnato;
+        p->addTiroRicevuto(val, parato);
+    }
     emit dataChanged();
 }
 
-void Partita::rigoreHome(int val, bool aggiunto){
+void Partita::rigoreHome(int val, bool segnato){
     Portiere* p = dynamic_cast<Portiere*>(guestTeam->at(currentPortiereGuest));
-    p->addRigoreRicevuto(-val, aggiunto);
+    if(p){
+        bool parato = !segnato;
+        p->addRigoreRicevuto(val, parato);
+    }
     emit dataChanged();
 }
 
-void Partita::tiroGuest(int val, bool aggiunto){
+void Partita::tiroGuest(int val, bool segnato){
     Portiere* p = dynamic_cast<Portiere*>(homeTeam->at(currentPortiereHome));
-    p->addTiroRicevuto(-val, aggiunto);
+    if(p){
+        bool parato = !segnato;
+        p->addTiroRicevuto(val, parato);
+    }
     emit dataChanged();
 }
 
-void Partita::rigoreGuest(int val, bool aggiunto){
+void Partita::rigoreGuest(int val, bool segnato){
     Portiere* p = dynamic_cast<Portiere*>(homeTeam->at(currentPortiereHome));
-    p->addRigoreRicevuto(-val, aggiunto);
+    if(p){
+        bool parato = !segnato;
+        p->addRigoreRicevuto(val, parato);
+    }
     emit dataChanged();
 }
 

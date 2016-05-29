@@ -7,9 +7,11 @@ PartitaPage::PartitaPage(SquadreModel *sm, ArbitriModel *am, QWidget *parent) :
     QWizardPage(parent), squadre(sm), arbitri(am),
     s1GiocChecked(0), s1AllChecked(0), s2GiocChecked(0), s2AllChecked(0)
 { 
-    /*for(int i=0; i<squadre->size(); ++i){
+    /*------------------------------------------------------------------------------------------
+     for(int i=0; i<squadre->size(); ++i){
         squadre->at(i)->sortByName();
-    }*/
+    }
+    --------------------------------------------------------------------------------------------*/
     layout = new QVBoxLayout;
     createView();
     createLayout();
@@ -63,13 +65,13 @@ void PartitaPage::createView(){
 
     connect(squadra1ComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateList()));
     connect(squadra1List, SIGNAL(clicked(QModelIndex)), this, SLOT(checkItemS1(QModelIndex)));
-    connect(squadra1, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(update()));
-    connect(squadra1, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(update()));
+    connect(squadra1, SIGNAL(dataChanged(QModelIndex,QModelIndex)), squadra1List, SLOT(update()));
+    connect(squadra1, SIGNAL(dataChanged(QModelIndex,QModelIndex)), squadra2List, SLOT(update()));
 
     connect(squadra2ComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateList()));
-    connect(squadra1List, SIGNAL(clicked(QModelIndex)), this, SLOT(checkItemS1(QModelIndex)));
-    connect(squadra2, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(update()));
-    connect(squadra2, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(update()));
+    connect(squadra2List, SIGNAL(clicked(QModelIndex)), this, SLOT(checkItemS2(QModelIndex)));
+    connect(squadra2, SIGNAL(dataChanged(QModelIndex,QModelIndex)), squadra2List, SLOT(update()));
+    connect(squadra2, SIGNAL(dataChanged(QModelIndex,QModelIndex)), squadra1List, SLOT(update()));
 
 }
 
@@ -180,7 +182,8 @@ void PartitaPage::checkItemS1(QModelIndex index){
         else{
             QMessageBox::warning(this, tr("Numero massimo raggiunto"),
                                  tr("E' stato raggiunto il numero massimo di giocatori (%1) "
-                                    "o allenatori (%2) consentiti a referto").arg(maxGiocatori, maxAllenatori));
+                                    "o allenatori (%2) consentiti a referto").arg(QString::number(maxGiocatori),
+                                                                                  QString::number(maxAllenatori)));
         }
     }
 
@@ -213,12 +216,14 @@ void PartitaPage::checkItemS2(QModelIndex index){
         else{
             QMessageBox::warning(this, tr("Numero massimo raggiunto"),
                                  tr("E' stato raggiunto il numero massimo di giocatori (%1) "
-                                    "o allenatori (%2) consentiti a referto").arg(maxGiocatori, maxAllenatori));
+                                    "o allenatori (%2) consentiti a referto").arg(QString::number(maxGiocatori),
+                                                                                  QString::number(maxAllenatori)));
         }
     }
 }
 
 void PartitaPage::sort(){
+    /*-----------------------------------------------------------------------------------------
     if(nomeButton->isChecked()){
         for(int i=0; i<squadre->size(); ++i){
             squadre->at(i)->sortByName();
@@ -231,4 +236,5 @@ void PartitaPage::sort(){
     }
 
     updateList();
+    -----------------------------------------------------------------------------------------------*/
 }

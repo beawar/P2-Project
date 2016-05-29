@@ -237,11 +237,11 @@ bool Squadra::operator ==(const Squadra& s) const{
 void Squadra::sortByName(){
     Vettore<Tesserato*> giocatori;
     Vettore<Tesserato*> allenatori;
-    for(Vettore<Tesserato*>::iterator it = tesserati.begin(); it != tesserati.end(); ++it){
+    for(Vettore<Tesserato*>::iterator it = tesserati.begin(); it < tesserati.end(); ++it){
         Giocatore* gioc = dynamic_cast<Giocatore*>(*it);
         if(gioc){
             bool inserito = false;
-            for(Vettore<Tesserato*>::iterator it2 = giocatori.begin(); it2 != giocatori.end() && !inserito; ++it2){
+            for(Vettore<Tesserato*>::iterator it2 = giocatori.begin(); it2 < giocatori.end() && !inserito; ++it2){
                 Giocatore* g2 = dynamic_cast<Giocatore*>(*it2);
                 if(*gioc < *g2){
                     it2 = giocatori.insert(it2, gioc);
