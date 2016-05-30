@@ -1,13 +1,20 @@
 #include "portiere.h"
 
-Portiere::Portiere(const QString & n, const QString & c, const QDate & d, unsigned int num)
-    : Giocatore(n, c, d, num), tiriParati(0), tiriRicevuti(0) {}
+Portiere::Portiere(const QString & nome, const QString & cognome, const QDate & nascita, unsigned int numero)
+    : Giocatore(nome, cognome, nascita, numero), tiriParati(0),
+      tiriRicevuti(0), rigoriParati(0), rigoriRicevuti(0) {}
+
+Portiere::Portiere(const Portiere &p){
+    *this = p;
+}
+
+Portiere::Portiere(const Giocatore &g): Giocatore(g), tiriParati(0), tiriRicevuti(0) {}
 
 unsigned int Portiere::getTiriParati() const{
     return tiriParati;
 }
 
-unsigned int Portiere::getTitiRicevuti() const{
+unsigned int Portiere::getTiriRicevuti() const{
     return tiriRicevuti;
 }
 
@@ -28,11 +35,11 @@ unsigned int Portiere::getRigoriSubiti() const{
 }
 
 double Portiere::getTiriParatiPerc() const{
-    return (tiriParati*100)/tiriRicevuti;
+    return tiriRicevuti == 0 ? 0 : (tiriParati*100)/tiriRicevuti;
 }
 
 double Portiere::getRigoriParatiPerc() const{
-    return (rigoriParati*100)/rigoriRicevuti;
+    return rigoriRicevuti == 0 ? 0 : (rigoriParati*100)/rigoriRicevuti;
 }
 
 void Portiere::addTiroRicevuto(int x, const bool & parato){
@@ -47,11 +54,29 @@ void Portiere::addRigoreRicevuto(int x, const bool & parato){
         rigoriParati+x <0 ? rigoriParati=0 : rigoriParati+=x;
     }
     rigoriRicevuti+x <0 ? rigoriParati=0 : rigoriParati+=x;
-    addTiroRicevuto(parato);
+    addTiroRicevuto(x, parato);
+}
+
+Portiere& Portiere::operator =(const Portiere& p){
+    Giocatore::operator =(p);
+    tiriParati = p.tiriParati;
+    tiriRicevuti = p.tiriRicevuti;
+    rigoriParati = p.rigoriParati;
+    rigoriRicevuti = p.rigoriRicevuti;
+    return *this;
+}
+
+QString Portiere::getInfo() const{
+    QString info;
+    info.append(Giocatore::getInfo());
+    info.append("  (P)");
+    return info;
 }
 
 void Portiere::reset(){
     Giocatore::reset();
     tiriParati=0;
     tiriRicevuti=0;
+    rigoriParati=0;
+    rigoriRicevuti=0;
 }

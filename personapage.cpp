@@ -151,7 +151,7 @@ void PersonaPage::insertPerson(){
                     Portiere* gioc = new Portiere;
                     gioc->setNome(nomeEdit->text());
                     gioc->setCognome(cognomeEdit->text());
-                    gioc->setAnno(dataEdit->date());
+                    gioc->setData(dataEdit->date());
                     gioc->setNumero(numeroEdit->value());
                     squadre->addTesserato(gioc, Squadra(squadraEdit->currentText()));
                 }
@@ -159,7 +159,7 @@ void PersonaPage::insertPerson(){
                     Giocatore* gioc = new Giocatore;
                     gioc->setNome(nomeEdit->text());
                     gioc->setCognome(cognomeEdit->text());
-                    gioc->setAnno(dataEdit->date());
+                    gioc->setData(dataEdit->date());
                     gioc->setNumero(numeroEdit->value());
                     squadre->addTesserato(gioc, Squadra(squadraEdit->currentText()));
                 }
@@ -170,7 +170,7 @@ void PersonaPage::insertPerson(){
                 Allenatore* all = new Allenatore;
                 all->setNome(nomeEdit->text());
                 all->setCognome(cognomeEdit->text());
-                all->setAnno(dataEdit->date());
+                all->setData(dataEdit->date());
                 squadre->addTesserato(all, Squadra(squadraEdit->currentText()));
             }
             break;
@@ -179,7 +179,7 @@ void PersonaPage::insertPerson(){
                 Arbitro* arb = new Arbitro;
                 arb->setNome(nomeEdit->text());
                 arb->setCognome(cognomeEdit->text());
-                arb->setAnno(dataEdit->date());
+                arb->setData(dataEdit->date());
                 arb->setLivello(livelloEdit->value());
                 arbitri->addArbitro(arb);
             }

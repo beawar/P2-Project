@@ -13,7 +13,7 @@ class LineStat : public QWidget
 {
     Q_OBJECT
 private:
-    const Tesserato* tess;
+    Tesserato* tess;
 
     void createLabels();
 
@@ -28,12 +28,12 @@ private:
     QLabel* perc;
     QLabel* paratePerc;
 public:
-    explicit LineStat(const Tesserato* t, QWidget *parent = 0);
+    explicit LineStat(Tesserato* t, QWidget *parent = 0);
 
 signals:
 
 public slots:
-    void updateDati();
+    void updateDati(Tesserato* t);
 
 };
 

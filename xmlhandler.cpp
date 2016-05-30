@@ -50,7 +50,7 @@ void XmlHandler::writeItem(){
                 xmlWriter.writeTextElement("Nome", giocatore->getNome());
                 xmlWriter.writeTextElement("Cognome", giocatore->getCognome());
                 xmlWriter.writeTextElement("Numero", QString::number(giocatore->getNumero()));
-                QString data = giocatore->getAnno().toString("dd/MM/yyyy");
+                QString data = giocatore->getData().toString("dd/MM/yyyy");
                 xmlWriter.writeTextElement("Nascita", data);
                 if(portiere){
                     xmlWriter.writeEndElement();
@@ -62,7 +62,7 @@ void XmlHandler::writeItem(){
                 xmlWriter.writeStartElement("Allenatore");
                 xmlWriter.writeTextElement("Nome", all->getNome());
                 xmlWriter.writeTextElement("Cognome", all->getCognome());
-                QString data = all->getAnno().toString("dd/MM/yyyy");
+                QString data = all->getData().toString("dd/MM/yyyy");
                 xmlWriter.writeTextElement("Nascita", data);
                 xmlWriter.writeEndElement();
             }
@@ -75,7 +75,7 @@ void XmlHandler::writeItem(){
         xmlWriter.writeStartElement("Arbitro");
         xmlWriter.writeTextElement("Nome", arbitro->getNome());
         xmlWriter.writeTextElement("Cognome", arbitro->getCognome());
-        QString data = arbitro->getAnno().toString("dd/MM/yyyy");
+        QString data = arbitro->getData().toString("dd/MM/yyyy");
         xmlWriter.writeTextElement("Nascita", data);
         xmlWriter.writeTextElement("Livello", QString::number(arbitro->getLivello()));
         xmlWriter.writeEndElement();
@@ -153,15 +153,18 @@ void XmlHandler::readSquadra(){
 void XmlHandler::readGiocatore(const Squadra& squadra){
     Q_ASSERT(xmlReader.isStartElement() && xmlReader.name() == "Giocatore");
 
-    Giocatore* giocatore = new Giocatore;
+    Giocatore* giocatore;
     bool portiere = false;
 
     while(!xmlReader.isEndElement()){
         if(xmlReader.name() == "Portiere"){
-            giocatore = static_cast<Portiere*>(giocatore);
+            giocatore = new Portiere;
             portiere = true;
         }
         else if(xmlReader.name() == "Nome"){
+            if(!portiere){
+                giocatore = new Giocatore;
+            }
             QString nome = xmlReader.readElementText();
             giocatore->setNome(nome);
         }
@@ -175,7 +178,7 @@ void XmlHandler::readGiocatore(const Squadra& squadra){
         }
         else if(xmlReader.name() == "Nascita"){
             QString data = xmlReader.readElementText();
-            giocatore->setAnno(QDate::fromString(data, "dd/MM/yyyy"));
+            giocatore->setData(QDate::fromString(data, "dd/MM/yyyy"));
         }
         xmlReader.readNext();
     }
@@ -200,7 +203,7 @@ void XmlHandler::readAllenatore(const Squadra& squadra){
         }
         else if(xmlReader.name() == "Nascita"){
             QString data = xmlReader.readElementText();
-            allenatore->setAnno(QDate::fromString(data, "dd/MM/yyyy"));
+            allenatore->setData(QDate::fromString(data, "dd/MM/yyyy"));
         }
         xmlReader.readNext();
     }
@@ -222,7 +225,7 @@ void XmlHandler::readArbitro(){
         }
         else if(xmlReader.name() == "Nascita"){
             QString data = xmlReader.readElementText();
-            arbitro->setAnno(QDate::fromString(data, "dd/MM/yyyy"));
+            arbitro->setData(QDate::fromString(data, "dd/MM/yyyy"));
         }
         else if(xmlReader.name() == "livello"){
             QString livello = xmlReader.readElementText();

@@ -192,6 +192,12 @@ void Squadra::removeTesserato(Tesserato* t){
     }
 }
 
+void Squadra::sostituisciTesserato(int i, Tesserato *nuovo){
+    Tesserato* vecchio = tesserati.at(i);
+    delete vecchio;
+    tesserati.at(i) = nuovo;
+}
+
 void Squadra::modifica(const Squadra& s){
     if(nome != s.nome){
         setNome(s.nome);

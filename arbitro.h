@@ -13,18 +13,22 @@ private:
 
     void aumentaLivello ();
 public:
-    Arbitro(const QString& ="", const QString& ="", const QDate& =QDate::currentDate(), const unsigned int& = 0);
+    Arbitro(const QString& nome="", const QString& cognome="",
+            const QDate& nascita=QDate::currentDate(), const unsigned int& livello= 0);
+    Arbitro(const Arbitro& a);
 
-    virtual void modifica(const Arbitro&);
+    virtual void modifica(const Arbitro& a);
 
     unsigned int getLivello () const;
 
-    void setLivello (const unsigned int &);
-    void addPRegionale (int =1);
-    void addPNazionale(int =1);
-    void addPInternaz(int =1);
+    void setLivello (const unsigned int & l);
+    void addPRegionale (int x =1);
+    void addPNazionale(int x =1);
+    void addPInternaz(int x =1);
 
     unsigned int getPartite() const;
+
+    virtual Arbitro& operator =(const Arbitro& a);
 
     virtual void reset(){}
 

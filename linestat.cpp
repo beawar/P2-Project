@@ -1,7 +1,7 @@
 #include "linestat.h"
 #include <QString>
 
-LineStat::LineStat(const Tesserato *t, QWidget *parent) :
+LineStat::LineStat(Tesserato*t, QWidget *parent) :
     QWidget(parent), tess(t)
 {
     createLabels();
@@ -14,42 +14,42 @@ LineStat::LineStat(const Tesserato *t, QWidget *parent) :
     hbLayout->addWidget(dueMin);
     hbLayout->addWidget(escl);
     hbLayout->addWidget(reti);
-    hbLayout->addWidget(parate);
     hbLayout->addWidget(perc);
+    hbLayout->addWidget(parate);
     hbLayout->addWidget(paratePerc);
 
     setLayout(hbLayout);
-    setStyleSheet("QLabel { color: white;}");
-    setStyleSheet("background-color: ");
+    setAutoFillBackground(true);
+
 }
 
 void LineStat::createLabels(){
     cognome = new QLabel(tess->getCognome(), this);
-    //cognome->setMinimumWidth(100);
+    cognome->setMinimumSize(100, 20);
     nome = new QLabel(tess->getNome(), this);
-    //nome->setMinimumWidth(100);
+    nome->setMinimumSize(100, 20);
     numero = new QLabel(this);
-    //numero->setMinimumWidth(50);
-    numero->setMaximumSize(numero->minimumSize());
-    numero->setStyleSheet("font: bold 12pt;"
-                          "color: white;"
+    numero->setMinimumSize(30, 20);
+    numero->setStyleSheet("color: white;"
+                          "font-weight: bold;"
                           "background-color: navy;"
-                          "border 1px solid black;");
+                          "border 1px solid white;");
+    numero->setAlignment(Qt::AlignHCenter);
 
     ammo = new QLabel(this);
-    //ammo->setMinimumWidth(50);
+    ammo->setMinimumSize(20, 20);
     dueMin = new QLabel(this);
-    //dueMin->setMinimumWidth(80);
+    dueMin->setMinimumSize(80, 20);
     escl = new QLabel(this);
-    //escl->setMinimumWidth(50);
+    escl->setMinimumSize(20, 20);
     reti = new QLabel(this);
-    //reti->setMinimumWidth(100);
+    reti->setMinimumSize(100, 20);
     parate = new QLabel(this);
-    //parate->setMinimumWidth(100);
+    parate->setMinimumSize(100, 20);
     perc = new QLabel(this);
-    //perc->setMinimumWidth(200);
+    perc->setMinimumSize(100, 20);
     paratePerc = new QLabel(this);
-    //paratePerc->setMinimumWidth(200);
+    paratePerc->setMinimumSize(100, 20);
     const Giocatore* g = dynamic_cast<const Giocatore*>(tess);
     if(g){
         numero->setText(QString::number(g->getNumero()));
@@ -59,48 +59,77 @@ void LineStat::createLabels(){
     }
 }
 
-void LineStat::updateDati(){
-
-    const Giocatore* g = dynamic_cast<const Giocatore*>(tess);
+void LineStat::updateDati(Tesserato* t){
+    Giocatore* g = dynamic_cast<Giocatore*>(t);
     if(g){
         numero->setText(QString::number(g->getNumero()));
-        QString tiri = tr("%1 / %2 (%3 / %4)").arg(g->getTiriSegnati()).arg(g->getTiriTotali()).arg(g->getRigoriSegnati()).arg(g->getRigoriTotali());
-        reti->setText(tiri);
-        QString percentuali = tr("%1 (%2)").arg(g->getTiriPerc()).arg(g->getRigoriPerc());
-        perc->setText(percentuali);
+        reti->setText(tr("%1/%2 (%3/%4)").arg(QString::number(g->getTiriSegnati()),
+                                              QString::number(g->getTiriTotali()),
+                                              QString::number(g->getRigoriSegnati()),
+                                              QString::number(g->getRigoriTotali())));
+        perc->setText(tr("%1 (%2)").arg(QString::number(g->getTiriPerc()),
+                                        QString::number(g->getRigoriPerc())));
         if(g->isAmmonito()){
             ammo->setText("X");
         }
-        for(int i=0; i<g->get2Minuti(); ++i){
-            dueMin->setText(dueMin->text().append("X"));
+        else{
+            ammo->clear();
         }
+
+        switch(g->get2Minuti()){
+            case 1:
+                dueMin->setText("X");
+                break;
+            case 2:
+                dueMin->setText("XX");
+                break;
+            case 3:
+                dueMin->setText("XXX");
+                break;
+            default:
+                dueMin->clear();
+                break;
+        }
+
         if(g->isEscluso()){
             escl->setText("X");
         }
-        const Portiere* p = dynamic_cast<const Portiere*>(g);
+        else{
+            escl->clear();
+        }
+
+        Portiere* p = dynamic_cast<Portiere*>(g);
         if(p){
-            parate->setText(tr("%1 / %2 (%3 / %4)")
-                            .arg(QString::number(p->getTiriParati()),
-                                 QString::number(p->getTitiRicevuti()),
-                                 QString::number(p->getRigoriParati()),
-                                 QString::number(p->getRigoriRicevuti())));
-            paratePerc->setText(tr("%1% (%2%)")
-                                .arg(p->getTiriParatiPerc(),
-                                     p->getRigoriParatiPerc()));
+            parate->setText(tr("%1/%2 (%3/%4)").arg(QString::number(p->getTiriParati()),
+                                                    QString::number(p->getTiriRicevuti()),
+                                                    QString::number(p->getRigoriParati()),
+                                                    QString::number(p->getRigoriRicevuti())));
+            paratePerc->setText(tr("%1 (%2)").arg(QString::number(p->getTiriParatiPerc()),
+                                                  QString::number(p->getRigoriParatiPerc())));
         }
     }
     else{
-        const Allenatore* all = dynamic_cast<const Allenatore*>(tess);
+        Allenatore* all = dynamic_cast<Allenatore*>(t);
         if(all){
             if(all->isAmmonito()){
                 ammo->setText("X");
             }
-            for(int i=0; i<all->get2Minuti(); ++i){
-                dueMin->setText(dueMin->text().append("X"));
+            else{
+                ammo->clear();
+            }
+            if(all->get2Minuti() == 1){
+                dueMin->setText("X");
+            }
+            else{
+                dueMin->clear();
             }
             if(all->isEscluso()){
                 escl->setText("X");
             }
+            else{
+                escl->clear();
+            }
         }
     }
+    update();
 }

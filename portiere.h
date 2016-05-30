@@ -12,10 +12,13 @@ private:
     int rigoriRicevuti;
 
 public:
-    Portiere(const QString& ="", const QString& ="", const QDate& = QDate::currentDate(), unsigned int = 0);
+    Portiere(const QString& nome ="", const QString& cognome ="",
+             const QDate& nascita = QDate::currentDate(), unsigned int numero = 0);
+    Portiere(const Portiere& p);
+    Portiere(const Giocatore& g);
 
     unsigned int getTiriParati() const;
-    unsigned int getTitiRicevuti() const;
+    unsigned int getTiriRicevuti() const;
     unsigned int getRigoriParati() const;
     unsigned int getRigoriRicevuti() const;
 
@@ -25,9 +28,12 @@ public:
     double getTiriParatiPerc() const;
     double getRigoriParatiPerc() const;
 
-    void addTiroRicevuto( int = 1, const bool& = false);
-    void addRigoreRicevuto(int =1, const bool& = false);
+    void addTiroRicevuto(int x = 1, const bool& parato= false);
+    void addRigoreRicevuto(int x =1, const bool& parato = false);
 
+    virtual Portiere& operator =(const Portiere& p);
+
+    virtual QString getInfo() const;
     virtual void reset();
 };
 

@@ -3,7 +3,8 @@
 
 Stat::Stat(Squadra *s, QWidget *parent) :
     QWidget(parent), squadra(s)
-{
+{   
+    setStyleSheet("background-image: url(:/images/images/Sfondo_logo.png)");
     createHeader();
 
     QFont font;
@@ -18,48 +19,75 @@ Stat::Stat(Squadra *s, QWidget *parent) :
     layout->addLayout(headerLayout);
 
     int j = 0;
-    for(int i=0; i<squadra->size(); ++i){
-        if(squadra->at(i)->isChecked() && j<maxPersone){
+    for(int i=0; i<squadra->size() && j<maxPersone; ++i){
+        if(squadra->at(i)->isChecked()){
             persona[j] = new LineStat(squadra->at(i), this);
+            persona[j]->setAttribute(Qt::WA_NoSystemBackground);
+            /*persona[j]->setStyleSheet("font-size: 10pt;"
+                                      "text-align: center center;"
+                                      "color: white;");
+            */
             layout->addWidget(persona[j]);
             j++;
         }
     }
     persona[j-1]->setObjectName("LastPerson");
-
-    setStyleSheet("LineStat {border-top: 1px groove grey }");
-    setStyleSheet("LineStat#LastPerson {border-bottom: 1px groove grey }");
-    setStyleSheet("Stat { background-image: url(:/images/images/Sfondo_logo.png) }");
     setLayout(layout);
+
 }
 
 void Stat::createHeader(){
     headerLayout = new QHBoxLayout;
 
     numero = new QLabel("N°", this);
-    //numero->setMinimumSize(50, 50);
+    numero->setMinimumSize(30, 30);
+
+    QFont bold = numero->font();
+    bold.setBold(true);
+    numero->setFont(bold);
+
     cognome = new QLabel(tr("Cognome"), this);
-    //cognome->setMinimumSize(100, 50);
+    cognome->setMinimumSize(100, 30);
+    cognome->setFont(bold);
+
     nome = new QLabel(tr("Nome"), this);
-    //nome->setMinimumSize(100, 50);
+    nome->setMinimumSize(100, 30);
+    nome->setFont(bold);
+
     ammo = new QLabel(this);
-    ammo->setPixmap(QPixmap(":/images/images/giallo.png").scaled(10, 10));
-    //ammo->setMinimumSize(50, 50);
+    ammo->setPixmap(QPixmap(":/images/images/giallo.png").scaled(30, 30));
+    ammo->setMinimumSize(30, 30);
+    ammo->setAlignment(Qt::AlignHCenter);
+
     dueMin = new QLabel(this);
-    dueMin->setPixmap(QPixmap(":/images/images/two_fingers.png").scaled(10, 10));
-    //dueMin->setMinimumSize(80, 50);
-    escl = new QLabel(tr("Escl."), this);
-    escl->setPixmap(QPixmap(":/images/images/rosso.png").scaled(10, 10));
-    //escl->setMinimumSize(50, 50);
-    reti = new QLabel(tr("Reti (Rigori)"), this);
-    reti->setPixmap(QPixmap(":/images/images/footbal.png").scaled(10, 10));
-    //reti->setMinimumSize(100, 50);
-    parate = new QLabel(tr("Parate (Rigori)"), this);
-    //parate->setMinimumSize(100, 50);
-    perc = new QLabel("%", this);
-    //perc->setMinimumSize(100, 50);
-    parateperc = new QLabel(tr("% Parate"));
-    //parateperc->setMinimumSize(100, 50);
+    dueMin->setPixmap(QPixmap(":/images/images/two_fingers.png").scaled(30, 30));
+    dueMin->setMinimumSize(80, 30);
+    dueMin->setAlignment(Qt::AlignHCenter);
+
+    escl = new QLabel(this);
+    escl->setPixmap(QPixmap(":/images/images/rosso.png").scaled(30, 30));
+    escl->setMinimumSize(30, 30);
+    escl->setAlignment(Qt::AlignHCenter);
+
+    reti = new QLabel(this);
+    reti->setPixmap(QPixmap(":/images/images/footbal.png").scaled(30, 30));
+    reti->setMinimumSize(100, 30);
+    reti->setAlignment(Qt::AlignHCenter);
+
+    parate = new QLabel(this);
+    parate->setPixmap(QPixmap(":/images/images/portiere.png").scaled(30, 30));
+    parate->setMinimumSize(100, 30);
+    parate->setAlignment(Qt::AlignHCenter);
+
+    perc = new QLabel(this);
+    perc->setPixmap(QPixmap(":/images/images/footbal_perc.png").scaled(30, 30));
+    perc->setMinimumSize(100, 30);
+    perc->setAlignment(Qt::AlignHCenter);
+
+    parateperc = new QLabel(this);
+    parateperc->setPixmap(QPixmap(":/images/images/portiere_perc.png").scaled(30, 30));
+    parateperc->setMinimumSize(100, 50);
+    parateperc->setAlignment(Qt::AlignHCenter);
 
     headerLayout->addWidget(numero);
     headerLayout->addWidget(cognome);
@@ -68,13 +96,22 @@ void Stat::createHeader(){
     headerLayout->addWidget(dueMin);
     headerLayout->addWidget(escl);
     headerLayout->addWidget(reti);
-    headerLayout->addWidget(parate);
     headerLayout->addWidget(perc);
+    headerLayout->addWidget(parate);
     headerLayout->addWidget(parateperc);
 }
 
 void Stat::updateDati(){
-    for(int i=0; i<maxPersone;i++){
-        persona[i]->updateDati();
+    int j = 0;
+    bool last = false;
+    for(int i=0; i<squadra->size() && !last; ++i){
+        if(squadra->at(i)->isChecked()){
+            persona[j]->updateDati(squadra->at(i));
+            if(persona[j]->objectName() == "LastPerson"){
+                last = true;
+            }
+            j++;
+        }
     }
+    update();
 }

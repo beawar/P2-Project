@@ -8,9 +8,6 @@ CheckList::CheckList(Squadra *s, bool checkable, QObject *parent) :
     if(squadra){
         for(int i=0; i<squadra->size(); ++i){
             strList.push_back(squadra->at(i)->getInfo());
-            if(dynamic_cast<Portiere*>(squadra->at(i))){
-                strList.push_back(tr(" (P)"));
-            }
         }
     }
     setStringList(strList);

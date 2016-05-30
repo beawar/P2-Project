@@ -72,6 +72,7 @@ public:
     void addTesserato (Tesserato*) throw(Err_Tesserato);
     void modificaTesserato(Tesserato*, const Tesserato&);
     void removeTesserato(Tesserato*);
+    void sostituisciTesserato(int, Tesserato*);
 
     void modifica(const Squadra&);
 

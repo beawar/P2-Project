@@ -1,7 +1,11 @@
 #include "arbitro.h"
 
-Arbitro::Arbitro(const QString& n, const QString& c, const QDate& d, const unsigned int &l)
-    :Tesserato(n, c, d), livello(l), partiteRegionali(0), partiteNazionali(0), partiteInternaz(0) {}
+Arbitro::Arbitro(const QString& nome, const QString& cognome, const QDate& nascita, const unsigned int &livello)
+    :Tesserato(nome, cognome, nascita), livello(livello), partiteRegionali(0), partiteNazionali(0), partiteInternaz(0) {}
+
+Arbitro::Arbitro(const Arbitro &a){
+    *this = a;
+}
 
 void Arbitro::modifica(const Arbitro&a){
     if(*this != a){
@@ -29,8 +33,8 @@ unsigned int Arbitro::getLivello() const{
     return livello;
 }
 
-void Arbitro::setLivello(const unsigned int &x){
-    livello=x;
+void Arbitro::setLivello(const unsigned int &l){
+    livello=l;
     switch(livello){
     case 1:
         partiteInternaz = 2;
@@ -84,4 +88,13 @@ void Arbitro::aumentaLivello(){
     else{
         livello = 0;
     }
+}
+
+Arbitro& Arbitro::operator =(const Arbitro& a){
+    Tesserato::operator =(a);
+    livello = a.livello;
+    partiteRegionali = a.partiteRegionali;
+    partiteNazionali = a.partiteNazionali;
+    partiteInternaz = a.partiteInternaz;
+    return *this;
 }

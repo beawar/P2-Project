@@ -11,34 +11,37 @@ class Tesserato
 private:
   QString nome;
   QString cognome;
-  QDate annoNascita;
+  QDate dataNascita;
 
   bool checked;
 
 protected:
+  Tesserato(const QString& nome, const QString& cognome, const QDate& nascita);
   Tesserato();
+  Tesserato(const Tesserato& t);
 
 public:
-  Tesserato(const QString&, const QString&, const QDate&);
   virtual ~Tesserato() {}
 
   QString getNome() const;
   QString getCognome() const;
-  QDate getAnno() const;
-  void setNome(const QString&);
-  void setCognome(const QString&);
-  void setAnno(const QDate&);
+  QDate getData() const;
+  void setNome(const QString& _nome);
+  void setCognome(const QString& _cognome);
+  void setData(const QDate& nascita);
 
-  virtual void modifica(const Tesserato&);
+  virtual void modifica(const Tesserato& t);
 
-  virtual bool operator ==(const Tesserato&) const;
-  virtual bool operator !=(const Tesserato&) const;
-  virtual bool operator <(const Tesserato&) const;
-  virtual bool operator <=(const Tesserato&) const;
-  virtual bool operator >(const Tesserato&) const;
-  virtual bool operator >=(const Tesserato&) const;
+  virtual Tesserato& operator =(const Tesserato& t);
 
-  void setChecked(const bool&);
+  virtual bool operator ==(const Tesserato& t) const;
+  virtual bool operator !=(const Tesserato& t) const;
+  virtual bool operator <(const Tesserato& t) const;
+  virtual bool operator <=(const Tesserato& t) const;
+  virtual bool operator >(const Tesserato& t) const;
+  virtual bool operator >=(const Tesserato& t) const;
+
+  void setChecked(const bool& b);
   bool isChecked() const;
 
   virtual QString getInfo() const;

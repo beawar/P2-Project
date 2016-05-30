@@ -19,7 +19,9 @@ private:
 public:
     static unsigned int max2Minuti;
 
-    Giocatore(const QString& ="", const QString& ="", const QDate& = QDate::currentDate(), unsigned int = 0);
+    Giocatore(const QString& nome="", const QString& cognome="",
+              const QDate& nascita= QDate::currentDate(), unsigned int num= 0);
+    Giocatore(const Giocatore& g);
 
     unsigned int getNumero() const;
     unsigned int getTiriSegnati () const;
@@ -32,21 +34,23 @@ public:
     int get2Minuti () const;
     bool isEscluso () const;
 
-    void setNumero(unsigned int);
-    void addTiro (int =1, const bool& =false);
-    void addRigore (int =1, const bool& =false);
-    void ammonito (const bool& =true) throw (Err_Ammonizione);
-    void add2Minuti (int =1) throw (Err_DueMinuti);
-    void escluso (const bool& =true) throw (Err_Esclusione);
+    void setNumero(unsigned int n);
+    void addTiro (int x =1, const bool& segnato =false);
+    void addRigore (int x =1, const bool& segnato =false);
+    void ammonito (const bool& add =true) throw (Err_Ammonizione);
+    void add2Minuti (int x =1) throw (Err_DueMinuti);
+    void escluso (const bool& add =true) throw (Err_Esclusione);
 
-    virtual void modifica(const Giocatore&);
+    virtual void modifica(const Giocatore& g);
 
-    virtual bool operator ==(const Giocatore&) const;
-    virtual bool operator !=(const Giocatore&) const;
-    virtual bool operator <(const Giocatore&) const;
-    virtual bool operator <=(const Giocatore&) const;
-    virtual bool operator >(const Giocatore&) const;
-    virtual bool operator >=(const Giocatore&) const;
+    virtual Giocatore& operator = (const Giocatore& g);
+
+    virtual bool operator ==(const Giocatore& g) const;
+    virtual bool operator !=(const Giocatore& g) const;
+    virtual bool operator <(const Giocatore& g) const;
+    virtual bool operator <=(const Giocatore& g) const;
+    virtual bool operator >(const Giocatore& g) const;
+    virtual bool operator >=(const Giocatore& g) const;
 
     virtual QString getInfo() const;
     virtual void reset();

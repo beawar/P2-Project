@@ -22,10 +22,10 @@ public:
 
     void addArbitro(Arbitro* a);
     void modificaArbitro(Arbitro* vecchio, const Arbitro& nuovo) const;
-    void removeArbitro(Arbitro*);
+    void removeArbitro(Arbitro* a);
 
     unsigned int size() const;
-    Arbitro* trova(const Arbitro&) const;
+    Arbitro* trova(const Arbitro& a) const;
     Arbitro* at(int i) const;
     Arbitro& operator [] (int) const;
     bool isEmpty() const;

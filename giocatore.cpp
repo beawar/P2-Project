@@ -2,9 +2,13 @@
 
 unsigned int Giocatore::max2Minuti = 3;
 
-Giocatore::Giocatore(const QString& n, const QString& c, const QDate& d, unsigned int num)
-  :Tesserato(n, c, d), numero(num), tiriSegnati(0), tiriTotali(0), rigoriSegnati(0),
+Giocatore::Giocatore(const QString& nome, const QString& cognome, const QDate& nascita, unsigned int num)
+  :Tesserato(nome, cognome, nascita), numero(num), tiriSegnati(0), tiriTotali(0), rigoriSegnati(0),
     rigoriTotali(0), ammonizione(false), dueMinuti(0), esclusione(0) {}
+
+Giocatore::Giocatore(const Giocatore &g){
+    *this = g;
+}
 
 unsigned int Giocatore::getNumero() const{
     return numero;
@@ -27,11 +31,11 @@ unsigned int Giocatore::getRigoriTotali() const{
 }
 
 double Giocatore::getTiriPerc() const{
-  return (tiriSegnati*100)/tiriTotali;
+  return tiriTotali == 0 ? 0 : (tiriSegnati*100)/tiriTotali;
 }
 
 double Giocatore::getRigoriPerc() const{
-  return (rigoriSegnati*100)/rigoriTotali;
+  return rigoriTotali == 0 ? 0 : (rigoriSegnati*100)/rigoriTotali;
 }
 
 bool Giocatore::isAmmonito() const{
@@ -54,7 +58,7 @@ void Giocatore::addTiro(int x, const bool& segnato){
     if(segnato){
         (tiriSegnati+x)<0 ? tiriSegnati=0 : tiriSegnati+=x;
     }
-    (tiriTotali+x)<0 ? tiriTotali=0 : tiriSegnati+=x;
+    (tiriTotali+x)<0 ? tiriTotali=0 : tiriTotali+=x;
 }
 
 void Giocatore::addRigore(int x, const bool& segnato){
@@ -94,6 +98,19 @@ void Giocatore::modifica(const Giocatore &g){
             setNumero(g.numero);
         }
     }
+}
+
+Giocatore& Giocatore::operator =(const Giocatore& g){
+    Tesserato::operator =(g);
+    numero = g.numero;
+    tiriSegnati = g.tiriSegnati;
+    tiriTotali = g.tiriTotali;
+    rigoriSegnati = g.rigoriSegnati;
+    rigoriTotali = g.rigoriTotali;
+    ammonizione = g.ammonizione;
+    dueMinuti = g.dueMinuti;
+    esclusione = g.esclusione;
+    return *this;
 }
 
 bool Giocatore::operator ==(const Giocatore& t) const{

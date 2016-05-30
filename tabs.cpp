@@ -8,9 +8,14 @@ Tabs::Tabs(Squadra *s1, Squadra *s2, Arbitro *arb1, Arbitro *arb2, QWidget *pare
     QTabWidget(parent), team1(s1), team2(s2), a1(arb1), a2(arb2),
     statTeam1(0), statTeam2(0), partita(0)
 {
+
     if(team1 && team2 && a1 && a2){
         statTeam1 = new Stat(team1);
+        statTeam1->setObjectName("Stat1");
+
         statTeam2 = new Stat(team2);
+        statTeam2->setObjectName("Stat2");
+
         partita = new Partita(team1, team2, a1, a2);
 
         addTab(partita, tr("Partita"));
@@ -19,6 +24,7 @@ Tabs::Tabs(Squadra *s1, Squadra *s2, Arbitro *arb1, Arbitro *arb2, QWidget *pare
 
         pngOpen1 = "";
         pngOpen2 = "";
+
 
         connect(partita, SIGNAL(dataChanged()), statTeam1, SLOT(updateDati()));
         connect(partita, SIGNAL(dataChanged()), statTeam2, SLOT(updateDati()));
@@ -74,14 +80,4 @@ void Tabs::reset(){
 void Tabs::termina(){
     partita->termina();
     partita->setEnabled(false);
-    for(int i = 0; i<team1->size(); ++i){
-        if(team1->at(i)->isChecked()){
-            team1->at(i)->setChecked(false);
-        }
-    }
-    for(int i = 0; i<team2->size(); ++i){
-        if(team2->at(i)->isChecked()){
-            team2->at(i)->setChecked(false);
-        }
-    }
 }

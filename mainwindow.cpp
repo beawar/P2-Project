@@ -46,7 +46,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::newFile(){
     if(newWizard){
-        qDeleteAll(newWizard->children());
         delete newWizard;
     }
     newWizard = new NewWizard(&squadre, &arbitri, this);
@@ -165,6 +164,8 @@ void MainWindow::showPartita(){
 
     classificaAct->setEnabled(false);
     exportAct->setEnabled(true);
+    resetPartitaAct->setEnabled(true);
+    closePartitaAct->setEnabled(true);
 
     connect(exportAct, SIGNAL(triggered()), tabs, SLOT(exportPng()));
     connect(resetPartitaAct, SIGNAL(triggered()), tabs, SLOT(reset()));
@@ -253,7 +254,6 @@ void MainWindow::createToolBar(){
 
 void MainWindow::creaClassifica(){
 
-    qDeleteAll(widget->layout()->children());
     delete widget->layout();
 
     QFont font;

@@ -2,10 +2,12 @@
 
 unsigned int Allenatore::max2Minuti = 1;
 
-Allenatore::Allenatore(const QString& n, const QString& c, const QDate& d)
-    :Tesserato(n, c, d), ammonizione(false), dueMinuti(false), esclusione(false){}
+Allenatore::Allenatore(const QString& nome, const QString& cognome, const QDate& nascita)
+    :Tesserato(nome, cognome, nascita), ammonizione(false), dueMinuti(false), esclusione(false){}
 
-
+Allenatore::Allenatore(const Allenatore& a){
+   *this = a;
+}
 
 bool Allenatore::isAmmonito() const{
     return ammonizione;
@@ -44,6 +46,14 @@ void Allenatore::escluso(const bool& add) throw(Err_Esclusione){
     else{
         esclusione = false;
     }
+}
+
+Allenatore& Allenatore::operator =(const Allenatore& a){
+    Tesserato::operator =(a);
+    ammonizione = a.ammonizione;
+    dueMinuti = a.dueMinuti;
+    esclusione = a.esclusione;
+    return *this;
 }
 
 QString Allenatore::getInfo() const{

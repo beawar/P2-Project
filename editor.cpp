@@ -193,7 +193,7 @@ void Editor::modificaTesserato(){
         Giocatore g;
         g.setNome(nomeTEdit->text());
         g.setCognome(cognomeTEdit->text());
-        g.setAnno(dataTEdit->date());
+        g.setData(dataTEdit->date());
         g.setNumero(numeroEdit->value());
         squadra->modificaTesserato(gioc, g);
     }
@@ -203,7 +203,7 @@ void Editor::modificaTesserato(){
             Allenatore a;
             a.setNome(nomeTEdit->text());
             a.setCognome(cognomeTEdit->text());
-            a.setAnno(dataTEdit->date());
+            a.setData(dataTEdit->date());
             squadra->modificaTesserato(all, a);
         }
     }
@@ -227,7 +227,7 @@ void Editor::modificaArbitro(){
     Arbitro a;
     a.setNome(nomeAEdit->text());
     a.setCognome(cognomeAEdit->text());
-    a.setAnno(dataAEdit->date());
+    a.setData(dataAEdit->date());
     a.setLivello(livelloEdit->value());
     arbitri->modificaArbitro(arb, a);
     updateList(INT_MIN);
@@ -346,7 +346,7 @@ void Editor::itemSelected(QModelIndex current){
             {
                 nomeTEdit->setText(squadra->at(current.row())->getNome());
                 cognomeTEdit->setText(squadra->at(current.row())->getCognome());
-                dataTEdit->setDate(squadra->at(current.row())->getAnno());
+                dataTEdit->setDate(squadra->at(current.row())->getData());
                 Giocatore* g = dynamic_cast<Giocatore*>(squadra->at(current.row()));
                 if(g){
                     numeroEdit->setEnabled(true);
@@ -365,7 +365,7 @@ void Editor::itemSelected(QModelIndex current){
             case id_arbitro:
                 nomeAEdit->setText(arbitri->at(current.row())->getNome());
                 cognomeAEdit->setText(arbitri->at(current.row())->getCognome());
-                dataAEdit->setDate(arbitri->at(current.row())->getAnno());
+                dataAEdit->setDate(arbitri->at(current.row())->getData());
                 livelloEdit->setValue(arbitri->at(current.row())->getLivello());
             break;
             default:

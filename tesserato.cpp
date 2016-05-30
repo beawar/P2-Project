@@ -2,8 +2,12 @@
 
 Tesserato::Tesserato() {}
 
-Tesserato::Tesserato(const QString& n, const QString& c, const QDate& d)
-  : nome(n), cognome(c), annoNascita(d), checked(false) {}
+Tesserato::Tesserato(const QString& nome, const QString& cognome, const QDate& nascita)
+  : nome(nome), cognome(cognome), dataNascita(nascita), checked(false) {}
+
+Tesserato::Tesserato(const Tesserato &t){
+    *this = t;
+}
 
 QString Tesserato::getNome() const{
   return nome;
@@ -13,20 +17,20 @@ QString Tesserato::getCognome() const{
   return cognome;
 }
 
-QDate Tesserato::getAnno() const{
-  return annoNascita;
+QDate Tesserato::getData() const{
+  return dataNascita;
 }
 
-void Tesserato::setNome(const QString &n){
-  nome=n;
+void Tesserato::setNome(const QString& _nome){
+  nome=_nome;
 }
 
-void Tesserato::setCognome(const QString &c){
-   cognome=c;
+void Tesserato::setCognome(const QString &_cognome){
+   cognome=_cognome;
 }
 
-void Tesserato::setAnno(const QDate &a){
-  annoNascita=a;
+void Tesserato::setData(const QDate &nascita){
+  dataNascita=nascita;
 }
 
 void Tesserato::modifica(const Tesserato &t){
@@ -37,14 +41,22 @@ void Tesserato::modifica(const Tesserato &t){
         if(cognome != t.cognome){
             setCognome(t.cognome);
         }
-        if(annoNascita != t.annoNascita){
-            setAnno(t.annoNascita);
+        if(dataNascita != t.dataNascita){
+            setData(t.dataNascita);
         }
     }
 }
 
+Tesserato& Tesserato::operator =(const Tesserato& t){
+    nome = t.nome;
+    cognome = t.cognome;
+    dataNascita = t.dataNascita;
+    checked = t.checked;
+    return *this;
+}
+
 bool Tesserato::operator ==(const Tesserato& t) const{
-    return nome==t.nome && cognome==t.cognome && annoNascita==t.annoNascita;
+    return nome==t.nome && cognome==t.cognome && dataNascita==t.dataNascita;
 }
 
 bool Tesserato::operator !=(const Tesserato& t) const{
@@ -58,7 +70,7 @@ bool Tesserato::operator <(const Tesserato& t) const{
     else if(cognome==t.cognome && nome<t.nome){
         return true;
     }
-    else if(cognome==t.cognome && nome==t.nome && annoNascita<t.annoNascita){
+    else if(cognome==t.cognome && nome==t.nome && dataNascita<t.dataNascita){
         return true;
     }
     else{
