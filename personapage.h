@@ -60,6 +60,7 @@ public:
     int nextId() const;
 
 signals:
+    void personaCreata();
 
 public slots:
     void changeEditor();

@@ -3,6 +3,7 @@
 #include <QDir>
 #include <QFile>
 #include <QFileDialog>
+#include <QTabBar>
 
 Tabs::Tabs(Squadra *s1, Squadra *s2, Arbitro *arb1, Arbitro *arb2, QWidget *parent) :
     QTabWidget(parent), team1(s1), team2(s2), a1(arb1), a2(arb2),
@@ -10,6 +11,7 @@ Tabs::Tabs(Squadra *s1, Squadra *s2, Arbitro *arb1, Arbitro *arb2, QWidget *pare
 {
 
     if(team1 && team2 && a1 && a2){
+
         statTeam1 = new Stat(team1);
         statTeam1->setObjectName("Stat1");
 
@@ -24,7 +26,6 @@ Tabs::Tabs(Squadra *s1, Squadra *s2, Arbitro *arb1, Arbitro *arb2, QWidget *pare
 
         pngOpen1 = "";
         pngOpen2 = "";
-
 
         connect(partita, SIGNAL(dataChanged()), statTeam1, SLOT(updateDati()));
         connect(partita, SIGNAL(dataChanged()), statTeam2, SLOT(updateDati()));

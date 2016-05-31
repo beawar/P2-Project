@@ -29,6 +29,7 @@ NewWizard::NewWizard(SquadreModel *sm, ArbitriModel *am, QWidget *parent) :
         setMaximumSize(500, 360);
     }
 
+    connect(personaP, SIGNAL(personaCreata()), this, SLOT(nuovaPersona()));
     connect(squadraP, SIGNAL(squadraCreata()), this, SLOT(nuovaSquadra()));
 
 }
@@ -78,6 +79,11 @@ void NewWizard::accept(){
 }
 
 void NewWizard::nuovaSquadra(){
-    emit partitaCreata();
+    emit squadraCreata();
+    emit dataChanged(true);
+}
+
+void NewWizard::nuovaPersona(){
+    emit dataChanged(true);
 }
 

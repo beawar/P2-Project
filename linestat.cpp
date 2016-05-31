@@ -1,5 +1,6 @@
 #include "linestat.h"
 #include <QString>
+#include <QGroupBox>
 
 LineStat::LineStat(Tesserato*t, QWidget *parent) :
     QWidget(parent), tess(t)
@@ -19,37 +20,45 @@ LineStat::LineStat(Tesserato*t, QWidget *parent) :
     hbLayout->addWidget(paratePerc);
 
     setLayout(hbLayout);
-    setAutoFillBackground(true);
 
 }
 
 void LineStat::createLabels(){
     cognome = new QLabel(tess->getCognome(), this);
-    cognome->setMinimumSize(100, 20);
+    cognome->setMinimumSize(100, 15);
     nome = new QLabel(tess->getNome(), this);
-    nome->setMinimumSize(100, 20);
+    nome->setMinimumSize(100, 15);
     numero = new QLabel(this);
-    numero->setMinimumSize(30, 20);
+    numero->setMinimumSize(30, 15);
+    numero->setMaximumSize(50, 50);
     numero->setStyleSheet("color: white;"
                           "font-weight: bold;"
-                          "background-color: navy;"
+                          "background-color: rgba(0, 0, 128, 70%);"
                           "border 1px solid white;");
-    numero->setAlignment(Qt::AlignHCenter);
+    numero->setAlignment(Qt::AlignCenter);
 
     ammo = new QLabel(this);
-    ammo->setMinimumSize(20, 20);
+    ammo->setMinimumSize(30, 15);
+    ammo->setAlignment(Qt::AlignCenter);
     dueMin = new QLabel(this);
-    dueMin->setMinimumSize(80, 20);
+    dueMin->setMinimumSize(80, 15);
+    dueMin->setAlignment(Qt::AlignCenter);
     escl = new QLabel(this);
-    escl->setMinimumSize(20, 20);
+    escl->setMinimumSize(30, 15);
+    escl->setAlignment(Qt::AlignCenter);
     reti = new QLabel(this);
-    reti->setMinimumSize(100, 20);
+    reti->setMinimumSize(100, 15);
+    reti->setAlignment(Qt::AlignCenter);
     parate = new QLabel(this);
-    parate->setMinimumSize(100, 20);
+    parate->setMinimumSize(100, 15);
+    parate->setAlignment(Qt::AlignCenter);
     perc = new QLabel(this);
-    perc->setMinimumSize(100, 20);
+    perc->setMinimumSize(100, 15);
+    perc->setAlignment(Qt::AlignCenter);
     paratePerc = new QLabel(this);
-    paratePerc->setMinimumSize(100, 20);
+    paratePerc->setMinimumSize(100, 15);
+    paratePerc->setAlignment(Qt::AlignCenter);
+
     const Giocatore* g = dynamic_cast<const Giocatore*>(tess);
     if(g){
         numero->setText(QString::number(g->getNumero()));
@@ -67,8 +76,8 @@ void LineStat::updateDati(Tesserato* t){
                                               QString::number(g->getTiriTotali()),
                                               QString::number(g->getRigoriSegnati()),
                                               QString::number(g->getRigoriTotali())));
-        perc->setText(tr("%1 (%2)").arg(QString::number(g->getTiriPerc()),
-                                        QString::number(g->getRigoriPerc())));
+        perc->setText(tr("%1% (%2%)").arg(QString::number(g->getTiriPerc(), 'f', 2),
+                                        QString::number(g->getRigoriPerc(), 'f', 2)));
         if(g->isAmmonito()){
             ammo->setText("X");
         }
@@ -104,8 +113,8 @@ void LineStat::updateDati(Tesserato* t){
                                                     QString::number(p->getTiriRicevuti()),
                                                     QString::number(p->getRigoriParati()),
                                                     QString::number(p->getRigoriRicevuti())));
-            paratePerc->setText(tr("%1 (%2)").arg(QString::number(p->getTiriParatiPerc()),
-                                                  QString::number(p->getRigoriParatiPerc())));
+            paratePerc->setText(tr("%1% (%2%)").arg(QString::number(p->getTiriParatiPerc(), 'f', 2),
+                                                  QString::number(p->getRigoriParatiPerc(), 'f', 2)));
         }
     }
     else{

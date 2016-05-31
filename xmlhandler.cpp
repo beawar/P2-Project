@@ -38,6 +38,8 @@ void XmlHandler::writeItem(){
         xmlWriter.writeTextElement("Pareggi", QString::number(squadra->getPareggi()));
         xmlWriter.writeTextElement("Sconfitte", QString::number(squadra->getSconfitte()));
         xmlWriter.writeTextElement("Penalità", QString::number(squadra->getPenalita()));
+        xmlWriter.writeTextElement("GoalFatti", QString::number(squadra->getGoalFatti()));
+        xmlWriter.writeTextElement("GoalSubiti", QString::number(squadra->getGoalSubiti()));
 
         for(int j=0; j<squadra->size(); ++j){
             const Giocatore* giocatore = dynamic_cast<const Giocatore*>(squadra->at(j));
@@ -138,6 +140,14 @@ void XmlHandler::readSquadra(){
         else if(xmlReader.name() == "Penalità"){
             QString penalita = xmlReader.readElementText();
             squadra->addPenalita(penalita.toInt());
+        }
+        else if(xmlReader.name() == "GoalFatti"){
+            QString gf = xmlReader.readElementText();
+            squadra->addGoalFatti(gf.toInt());
+        }
+        else if(xmlReader.name() == "GoalSubiti"){
+            QString gs = xmlReader.readElementText();
+            squadra->addGoalSubiti(gs.toInt());
         }
         else if(xmlReader.isStartElement() && xmlReader.name() == "Giocatore"){
             readGiocatore(*squadra);

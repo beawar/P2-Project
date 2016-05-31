@@ -9,6 +9,7 @@
 #include <QToolBar>
 #include <QLabel>
 #include <QVBoxLayout>
+#include <QStackedWidget>
 #include "newwizard.h"
 #include "squadremodel.h"
 #include "arbitrimodel.h"
@@ -20,11 +21,15 @@ class MainWindow : public QMainWindow
 {
   Q_OBJECT
 private:
+    void createLogoWidget();
     void createActions();
     void createMenus();
     void createToolBar();
+    bool maybeSave();
 
-    QWidget* widget;
+    QStackedWidget stackedWidget;
+    QWidget* logoWidget;
+    QWidget* classificaWidget;
 
     QMenu* fileMenu;
     QMenu* editMenu;
@@ -48,12 +53,15 @@ private:
     QAction* resetPartitaAct;
     QAction* closePartitaAct;
     QAction* classificaAct;
+    QAction* closeTabs;
 
     SquadreModel squadre;
     ArbitriModel arbitri;
 
     QString fileOpen;
     XmlHandler xml;
+
+    bool modificato;
 
 
 private slots:
@@ -69,6 +77,11 @@ private slots:
     void showPartita();
     void creaClassifica();
     void terminaPartita();
+    void chiudiTabs();
+
+    void wasModified(bool);
+protected:
+    void closeEvent(QCloseEvent *event);
 
 public:
   explicit MainWindow(QWidget *parent = 0);

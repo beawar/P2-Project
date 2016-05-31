@@ -16,7 +16,7 @@ PartitaPage::PartitaPage(SquadreModel *sm, ArbitriModel *am, QWidget *parent) :
     createView();
     createLayout();
 
-    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     setLayout(layout);
 
     registerField("partita.homeTeam", squadra1ComboBox);

@@ -4,7 +4,7 @@
 Stat::Stat(Squadra *s, QWidget *parent) :
     QWidget(parent), squadra(s)
 {   
-    setStyleSheet("background-image: url(:/images/images/Sfondo_logo.png)");
+
     createHeader();
 
     QFont font;
@@ -22,17 +22,13 @@ Stat::Stat(Squadra *s, QWidget *parent) :
     for(int i=0; i<squadra->size() && j<maxPersone; ++i){
         if(squadra->at(i)->isChecked()){
             persona[j] = new LineStat(squadra->at(i), this);
-            persona[j]->setAttribute(Qt::WA_NoSystemBackground);
-            /*persona[j]->setStyleSheet("font-size: 10pt;"
-                                      "text-align: center center;"
-                                      "color: white;");
-            */
             layout->addWidget(persona[j]);
             j++;
         }
     }
     persona[j-1]->setObjectName("LastPerson");
     setLayout(layout);
+
 
 }
 
@@ -41,6 +37,8 @@ void Stat::createHeader(){
 
     numero = new QLabel("N°", this);
     numero->setMinimumSize(30, 30);
+    numero->setMaximumWidth(50);
+    numero->setAlignment(Qt::AlignCenter);
 
     QFont bold = numero->font();
     bold.setBold(true);

@@ -53,6 +53,7 @@ Partita::Partita(Squadra *home, Squadra *guest, Arbitro *a1, Arbitro *a2, QWidge
     QGroupBox* goalsGroup = new QGroupBox(this);
     goalsGroup->setLayout(goalsLayout);
     goalsGroup->setObjectName("goalsGroup");
+    goalsGroup->setMaximumHeight(goalsGroup->sizeHint().height());
     setStyleSheet("QGroupBox#goalsGroup {border: 2px solid black } ");
 
     QHBoxLayout* teams = new QHBoxLayout;
@@ -98,7 +99,7 @@ void Partita::createHomeLayout(){
                 homeRadio[giocatoriCount]->setMinimumSize(15, 15);
                 homeRadio[giocatoriCount]->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
                 lineLayout[giocatoriCount] = new QHBoxLayout;
-                lineLayout[giocatoriCount]->addWidget(homeRadio[giocatoriCount]);
+                lineLayout[giocatoriCount]->addWidget(homeRadio[giocatoriCount], 0, Qt::AlignRight);
                 lineLayout[giocatoriCount]->addWidget(homeLines[j], 0, Qt::AlignRight);
 
                 homePortiere->addButton(homeRadio[giocatoriCount], i);
@@ -120,6 +121,7 @@ void Partita::createHomeLayout(){
 
             connect(homeLines[j], SIGNAL(tiro(int, bool)), this, SLOT(tiroHome(int,bool)));
             connect(homeLines[j], SIGNAL(rigore(int,bool)), this, SLOT(rigoreHome(int,bool)));
+            connect(homeLines[j], SIGNAL(dataChanged()), this, SLOT(dataSlot()));
             j++;
         }
     }
@@ -160,7 +162,7 @@ void Partita::createGuestLayout(){
                 guestRadio[giocatoriCount]->setMinimumSize(15, 15);
                 guestRadio[giocatoriCount]->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
                 lineLayout[giocatoriCount] = new QHBoxLayout;
-                lineLayout[giocatoriCount]->addWidget(guestRadio[giocatoriCount]);
+                lineLayout[giocatoriCount]->addWidget(guestRadio[giocatoriCount], 0, Qt::AlignRight);
                 lineLayout[giocatoriCount]->addWidget(guestLines[j], 0, Qt::AlignRight);
 
                 guestPortiere->addButton(guestRadio[giocatoriCount], i);
@@ -182,6 +184,7 @@ void Partita::createGuestLayout(){
 
             connect(guestLines[j], SIGNAL(tiro(int, bool)), this, SLOT(tiroGuest(int,bool)));
             connect(guestLines[j], SIGNAL(rigore(int,bool)), this, SLOT(rigoreGuest(int,bool)));
+            connect(guestLines[j], SIGNAL(dataChanged()), this, SLOT(dataSlot()));
             j++;
         }
     }
@@ -306,6 +309,10 @@ void Partita::cambiaPortiereGuest(){
         }
     }
 
+}
+
+void Partita::dataSlot(){
+    emit dataChanged();
 }
 
 void Partita::termina(){

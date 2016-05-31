@@ -20,5 +20,6 @@
         <file>images/portiere.png</file>
         <file>images/footbal_perc.png</file>
         <file>images/portiere_perc.png</file>
+        <file>images/close_red.png</file>
     </qresource>
 </RCC>

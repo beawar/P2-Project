@@ -59,6 +59,8 @@ private slots:
     void cambiaPortiereHome();
     void cambiaPortiereGuest();
 
+    void dataSlot();
+
 public slots:
     void termina();
     void reset();

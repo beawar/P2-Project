@@ -190,6 +190,7 @@ void PersonaPage::insertPerson(){
         dataEdit->setDate(QDate(1990, 1, 1));
         numeroEdit->clear();
         livelloEdit->clear();
+        emit personaCreata();
     }
     catch(Err_Tesserato e){
         QMessageBox::warning(this, tr("Inserimento non riuscito"),

@@ -7,10 +7,12 @@ unsigned int Squadra::puntiVittoria = 3;
 unsigned int Squadra::puntiPareggio = 1;
 
 Squadra::Squadra(const QString& n)
-    :nome(n), societa(n), tesserati(), vittorie(0), pareggi(0), sconfitte(0), penalita(0) {}
+    :nome(n), societa(n), tesserati(), vittorie(0), pareggi(0),
+      sconfitte(0), penalita(0), goalFatti(0), goalSubiti(0) {}
 
 Squadra::Squadra(const QString& n, const QString& s)
-    : nome(n), societa(s), tesserati(), vittorie(0), pareggi(0), sconfitte(0), penalita(0) {}
+    : nome(n), societa(s), tesserati(), vittorie(0), pareggi(0),
+      sconfitte(0), penalita(0), goalFatti(0), goalSubiti(0) {}
 
 QString Squadra::getNome() const{
     return nome;

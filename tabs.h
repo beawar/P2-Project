@@ -23,7 +23,6 @@ private:
     Stat* statTeam2;
     Partita* partita;
 
-
 public:
     explicit Tabs(Squadra *s1, Squadra *s2, Arbitro *arb1, Arbitro *arb2, QWidget *parent = 0);
 

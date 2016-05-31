@@ -56,9 +56,7 @@ public:
 signals:
     void tiro(int, bool);
     void rigore(int, bool);
-    void ammonizione(bool);
-    void dueMinuti(bool);
-    void esclusione(bool);
+    void dataChanged();
 
 public slots:
     void reset();

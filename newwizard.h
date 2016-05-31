@@ -27,6 +27,7 @@ private:
 
 private slots:
     void nuovaSquadra();
+    void nuovaPersona();
 
 public:
     enum {Page_Intro, Page_Persona, Page_Squadra, Page_Partita};
@@ -42,7 +43,7 @@ public:
 signals:
     void partitaCreata();
     void squadraCreata();
-    void personaCreata();
+    void dataChanged(bool);
 };
 
 #endif // NEWWIZARD_H

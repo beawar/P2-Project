@@ -156,9 +156,9 @@ void SquadreModel::sort(int column, Qt::SortOrder order){
                         || (s1->getPunti() == s2->getPunti()
                             && s1->getDifferenzaReti() == s2->getDifferenzaReti()
                             && s1->getTiriSegnati() > s2->getTiriSegnati())){
-                    Squadra* temp = s1;
-                    s1 = s2;
-                    s2 = temp;
+                    Squadra temp = *s1;
+                    *s1 = *s2;
+                    *s2 = temp;
                 }
                 else{
                     ordinato = true;

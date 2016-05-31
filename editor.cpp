@@ -171,18 +171,21 @@ void Editor::createArbitroEditor(){
 }
 
 void Editor::modifica(){
-    switch(radioButtonGroup->checkedId()){
-        case id_tesserato:
-            modificaTesserato();
+    if(listView->selectionModel()->currentIndex().isValid()){
+        switch(radioButtonGroup->checkedId()){
+            case id_tesserato:
+                modificaTesserato();
             break;
-        case id_squadra:
-            modificaSquadra();
+            case id_squadra:
+                modificaSquadra();
             break;
-        case id_arbitro:
-            modificaArbitro();
+            case id_arbitro:
+                modificaArbitro();
             break;
+        }
+        updateList(squadreComboBox->currentIndex());
+        emit dataChanged(true);
     }
-    updateList(squadreComboBox->currentIndex());
 }
 
 void Editor::modificaTesserato(){
@@ -218,7 +221,7 @@ void Editor::modificaSquadra(){
     nuova.addPenalita(penalitaEdit->value());
     squadre->modificaSquadra(squadre->at(index), nuova);
     updateList(INT_MIN);
-    emit dataChanged();
+    emit squadraChanged();
 }
 
 void Editor::modificaArbitro(){
@@ -248,6 +251,7 @@ void Editor::rimuovi(){
             default:
             break;
         }
+        emit dataChanged(true);
     }
 }
 
@@ -262,6 +266,7 @@ void Editor::rimuoviSquadra(){
     int index = listView->selectionModel()->currentIndex().row();
     squadre->removeSquadra(squadre->at(index));
     updateList(INT_MIN);
+    emit squadraChanged();
 }
 
 void Editor::rimuoviArbitro(){

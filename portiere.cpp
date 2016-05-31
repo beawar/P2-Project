@@ -8,7 +8,9 @@ Portiere::Portiere(const Portiere &p){
     *this = p;
 }
 
-Portiere::Portiere(const Giocatore &g): Giocatore(g), tiriParati(0), tiriRicevuti(0) {}
+Portiere::Portiere(const Giocatore &g)
+    : Giocatore(g), tiriParati(0), tiriRicevuti(0),
+      rigoriParati(0), rigoriRicevuti(0) {}
 
 unsigned int Portiere::getTiriParati() const{
     return tiriParati;
@@ -46,14 +48,14 @@ void Portiere::addTiroRicevuto(int x, const bool & parato){
     if(parato){
         tiriParati+x <0 ? tiriParati=0 : tiriParati+=x;
     }
-    tiriRicevuti+x <0 ? tiriParati=0 : tiriParati+=x;
+    tiriRicevuti+x <0 ? tiriRicevuti=0 : tiriRicevuti+=x;
 }
 
 void Portiere::addRigoreRicevuto(int x, const bool & parato){
     if(parato){
         rigoriParati+x <0 ? rigoriParati=0 : rigoriParati+=x;
     }
-    rigoriRicevuti+x <0 ? rigoriParati=0 : rigoriParati+=x;
+    rigoriRicevuti+x <0 ? rigoriRicevuti=0 : rigoriRicevuti+=x;
     addTiroRicevuto(x, parato);
 }
 

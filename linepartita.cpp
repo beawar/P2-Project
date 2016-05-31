@@ -102,7 +102,7 @@ void LinePartita::rightclickAmmo(){
             a->ammonito(false);
         }
     }
-    emit ammonizione(false);
+    emit dataChanged();
     update();
 }
 
@@ -112,7 +112,7 @@ void LinePartita::leftclickAmmo(){
     if(g){
         try{
             g->ammonito(true);
-            emit ammonizione(true);
+            emit dataChanged();
         }
         catch(Err_Ammonizione e){
             QMessageBox::warning(this, tr("Errore"),
@@ -125,7 +125,7 @@ void LinePartita::leftclickAmmo(){
         if(a){
             try{
                 a->ammonito(true);
-                emit ammonizione(true);
+                emit dataChanged();
             }
             catch(Err_Ammonizione){
                 QMessageBox::warning(this, tr("Errore"),
@@ -148,7 +148,7 @@ void LinePartita::rightclickdueMin(){
             a->set2Minuti(false);
         }
     }
-    emit dueMinuti(false);
+    emit dataChanged();
     update();
 }
 
@@ -157,7 +157,7 @@ void LinePartita::leftclickdueMin(){
     if(g){
         try{
             g->add2Minuti();
-            emit dueMinuti(true);
+            emit dataChanged();
         }
         catch(Err_DueMinuti e){
             QMessageBox::warning(this, tr("Errore"),
@@ -170,7 +170,7 @@ void LinePartita::leftclickdueMin(){
         if(a){
             try{
                 a->set2Minuti(true);
-                emit dueMinuti(true);
+                emit dataChanged();
             }
             catch(Err_Ammonizione){
                 QMessageBox::warning(this, tr("Errore"),
@@ -194,7 +194,7 @@ void LinePartita::rightclickEscl(){
             a->escluso(false);
         }
     }
-    emit esclusione(false);
+    emit dataChanged();
     update();
 }
 
@@ -204,7 +204,7 @@ void LinePartita::leftclickEscl(){
     if(g){
         try{
             g->escluso();
-            emit esclusione(true);
+            emit dataChanged();
         }
         catch(Err_Esclusione e){
             QMessageBox::warning(this, tr("Errore"),
@@ -217,7 +217,7 @@ void LinePartita::leftclickEscl(){
         if(a){
             try{
                 a->set2Minuti(true);
-                emit esclusione(true);
+                emit dataChanged();
             }
             catch(Err_Ammonizione){
                 QMessageBox::warning(this, tr("Errore"),
@@ -233,7 +233,6 @@ void LinePartita::leftclickEscl(){
 void LinePartita::rightclickTiro(){
     Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
     g->addTiro(-1, true);
-    QMessageBox::warning(this, tr("Tiro rimosso"), tr("E' stato rimosso un tiro segnato"), QMessageBox::Ok);
     emit tiro(-1, true);
     updateGoals();
 }
@@ -271,7 +270,6 @@ void LinePartita::leftdoubleclickTiro(){
 void LinePartita::rightclickRigore(){
     Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
     g->addRigore(-1, true);
-    QMessageBox::warning(this, tr("Rigore rimosso"), tr("E' stato rimosso un rigore segnato"), QMessageBox::Ok);
     emit rigore(-1, true);
     updateGoals();
 }
@@ -281,7 +279,6 @@ void LinePartita::rightdoubleclickRigore(){
     Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
     g->addRigore(1, true); //aggiunge un rigore segnato rimosso con il single-click dovuto al double-click
     g->addRigore(-1, false);
-    QMessageBox::warning(this, tr("Rigore rimosso"), tr("E' stato rimosso un rigore sbagliato"), QMessageBox::Ok);
     emit rigore(1, true);
     emit rigore(-1, false);
     updateGoals();
