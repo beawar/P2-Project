@@ -5,9 +5,8 @@ Tesserato::Tesserato() {}
 Tesserato::Tesserato(const QString& nome, const QString& cognome, const QDate& nascita)
   : nome(nome), cognome(cognome), dataNascita(nascita), checked(false) {}
 
-Tesserato::Tesserato(const Tesserato &t){
-    *this = t;
-}
+Tesserato::Tesserato(const Tesserato &t)
+    : nome(t.nome), cognome(t.cognome), dataNascita(t.dataNascita), checked(t.checked){}
 
 QString Tesserato::getNome() const{
   return nome;

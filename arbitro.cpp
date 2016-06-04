@@ -3,8 +3,11 @@
 Arbitro::Arbitro(const QString& nome, const QString& cognome, const QDate& nascita, const unsigned int &livello)
     :Tesserato(nome, cognome, nascita), livello(livello), partiteRegionali(0), partiteNazionali(0), partiteInternaz(0) {}
 
-Arbitro::Arbitro(const Arbitro &a){
-    *this = a;
+Arbitro::Arbitro(const Arbitro &a)
+    : Tesserato(a.getNome(), a.getCognome(), a.getData()), livello(a.livello), partiteRegionali(a.partiteRegionali),
+      partiteNazionali(a.partiteNazionali), partiteInternaz(a.partiteInternaz)
+{
+    setChecked(a.isChecked());
 }
 
 void Arbitro::modifica(const Arbitro&a){

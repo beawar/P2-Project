@@ -5,8 +5,11 @@ unsigned int Allenatore::max2Minuti = 1;
 Allenatore::Allenatore(const QString& nome, const QString& cognome, const QDate& nascita)
     :Tesserato(nome, cognome, nascita), ammonizione(false), dueMinuti(false), esclusione(false){}
 
-Allenatore::Allenatore(const Allenatore& a){
-   *this = a;
+Allenatore::Allenatore(const Allenatore& a)
+    : Tesserato(a.getNome(), a.getCognome(), a.getData()), ammonizione(a.isAmmonito()),
+        dueMinuti(a.get2Minuti()), esclusione(a.isEscluso())
+{
+    setChecked(a.isChecked());
 }
 
 bool Allenatore::isAmmonito() const{

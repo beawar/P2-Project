@@ -6,8 +6,8 @@
 #include <QGridLayout>
 
 MainWindow::MainWindow(QWidget *parent) :
-  QMainWindow(parent), toolBar(0), newWizard(0), tabs(0), editor(0), fileOpen(""),
-  xml(&squadre, &arbitri), modificato(false), logoWidget(0), classificaWidget(0)
+  QMainWindow(parent), logoWidget(0), classificaWidget(0), toolBar(0), newWizard(0),
+  tabs(0), editor(0), fileOpen(""), xml(&squadre, &arbitri), modificato(false)
 {
     createLogoWidget();
     createActions();
@@ -141,6 +141,9 @@ bool MainWindow::maybeSave(){
             save();
             return true;
         }
+        else if(ret == QMessageBox::Discard){
+            return true;
+        }
         else if(ret == QMessageBox::Cancel){
             return false;
         }
@@ -233,11 +236,11 @@ void MainWindow::exportPng(){
 void MainWindow::edit(){
     editor = new Editor(&squadre, &arbitri, this);
     editor->setAttribute(Qt::WA_DeleteOnClose);
-    /* ----------------------------------------------------------------------------------------
+
     for(int i=0; i<squadre.size(); ++i){
         squadre.at(i)->sortByName();
     }
-    -------------------------------------------------------------------------------------------*/
+
     connect(editor, SIGNAL(squadraChanged()), this, SLOT(creaClassifica()));
     connect(editor, SIGNAL(dataChanged(bool)), this, SLOT(wasModified(bool)));
     editor->show();

@@ -263,7 +263,7 @@ void Squadra::sortByName(){
         else{
             Allenatore* all = dynamic_cast<Allenatore*>(*it);
             bool inserito = false;
-            for(Vettore<Tesserato*>::iterator it2 = allenatori.begin(); it2 != allenatori.end() && !inserito; ++it2){
+            for(Vettore<Tesserato*>::iterator it2 = allenatori.begin(); it2 < allenatori.end() && !inserito; ++it2){
                 Allenatore* all2 = dynamic_cast<Allenatore*>(*it2);
                 if(*all < *all2){
                     it2 = allenatori.insert(it2, all);

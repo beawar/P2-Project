@@ -6,8 +6,12 @@ Giocatore::Giocatore(const QString& nome, const QString& cognome, const QDate& n
   :Tesserato(nome, cognome, nascita), numero(num), tiriSegnati(0), tiriTotali(0), rigoriSegnati(0),
     rigoriTotali(0), ammonizione(false), dueMinuti(0), esclusione(0) {}
 
-Giocatore::Giocatore(const Giocatore &g){
-    *this = g;
+Giocatore::Giocatore(const Giocatore &g)
+    :Tesserato(g.getNome(), g.getCognome(), g.getData()), numero(g.numero), tiriSegnati(g.tiriSegnati),
+      tiriTotali(g.tiriTotali), rigoriSegnati(g.rigoriSegnati), rigoriTotali(g.rigoriTotali),
+      ammonizione(g.ammonizione), dueMinuti(g.dueMinuti), esclusione(g.esclusione)
+{
+    setChecked(g.isChecked());
 }
 
 unsigned int Giocatore::getNumero() const{

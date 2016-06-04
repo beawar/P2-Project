@@ -4,8 +4,18 @@ Portiere::Portiere(const QString & nome, const QString & cognome, const QDate & 
     : Giocatore(nome, cognome, nascita, numero), tiriParati(0),
       tiriRicevuti(0), rigoriParati(0), rigoriRicevuti(0) {}
 
-Portiere::Portiere(const Portiere &p){
-    *this = p;
+Portiere::Portiere(const Portiere &p)
+    : Giocatore(p.getNome(), p.getCognome(), p.getData(), p.getNumero()), tiriParati(p.tiriParati),
+      tiriRicevuti(p.tiriRicevuti), rigoriParati(p.rigoriParati), rigoriRicevuti(p.rigoriRicevuti)
+{
+    addTiro(p.getTiriSegnati(), true);
+    addTiro(p.getTiriTotali()-p.getTiriSegnati(), false);
+    addRigore(p.getRigoriSegnati(), true);
+    addRigore(p.getRigoriTotali()-p.getRigoriSegnati(), false);
+    ammonito(p.isAmmonito());
+    add2Minuti(p.get2Minuti());
+    escluso(p.isEscluso());
+    setChecked(p.isChecked());
 }
 
 Portiere::Portiere(const Giocatore &g)
