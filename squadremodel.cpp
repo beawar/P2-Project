@@ -9,11 +9,6 @@ int SquadreModel::rowCount(const QModelIndex &parent) const{
     return squadre.count();
 }
 
-int SquadreModel::columnCount(const QModelIndex &parent) const{
-    Q_UNUSED(parent);
-    return 7;
-}
-
 QVariant SquadreModel::data(const QModelIndex &index, int role) const{
     if(index.row()<0 || index.row()>=squadre.count()){
         return QVariant::Invalid;
@@ -49,31 +44,6 @@ QVariant SquadreModel::data(const QModelIndex &index, int role) const{
     }
 }
 
-QVariant SquadreModel::headerData(int section, Qt::Orientation orientation, int role) const{
-    if(orientation == Qt::Horizontal && role == Qt::DisplayRole){
-        switch(section){
-            case 0:
-                return tr("Squadra");
-            case 1:
-                return tr("Società");
-            case 2:
-                return tr("V");
-            case 3:
-                return tr("P");
-            case 4:
-                return tr("S");
-            case 5:
-                return tr("Pt");
-            case 6:
-                return tr("Pen");
-            case 7:
-                return tr("DR");
-            default:
-                return "";
-        }
-    }
-}
-
 Squadra* SquadreModel::trova(const Squadra &s) const{
     for(QList<Squadra*>::ConstIterator it = squadre.constBegin(); it!=squadre.constEnd(); ++it){
         if(**it == s){
@@ -85,7 +55,7 @@ Squadra* SquadreModel::trova(const Squadra &s) const{
 
 void SquadreModel::addSquadra(Squadra* s){
     bool inserito = false;
-    for(QList<Squadra*>::iterator it = squadre.begin(); it != squadre.end() && !inserito; ++it){
+    for(QList<Squadra*>::Iterator it = squadre.begin(); it != squadre.end() && !inserito; ++it){
         if(s->getNome() < (*it)->getNome()){
             squadre.insert(it, s);
             inserito = true;
@@ -107,7 +77,7 @@ void SquadreModel::removeSquadra(Squadra *s){
 }
 
 void SquadreModel::addTesserato(Tesserato* t, const Squadra& s) const{
-    for(QList<Squadra*>::const_iterator it = squadre.cbegin(); it!=squadre.cend(); ++it){
+    for(QList<Squadra*>::ConstIterator it = squadre.constBegin(); it!=squadre.constEnd(); ++it){
         if((*it)->getNome() == s.getNome()){
             (*it)->addTesserato(t);
 
@@ -116,7 +86,7 @@ void SquadreModel::addTesserato(Tesserato* t, const Squadra& s) const{
 }
 
 void SquadreModel::modificaTesserato(const Squadra& squadra, Tesserato* vecchio,  const Tesserato & nuovo) const{
-    for(QList<Squadra*>::const_iterator it=squadre.cbegin(); it!=squadre.cend(); ++it){
+    for(QList<Squadra*>::ConstIterator it=squadre.constBegin(); it!=squadre.constEnd(); ++it){
         if(**it == squadra && (*it)->trova(*vecchio)){
             (*it)->modificaTesserato(vecchio, nuovo);
         }
@@ -173,7 +143,8 @@ void SquadreModel::clear(){
 }
 
 SquadreModel::~SquadreModel(){
-    for(QList<Squadra*>::iterator it = squadre.begin(); it != squadre.end(); it++){
+    for(QList<Squadra*>::Iterator it = squadre.begin(); it != squadre.end(); it++){
         delete *it;
     }
+    squadre.clear();
 }

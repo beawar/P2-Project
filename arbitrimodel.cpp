@@ -99,7 +99,7 @@ void ArbitriModel::clear(){
 }
 
 ArbitriModel::~ArbitriModel(){
-    for(QList<Arbitro*>::iterator it = arbitri.begin(); it != arbitri.end(); it++){
+    for(QList<Arbitro*>::Iterator it = arbitri.begin(); it != arbitri.end(); it++){
         delete *it;
     }
 }

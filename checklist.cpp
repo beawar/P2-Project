@@ -18,10 +18,8 @@ Qt::ItemFlags CheckList::flags(const QModelIndex &index) const{
         if(itemsAreCheckable()){
             return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemNeverHasChildren;
         }
-        else{
-            return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemNeverHasChildren;
-        }
     }
+    return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemNeverHasChildren;
 }
 
 QVariant CheckList::data(const QModelIndex &index, int role) const{
@@ -56,9 +54,7 @@ bool CheckList::setData(const QModelIndex &index, const QVariant &value, int rol
             return true;
         }
     }
-    else{
-        return false;
-    }
+    return false;
 
 }
 

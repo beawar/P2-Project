@@ -60,6 +60,7 @@ public:
     iterator copia(iterator from_pos, iterator from_to, iterator to_pos);
     iterator insert(iterator, value_type);
     iterator insert(iterator, size_type, value_type);
+    void insert(int, value_type);
     iterator erase(iterator);
     iterator erase(iterator, iterator);
     void erase (const_reference);
@@ -143,8 +144,10 @@ Vettore<T>::~Vettore(){
 
 template <class T>
 Vettore<T>& Vettore<T>::operator =(const Vettore<T>& v){
-    if(this != &v){
-        delete [] array;
+    if(*this != v){
+        if(array){
+            delete[] array;
+        }
         dim = v.dim;
         _size = v._size;
         array = copia(v);
@@ -267,8 +270,7 @@ typename Vettore<T>::iterator Vettore<T>::insert(iterator it, value_type x){
     int oldSize = size();
     ++_size;
     for(iterator i(&array[oldSize-1]); i >= it; --i){
-        iterator aux = i+1;
-        *aux = *i;
+        *(i+1) = *i;
     }
     *it = x;
     return it;
@@ -281,6 +283,20 @@ typename Vettore<T>::iterator Vettore<T>::insert(iterator it, size_type n, value
     }
     return it;
 
+}
+
+template <class T>
+void Vettore<T>::insert(int index, value_type x){
+    if(capacity() == size()){
+        array = ridimensiona(*this, capacity() + DEFAULT_DIMENSION);
+        dim += DEFAULT_DIMENSION;
+    }
+    int oldSize = size();
+    ++_size;
+    for(int i=oldSize-1; i>=index; --i){
+        array[i+1] = array[i];
+    }
+    array[index] = x;
 }
 
 template <class T>

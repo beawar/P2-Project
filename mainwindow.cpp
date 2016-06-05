@@ -264,9 +264,6 @@ void MainWindow::showPartita(){
     Arbitro* a1 = newWizard->getArbitro1();
     Arbitro* a2 = newWizard->getArbitro2();
 
-    if(tabs){
-        delete tabs;
-    }
     tabs = new Tabs(home, guest, a1, a2, this);
     tabs->setAttribute(Qt::WA_DeleteOnClose);
 
@@ -371,10 +368,6 @@ void MainWindow::terminaPartita(){
 }
 
 void MainWindow::chiudiTabs(){
-    if(tabs){
-        tabs->close();
-        tabs = 0;
-    }
     createLogoWidget();
     setCentralWidget(logoWidget);
     exportAct->setEnabled(false);

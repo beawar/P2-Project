@@ -2,6 +2,7 @@
 #define SQUADREMODEL_H
 
 #include <QAbstractListModel>
+#include <QList>
 #include <QVariant>
 #include "squadra.h"
 
@@ -18,9 +19,7 @@ public:
     ~SquadreModel();
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole ) const;
-    QVariant headerData(int section, Qt::Orientation orientation = Qt::Horizontal, int role = Qt::DisplayRole) const;
 
     Squadra* trova(const Squadra& s) const;
     void addSquadra(Squadra *);
