@@ -67,8 +67,5 @@ HEADERS  += \
 
 FORMS    +=
 
-OTHER_FILES += \
-    Promemoria.txt
-
 RESOURCES += \
     risorse.qrc
