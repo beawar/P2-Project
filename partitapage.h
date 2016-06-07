@@ -49,13 +49,10 @@ private:
     QListView* squadra1List;
     QListView* squadra2List;
 
+    Vettore<CheckList*> checkArray;
+
     CheckList* squadra1;
     CheckList* squadra2;
-
-    int s1GiocChecked;
-    int s1AllChecked;
-    int s2GiocChecked;
-    int s2AllChecked;
 
 private slots:
     void updateList();
@@ -70,8 +67,6 @@ public:
     bool validatePage() const;
 
     QString getCategoria() const;
-
-
 signals:
 
 public slots:

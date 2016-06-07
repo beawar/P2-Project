@@ -31,7 +31,7 @@ public:
     void addTiroRicevuto(int x = 1, const bool& parato= false);
     void addRigoreRicevuto(int x =1, const bool& parato = false);
 
-    virtual Portiere& operator =(const Portiere& p);
+    Portiere& operator =(const Portiere& p);
 
     virtual QString getInfo() const;
     virtual void reset();

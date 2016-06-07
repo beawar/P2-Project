@@ -80,7 +80,10 @@ void Editor::createTesseratoEditor(){
     squadreComboBox->setModel(squadre);
     connect(squadreComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateList(int)));
 
-    tesserati = new CheckList(squadre->at(squadreComboBox->currentIndex()), false, this);
+    for(int i=0; i<squadre->size(); ++i){
+        checkArray.push_back(new CheckList(squadre->at(i), false, this));
+    }
+    tesserati = checkArray[squadreComboBox->currentIndex()];
 
     nomeTLabel = new QLabel(tr("Nome:"), this);
     nomeTEdit = new QLineEdit(this);
@@ -278,7 +281,7 @@ void Editor::rimuoviArbitro(){
 void Editor::updateList(int index){
     switch(radioButtonGroup->checkedId()){
         case id_tesserato:
-            tesserati->createList(squadre->at(index));
+            tesserati = checkArray[index];
             listView->setModel(tesserati);
             break;
         case id_squadra:

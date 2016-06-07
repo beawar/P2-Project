@@ -21,6 +21,7 @@
 #include "arbitrimodel.h"
 #include "squadremodel.h"
 #include "checklist.h"
+#include "vettore.h"
 
 
 class Editor : public QDialog
@@ -78,6 +79,8 @@ private:
     QWidget* tesseratoWidget;
     QWidget* squadraWidget;
     QWidget* arbitroWidget;
+
+    Vettore<CheckList*> checkArray;
 
 public:
     explicit Editor(SquadreModel* sm, ArbitriModel* am, QWidget *parent = 0);

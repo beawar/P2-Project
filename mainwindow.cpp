@@ -7,7 +7,7 @@
 
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent), logoWidget(0), classificaWidget(0), toolBar(0), newWizard(0),
-  tabs(0), editor(0), fileOpen(""), xml(&squadre, &arbitri), modificato(false)
+  tabs(0), editor(0), squadre(new SquadreModel(this)), arbitri(new ArbitriModel(this)), fileOpen(""), xml(squadre, arbitri), modificato(false)
 {
     createLogoWidget();
     createActions();
@@ -89,8 +89,7 @@ void MainWindow::createActions(){
     connect(classificaAct, SIGNAL(triggered()), this, SLOT(creaClassifica()));
 
     closeTabs = new QAction(QIcon(":/images/images/close_red.png"), tr("Chiudi"), this);
-    closeTabs->setEnabled(false);
-
+    connect(closeTabs, SIGNAL(triggered()), this, SLOT(chiudiTabs()));
 }
 
 void MainWindow::createMenus(){
@@ -153,8 +152,9 @@ bool MainWindow::maybeSave(){
 }
 
 void MainWindow::newFile(){
-    newWizard = new NewWizard(&squadre, &arbitri, this);
+    newWizard = new NewWizard(squadre, arbitri, this);
     newWizard->setAttribute(Qt::WA_DeleteOnClose);
+    newWizard->setModal(true);
     newWizard->show();
     connect(newWizard, SIGNAL(partitaCreata()), this, SLOT(showPartita()));
     connect(newWizard, SIGNAL(squadraCreata()), this, SLOT(creaClassifica()));
@@ -164,11 +164,11 @@ void MainWindow::newFile(){
 void MainWindow::open(){
     QString fileName = QFileDialog::getOpenFileName(this, tr("Scegli un file da aprire"), QDir::currentPath(), "*.hbs");
     if(!fileName.isNull()){
-        if(!squadre.isEmpty()){
-            squadre.clear();
+        if(squadre && !squadre->isEmpty()){
+            squadre->clear();
         }
-        if(!arbitri.isEmpty()){
-            arbitri.clear();
+        if(arbitri && !arbitri->isEmpty()){
+            arbitri->clear();
         }
         try{
             xml.readFile(fileName);
@@ -184,7 +184,7 @@ void MainWindow::open(){
 }
 
 void MainWindow::save(){
-    if(!squadre.isEmpty() || !arbitri.isEmpty()){
+    if(!squadre->isEmpty() || !arbitri->isEmpty()){
         if(!fileOpen.isEmpty()){
             QFile file(fileOpen);
             if(file.open(QIODevice::WriteOnly)){
@@ -234,15 +234,16 @@ void MainWindow::exportPng(){
 
 
 void MainWindow::edit(){
-    editor = new Editor(&squadre, &arbitri, this);
+    editor = new Editor(squadre, arbitri, this);
     editor->setAttribute(Qt::WA_DeleteOnClose);
 
-    for(int i=0; i<squadre.size(); ++i){
-        squadre.at(i)->sortByName();
+    for(int i=0; i<squadre->size(); ++i){
+        squadre->at(i)->sortByName();
     }
 
     connect(editor, SIGNAL(squadraChanged()), this, SLOT(creaClassifica()));
     connect(editor, SIGNAL(dataChanged(bool)), this, SLOT(wasModified(bool)));
+    editor->setModal(true);
     editor->show();
 }
 
@@ -265,18 +266,16 @@ void MainWindow::showPartita(){
     Arbitro* a2 = newWizard->getArbitro2();
 
     tabs = new Tabs(home, guest, a1, a2, this);
-    tabs->setAttribute(Qt::WA_DeleteOnClose);
 
     classificaAct->setEnabled(false);
     exportAct->setEnabled(true);
     resetPartitaAct->setEnabled(true);
     closePartitaAct->setEnabled(true);
-    closeTabs->setEnabled(true);
 
 
     connect(exportAct, SIGNAL(triggered()), tabs, SLOT(exportPng()));
     connect(resetPartitaAct, SIGNAL(triggered()), tabs, SLOT(reset()));
-    connect(closeTabs, SIGNAL(triggered()), this, SLOT(chiudiTabs()));
+
 
     setCentralWidget(tabs);
 }
@@ -303,19 +302,19 @@ void MainWindow::creaClassifica(){
     header[6] = new QLabel(tr("Pen"), classificaWidget); //Penalità
     header[7] = new QLabel(tr("DR"), classificaWidget); //Differenza Reti
 
-    squadre.sort();
+    squadre->sort();
 
-    QLabel* teamsLabel[squadre.size()][8];
+    QLabel* teamsLabel[squadre->size()][8];
 
-    for(int i=0; i<squadre.size(); ++i){
+    for(int i=0; i<squadre->size(); ++i){
         teamsLabel[i][0] = new QLabel(QString::number(i+1), classificaWidget);
-        teamsLabel[i][1] = new QLabel(squadre.at(i)->getNome(), classificaWidget);
-        teamsLabel[i][2] = new QLabel(QString::number(squadre.at(i)->getPunti()), classificaWidget);
-        teamsLabel[i][3] = new QLabel(QString::number(squadre.at(i)->getVittorie()), classificaWidget);
-        teamsLabel[i][4] = new QLabel(QString::number(squadre.at(i)->getPareggi()), classificaWidget);
-        teamsLabel[i][5] = new QLabel(QString::number(squadre.at(i)->getSconfitte()), classificaWidget);
-        teamsLabel[i][6] = new QLabel(QString::number(squadre.at(i)->getPenalita()), classificaWidget);
-        teamsLabel[i][7] = new QLabel(QString::number(squadre.at(i)->getDifferenzaReti()), classificaWidget);
+        teamsLabel[i][1] = new QLabel(squadre->at(i)->getNome(), classificaWidget);
+        teamsLabel[i][2] = new QLabel(QString::number(squadre->at(i)->getPunti()), classificaWidget);
+        teamsLabel[i][3] = new QLabel(QString::number(squadre->at(i)->getVittorie()), classificaWidget);
+        teamsLabel[i][4] = new QLabel(QString::number(squadre->at(i)->getPareggi()), classificaWidget);
+        teamsLabel[i][5] = new QLabel(QString::number(squadre->at(i)->getSconfitte()), classificaWidget);
+        teamsLabel[i][6] = new QLabel(QString::number(squadre->at(i)->getPenalita()), classificaWidget);
+        teamsLabel[i][7] = new QLabel(QString::number(squadre->at(i)->getDifferenzaReti()), classificaWidget);
     }
 
     QGridLayout* classifica = new QGridLayout;
@@ -327,7 +326,7 @@ void MainWindow::creaClassifica(){
 
 
     font.setBold(false);
-    for(int i=0; i<squadre.size(); ++i){
+    for(int i=0; i<squadre->size(); ++i){
         for(int j=0; j<8; ++j){
             teamsLabel[i][j]->setFont(font);
             teamsLabel[i][j]->setAlignment(Qt::AlignHCenter);
@@ -362,6 +361,7 @@ void MainWindow::creaClassifica(){
 void MainWindow::terminaPartita(){
     classificaAct->setEnabled(true);
     resetPartitaAct->setEnabled(false);
+    closePartitaAct->setEnabled(false);
     tabs->termina();
     modificato = true;
 

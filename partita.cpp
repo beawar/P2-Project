@@ -20,7 +20,7 @@ Partita::Partita(Squadra *home, Squadra *guest, Arbitro *a1, Arbitro *a2, QWidge
     homeName->setFont(font);
     guestName->setFont(font);
 
-    punteggio = new QLabel(tr("%1 : %2").arg(QString::number(goalHome), QString::number(goalGuest)), this);
+    punteggio = new QLabel("0 : 0", this);
     punteggio->setAlignment(Qt::AlignHCenter);
     punteggio->setFont(font);
 
@@ -206,14 +206,14 @@ void Partita::createGuestLayout(){
 }
 
 void Partita::updatePunteggio(){
-    punteggio->setText(tr("%1 : %2").arg(QString::number(goalHome),
-                                         QString::number(goalGuest)));
+    punteggio->setText(tr("%1 : %2").arg(QString::number(homeTeam->getTiriSegnati()),
+                                         QString::number(guestTeam->getTiriSegnati())));
     update();
 }
 
 void Partita::tiroHome(int val, bool segnato){
     if(segnato){
-        goalHome += val;
+        //goalHome += val;
     }
     Portiere* p = dynamic_cast<Portiere*>(guestTeam->at(currentPortiereGuest));
     if(p){
@@ -227,7 +227,7 @@ void Partita::tiroHome(int val, bool segnato){
 
 void Partita::rigoreHome(int val, bool segnato){
     if(segnato){
-        goalHome += val;
+        //goalHome += val;
     }
     Portiere* p = dynamic_cast<Portiere*>(guestTeam->at(currentPortiereGuest));
     if(p){
@@ -240,7 +240,7 @@ void Partita::rigoreHome(int val, bool segnato){
 
 void Partita::tiroGuest(int val, bool segnato){
     if(segnato){
-        goalGuest += val;
+        //goalGuest += val;
     }
     Portiere* p = dynamic_cast<Portiere*>(homeTeam->at(currentPortiereHome));
     if(p){
@@ -253,7 +253,7 @@ void Partita::tiroGuest(int val, bool segnato){
 
 void Partita::rigoreGuest(int val, bool segnato){
     if(segnato){
-        goalGuest += val;
+        //goalGuest += val;
     }
     Portiere* p = dynamic_cast<Portiere*>(homeTeam->at(currentPortiereHome));
     if(p){
@@ -316,6 +316,8 @@ void Partita::dataSlot(){
 }
 
 void Partita::termina(){
+    goalHome = homeTeam->getTiriSegnati();
+    goalGuest = guestTeam->getTiriSegnati();
     if(goalHome > goalGuest){
         homeTeam->addVittoria(1, goalHome, goalGuest);
         guestTeam->addSconfitta(1, goalGuest, goalHome);

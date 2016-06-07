@@ -32,14 +32,14 @@ public:
 
   virtual void modifica(const Tesserato& t);
 
-  virtual Tesserato& operator =(const Tesserato& t);
+  Tesserato& operator =(const Tesserato& t);
 
-  virtual bool operator ==(const Tesserato& t) const;
-  virtual bool operator !=(const Tesserato& t) const;
-  virtual bool operator <(const Tesserato& t) const;
-  virtual bool operator <=(const Tesserato& t) const;
-  virtual bool operator >(const Tesserato& t) const;
-  virtual bool operator >=(const Tesserato& t) const;
+  bool operator ==(const Tesserato& t) const;
+  bool operator !=(const Tesserato& t) const;
+  bool operator <(const Tesserato& t) const;
+  bool operator <=(const Tesserato& t) const;
+  bool operator >(const Tesserato& t) const;
+  bool operator >=(const Tesserato& t) const;
 
   void setChecked(const bool& b);
   bool isChecked() const;

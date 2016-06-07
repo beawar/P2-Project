@@ -55,8 +55,8 @@ private:
     QAction* classificaAct;
     QAction* closeTabs;
 
-    SquadreModel squadre;
-    ArbitriModel arbitri;
+    SquadreModel* squadre;
+    ArbitriModel* arbitri;
 
     QString fileOpen;
     XmlHandler xml;

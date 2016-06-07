@@ -5,9 +5,19 @@
 CheckList::CheckList(Squadra *s, bool checkable, QObject *parent) :
     QStringListModel(parent), squadra(s), checkableItems(checkable)
 {
+    giocatori = 0;
+    allenatori = 0;
     if(squadra){
         for(int i=0; i<squadra->size(); ++i){
             strList.push_back(squadra->at(i)->getInfo());
+            if(squadra->at(i)->isChecked()){
+                if(dynamic_cast<const Giocatore*>(squadra->at(i))){
+                    giocatori++;
+                }
+                else if(dynamic_cast<const Allenatore*>(squadra->at(i))){
+                    allenatori++;
+                }
+            }
         }
     }
     setStringList(strList);
@@ -45,11 +55,23 @@ bool CheckList::setData(const QModelIndex &index, const QVariant &value, int rol
     else if(itemsAreCheckable() && role == Qt::CheckStateRole){
         if(value == Qt::Checked){
             squadra->at(index.row())->setChecked(true);
+            if(dynamic_cast<const Giocatore*>(squadra->at(index.row()))){
+                giocatori++;
+            }
+            else if(dynamic_cast<const Allenatore*>(squadra->at(index.row()))){
+                allenatori++;
+            }
             emit dataChanged(index, index);
             return true;
         }
         else if(value == Qt::Unchecked){
             squadra->at(index.row())->setChecked(false);
+            if(dynamic_cast<const Giocatore*>(squadra->at(index.row()))){
+                giocatori--;
+            }
+            else if(dynamic_cast<const Allenatore*>(squadra->at(index.row()))){
+                allenatori--;
+            }
             emit dataChanged(index, index);
             return true;
         }
@@ -58,18 +80,24 @@ bool CheckList::setData(const QModelIndex &index, const QVariant &value, int rol
 
 }
 
-void CheckList::createList(Squadra *s){
-    if(s){
+void CheckList::createList(){
+    if(squadra){
         strList.clear();
-        squadra = s;
         for(int i=0; i<squadra->size(); ++i){
             strList.push_back(squadra->at(i)->getInfo());
         }
         setStringList(strList);
-
     }
 }
 
 bool CheckList::itemsAreCheckable() const{
     return checkableItems;
+}
+
+int CheckList::checkedGiocatori() const{
+    return giocatori;
+}
+
+int CheckList::checkedAllenatori () const{
+    return allenatori;
 }

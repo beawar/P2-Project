@@ -10,26 +10,26 @@ Arbitro::Arbitro(const Arbitro &a)
     setChecked(a.isChecked());
 }
 
-void Arbitro::modifica(const Arbitro&a){
-    if(*this != a){
-        Tesserato::modifica(a);
-        if(livello != a.livello){
-            setLivello(a.livello);
+void Arbitro::modifica(const Tesserato &a){
+    const Arbitro* aux = dynamic_cast<const Arbitro*>(&a);
+    if(aux && *this != *aux){
+        if(livello != aux->livello){
+            setLivello(aux->livello);
         }
-        if(partiteRegionali != a.partiteRegionali){
-            addPRegionale(a.partiteRegionali);
+        if(partiteRegionali != aux->partiteRegionali){
+            addPRegionale(aux->partiteRegionali);
             aumentaLivello();
         }
-        if(partiteNazionali != a.partiteNazionali){
-            addPNazionale(a.partiteNazionali);
+        if(partiteNazionali != aux->partiteNazionali){
+            addPNazionale(aux->partiteNazionali);
             aumentaLivello();
         }
-        if(partiteInternaz != a.partiteInternaz){
-            addPInternaz(a.partiteInternaz);
+        if(partiteInternaz != aux->partiteInternaz){
+            addPInternaz(aux->partiteInternaz);
             aumentaLivello();
         }
-
     }
+    Tesserato::modifica(a);
 }
 
 unsigned int Arbitro::getLivello() const{

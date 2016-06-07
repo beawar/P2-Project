@@ -95,13 +95,14 @@ void Giocatore::escluso(const bool& add) throw(Err_Esclusione){
     }
 }
 
-void Giocatore::modifica(const Giocatore &g){
-    if(*this != g){
-        Tesserato::modifica(g);
-        if(numero != g.numero){
-            setNumero(g.numero);
+void Giocatore::modifica(const Tesserato &g){
+    const Giocatore* aux = dynamic_cast<const Giocatore*>(&g);
+    if(aux && *this != *aux){
+        if(numero != aux->numero){
+            setNumero(aux->numero);
         }
     }
+    Tesserato::modifica(g);
 }
 
 Giocatore& Giocatore::operator =(const Giocatore& g){
@@ -117,19 +118,19 @@ Giocatore& Giocatore::operator =(const Giocatore& g){
     return *this;
 }
 
-bool Giocatore::operator ==(const Giocatore& t) const{
-    return Tesserato::operator ==(t) && numero==t.numero;
+bool Giocatore::operator ==(const Giocatore& g) const{
+    return Tesserato::operator ==(g) && numero==g.numero;
 }
 
-bool Giocatore::operator !=(const Giocatore& t) const{
-    return !(operator ==(t));
+bool Giocatore::operator !=(const Giocatore& g) const{
+    return !(operator ==(g));
 }
 
-bool Giocatore::operator <(const Giocatore& t) const{
-    if(Tesserato::operator <(t)){
+bool Giocatore::operator <(const Giocatore& g) const{
+    if(Tesserato::operator <(g)){
         return true;
     }
-    else if(Tesserato::operator ==(t) && numero<t.numero){
+    else if(Tesserato::operator ==(g) && numero<g.numero){
         return true;
     }
     else{
@@ -137,16 +138,16 @@ bool Giocatore::operator <(const Giocatore& t) const{
     }
 }
 
-bool Giocatore::operator <=(const Giocatore& t) const{
-    return (operator <(t)) || (operator ==(t));
+bool Giocatore::operator <=(const Giocatore& g) const{
+    return (operator <(g)) || (operator ==(g));
 }
 
-bool Giocatore::operator >(const Giocatore& t) const{
-    return !(operator <=(t));
+bool Giocatore::operator >(const Giocatore& g) const{
+    return !(operator <=(g));
 }
 
-bool Giocatore::operator >=(const Giocatore& t) const{
-    return !(operator <(t));
+bool Giocatore::operator >=(const Giocatore& g) const{
+    return !(operator <(g));
 }
 
 QString Giocatore::getInfo() const{

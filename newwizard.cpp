@@ -5,11 +5,11 @@
 NewWizard::NewWizard(SquadreModel *sm, ArbitriModel *am, QWidget *parent) :
     QWizard(parent), squadre(sm), arbitri(am)
 {
-    if(!sm){
-        sm = new SquadreModel;
+    if(!squadre){
+        squadre = new SquadreModel;
     }
-    if(!am){
-        am = new ArbitriModel;
+    if(!arbitri){
+        arbitri = new ArbitriModel;
     }
 
     introP = new IntroPage(sm, am, this);
@@ -24,10 +24,7 @@ NewWizard::NewWizard(SquadreModel *sm, ArbitriModel *am, QWidget *parent) :
 
     setStartId(Page_Intro);
     setWindowTitle(tr("Nuovo"));
-    setMinimumSize(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    if(currentId() != Page_Partita){
-        setMaximumSize(500, 360);
-    }
+    setMinimumSize(sizeHint());
 
     connect(personaP, SIGNAL(personaCreata()), this, SLOT(nuovaPersona()));
     connect(squadraP, SIGNAL(squadraCreata()), this, SLOT(nuovaSquadra()));

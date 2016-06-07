@@ -17,7 +17,7 @@ public:
             const QDate& nascita=QDate::currentDate(), const unsigned int& livello= 0);
     Arbitro(const Arbitro& a);
 
-    virtual void modifica(const Arbitro& a);
+    virtual void modifica(const Tesserato& a);
 
     unsigned int getLivello () const;
 
@@ -28,7 +28,7 @@ public:
 
     unsigned int getPartite() const;
 
-    virtual Arbitro& operator =(const Arbitro& a);
+    Arbitro& operator =(const Arbitro& a);
 
     virtual void reset(){}
 

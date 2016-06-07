@@ -41,16 +41,16 @@ public:
     void add2Minuti (int x =1) throw (Err_DueMinuti);
     void escluso (const bool& add =true) throw (Err_Esclusione);
 
-    virtual void modifica(const Giocatore& g);
+    virtual void modifica(const Tesserato &g);
 
-    virtual Giocatore& operator = (const Giocatore& g);
+    Giocatore& operator = (const Giocatore& g);
 
-    virtual bool operator ==(const Giocatore& g) const;
-    virtual bool operator !=(const Giocatore& g) const;
-    virtual bool operator <(const Giocatore& g) const;
-    virtual bool operator <=(const Giocatore& g) const;
-    virtual bool operator >(const Giocatore& g) const;
-    virtual bool operator >=(const Giocatore& g) const;
+    bool operator ==(const Giocatore& g) const;
+    bool operator !=(const Giocatore& g) const;
+    bool operator <(const Giocatore& g) const;
+    bool operator <=(const Giocatore& g) const;
+    bool operator >(const Giocatore& g) const;
+    bool operator >=(const Giocatore& g) const;
 
     virtual QString getInfo() const;
     virtual void reset();

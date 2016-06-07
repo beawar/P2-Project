@@ -24,7 +24,7 @@ public:
     void set2Minuti (const bool& add = true) throw (Err_DueMinuti);
     void escluso (const bool& add =true) throw (Err_Esclusione);
 
-    virtual Allenatore& operator =(const Allenatore& a);
+    Allenatore& operator =(const Allenatore& a);
 
     virtual QString getInfo() const;
     virtual void reset();
