@@ -26,8 +26,10 @@ LineStat::LineStat(Tesserato*t, QWidget *parent) :
 void LineStat::createLabels(){
     cognome = new QLabel(tess->getCognome(), this);
     cognome->setMinimumSize(100, 15);
+    cognome->setAlignment(Qt::AlignVCenter);
     nome = new QLabel(tess->getNome(), this);
     nome->setMinimumSize(100, 15);
+    nome->setAlignment(Qt::AlignVCenter);
     numero = new QLabel(this);
     numero->setMinimumSize(30, 15);
     numero->setMaximumSize(50, 50);

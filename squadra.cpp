@@ -183,19 +183,19 @@ unsigned int Squadra::getRigoriRicevuti() const{
 }
 
 double Squadra::getTiriPerc() const{
-    return (double)getTiriSegnati()*100 /getTiriEffettuati();
+    return getTiriEffettuati() > 0 ? (double)getTiriSegnati()*100 /getTiriEffettuati() : 0;
 }
 
 double Squadra::getRigoriPerc() const{
-    return (double)getRigoriSegnati()*100 /getRigoriEffettuati();
+    return getRigoriEffettuati() > 0 ? (double)getRigoriSegnati()*100 /getRigoriEffettuati() : 0;
 }
 
 double Squadra::getParatePerc() const{
-    return (double)getTiriParati()*100 /getTiriRicevuti();
+    return getTiriRicevuti() > 0 ? (double)getTiriParati()*100 /getTiriRicevuti() : 0;
 }
 
 double Squadra::getParateRigoriPerc() const{
-    return (double)getRigoriParati()*100 /getRigoriRicevuti();
+    return getRigoriRicevuti() ? (double)getRigoriParati()*100 /getRigoriRicevuti() : 0;
 }
 
 void Squadra::addTesserato(Tesserato *t) throw(Err_Tesserato){

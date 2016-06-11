@@ -24,7 +24,6 @@ NewWizard::NewWizard(SquadreModel *sm, ArbitriModel *am, QWidget *parent) :
 
     setStartId(Page_Intro);
     setWindowTitle(tr("Nuovo"));
-    setMinimumSize(sizeHint());
 
     connect(personaP, SIGNAL(personaCreata()), this, SLOT(nuovaPersona()));
     connect(squadraP, SIGNAL(squadraCreata()), this, SLOT(nuovaSquadra()));
@@ -58,8 +57,14 @@ void NewWizard::accept(){
             close();
         }
         else{
-            QMessageBox::warning(this, tr("Informazioni invalide"), tr("Impossibile creare la partita. Ricontrollare le "
-                                                                        "informazioni immesse"), QMessageBox::Ok);
+            QMessageBox::warning(this, tr("Informazioni invalide"),
+                                 tr("Impossibile creare la partita. Ricontrollare le "
+                                 "informazioni immesse:\n"
+                                 " - la squadra in casa e quella ospite devono essere distinte;\n"
+                                 " - devono essere specificati due arbitri distinti;\n"
+                                 " - devono essere selezionati minimo 7 giocatori e massimo "
+                                 " 14 giocatori e 2 allenatori per squadra."),
+                                 QMessageBox::Ok);
         }
     }
     else{

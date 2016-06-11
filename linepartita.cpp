@@ -10,17 +10,14 @@ LinePartita::LinePartita(Tesserato* t, QWidget *parent) :
     numeroLabel = new QLabel(this);
     numeroLabel->setMinimumSize(15, 15);
     numeroLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    numeroLabel->setAlignment(Qt::AlignVCenter);
 
     nomeLabel = new QLabel(t->getCognome() + " " + t->getNome(), this);
     nomeLabel->setMinimumSize(200, 15);
     nomeLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    nomeLabel->setAlignment(Qt::AlignVCenter);
 
     goalLabel = new QLabel(this);
     goalLabel->setMinimumSize(15, 15);
     goalLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    goalLabel->setAlignment(Qt::AlignVCenter);
 
     if(dynamic_cast<Giocatore*>(tesserato) || dynamic_cast<Allenatore*>(tesserato)){
         createButtons();
@@ -245,11 +242,11 @@ void LinePartita::rightclickTiro(){
 void LinePartita::rightdoubleclickTiro(){
     Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
     g->addTiro(1, true); //aggiunge un tiro segnato rimosso con l'evento single click che avviene con il double-click
-    g->addTiro(-1, false);
-    QMessageBox::warning(this, tr("Tiro rimosso"), tr("E' stato rimosso un tiro sbagliato"), QMessageBox::Ok);
     emit tiro(1, true);
+    g->addTiro(-1, false);
     emit tiro(-1, false);
     updateGoals();
+    QMessageBox::warning(this, tr("Tiro rimosso"), tr("E' stato rimosso un tiro sbagliato"), QMessageBox::Ok);
 }
 
 //Aggiunge segnato
@@ -282,8 +279,8 @@ void LinePartita::rightclickRigore(){
 void LinePartita::rightdoubleclickRigore(){
     Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
     g->addRigore(1, true); //aggiunge un rigore segnato rimosso con il single-click dovuto al double-click
-    g->addRigore(-1, false);
     emit rigore(1, true);
+    g->addRigore(-1, false);
     emit rigore(-1, false);
     updateGoals();
 }

@@ -304,8 +304,8 @@ void Partita::termina(){
         guestTeam->addSconfitta(1, goalGuest, goalHome);
     }
     else if(goalHome == goalGuest){
-        homeTeam->addPareggio(goalHome);
-        guestTeam->addPareggio(goalGuest);
+        homeTeam->addPareggio(1, goalHome);
+        guestTeam->addPareggio(1, goalGuest);
     }
     else{
         homeTeam->addSconfitta(1, goalHome, goalGuest);

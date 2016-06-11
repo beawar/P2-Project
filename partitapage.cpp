@@ -7,23 +7,24 @@ PartitaPage::PartitaPage(SquadreModel *sm, ArbitriModel *am, QWidget *parent) :
     QWizardPage(parent), squadre(sm), arbitri(am), squadra1(0), squadra2(0)
 { 
 
-    for(int i=0; i<squadre->size(); ++i){
-        squadre->at(i)->sortByName();
-        checkArray.push_back(new CheckList(squadre->at(i), true, this));
+    if(!squadre->isEmpty() && !arbitri->isEmpty()){
+        for(int i=0; i<squadre->size(); ++i){
+            squadre->at(i)->sortByName();
+            checkArray.push_back(new CheckList(squadre->at(i), true, this));
+        }
+
+        layout = new QVBoxLayout;
+        createView();
+        createLayout();
+
+        setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+        setLayout(layout);
+
+        registerField("partita.homeTeam", squadra1ComboBox);
+        registerField("partita.guestTeam", squadra2ComboBox);
+        registerField("partita.arbitro1", arbitro1ComboBox);
+        registerField("partita.arbitro2", arbitro2ComboBox);
     }
-
-    layout = new QVBoxLayout;
-    createView();
-    createLayout();
-
-    setMinimumSize(sizeHint());
-    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    setLayout(layout);
-
-    registerField("partita.homeTeam", squadra1ComboBox);
-    registerField("partita.guestTeam", squadra2ComboBox);
-    registerField("partita.arbitro1", arbitro1ComboBox);
-    registerField("partita.arbitro2", arbitro2ComboBox);
 }
 
 void PartitaPage::createView(){
@@ -50,11 +51,9 @@ void PartitaPage::createView(){
 
     squadra1List = new QListView(this);
     squadra1List->setModel(squadra1);
-    squadra1List->setMinimumSize(squadra1List->sizeHint());
 
     squadra2List = new QListView(this);
     squadra2List->setModel(squadra2);
-    squadra2List->setMinimumSize(squadra2List->sizeHint());
 
     categoriaLabel = new QLabel(tr("Categoria: "), this);
 

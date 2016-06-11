@@ -112,7 +112,7 @@ void Stat::createHeader(){
 }
 
 void Stat::updateDati(){
-    percSquadra->setText(tr("Realizzazioni: %1 (Rigori: %2)         Parate: %3 (Rigori: %4)")
+    percSquadra->setText(tr("Realizzazioni: %1% (Rigori: %2%)         Parate: %3% (Rigori: %4%)")
                          .arg(QString::number(squadra->getTiriPerc(), 'f', 2))
                          .arg(QString::number(squadra->getRigoriPerc(), 'f', 2))
                          .arg(QString::number(squadra->getParatePerc(), 'f', 2))
