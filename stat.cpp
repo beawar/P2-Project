@@ -1,5 +1,6 @@
 #include "stat.h"
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 
 Stat::Stat(Squadra *s, QWidget *parent) :
     QWidget(parent), squadra(s)
@@ -14,8 +15,19 @@ Stat::Stat(Squadra *s, QWidget *parent) :
     squadraLabel = new QLabel(squadra->getNome(), this);
     squadraLabel->setFont(font);
 
+    QFont font2;
+    font2.setBold(true);
+    font2.setItalic(false);
+    font2.setPointSize(14);
+    percSquadra = new QLabel(this);
+    percSquadra->setFont(font2);
+    percSquadra->setAlignment(Qt::AlignLeft);
+
+    QHBoxLayout* squadraLayout = new QHBoxLayout;
+    squadraLayout->addWidget(squadraLabel);
+    squadraLayout->addWidget(percSquadra);
     QVBoxLayout* layout = new QVBoxLayout;
-    layout->addWidget(squadraLabel);
+    layout->addLayout(squadraLayout);
     layout->addLayout(headerLayout);
 
     int j = 0;
@@ -100,6 +112,11 @@ void Stat::createHeader(){
 }
 
 void Stat::updateDati(){
+    percSquadra->setText(tr("Realizzazioni: %1 (Rigori: %2)         Parate: %3 (Rigori: %4)")
+                         .arg(QString::number(squadra->getTiriPerc(), 'f', 2))
+                         .arg(QString::number(squadra->getRigoriPerc(), 'f', 2))
+                         .arg(QString::number(squadra->getParatePerc(), 'f', 2))
+                         .arg(QString::number(squadra->getParateRigoriPerc(), 'f', 2)));
     int j = 0;
     bool last = false;
     for(int i=0; i<squadra->size() && !last; ++i){

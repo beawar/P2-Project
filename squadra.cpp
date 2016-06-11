@@ -105,18 +105,7 @@ unsigned int Squadra::getTiriSegnati() const{
     return tot;
 }
 
- unsigned int Squadra::getTiriSubiti() const{
-     unsigned int tot=0;
-     for(Vettore<Tesserato*>::const_iterator cit = tesserati.cbegin(); cit<tesserati.cend(); ++cit){
-         Portiere* p = dynamic_cast<Portiere*>(*cit);
-         if(p){
-             tot+= p->getGoalSubiti();
-         }
-     }
-     return tot;
- }
-
-unsigned int Squadra::getTiriTotali() const{
+unsigned int Squadra::getTiriEffettuati() const{
     unsigned int tot=0;
     for(Vettore<Tesserato*>::const_iterator cit = tesserati.cbegin(); cit<tesserati.cend(); ++cit){
         Giocatore* g = dynamic_cast<Giocatore*>(*cit);
@@ -138,18 +127,7 @@ unsigned int Squadra::getRigoriSegnati() const{
     return tot;
 }
 
-unsigned int Squadra::getRigoriSubiti() const{
-    unsigned int tot=0;
-    for(Vettore<Tesserato*>::const_iterator cit = tesserati.cbegin(); cit<tesserati.cend(); ++cit){
-        Portiere* p = dynamic_cast<Portiere*>(*cit);
-        if(p){
-            tot+= p->getRigoriSubiti();
-        }
-    }
-    return tot;
-}
-
-unsigned int Squadra::getRigoriTotali() const{
+unsigned int Squadra::getRigoriEffettuati() const{
     unsigned int tot=0;
     for(Vettore<Tesserato*>::const_iterator cit = tesserati.cbegin(); cit<tesserati.cend(); ++cit){
         const Giocatore* g = dynamic_cast<const Giocatore*>(*cit);
@@ -160,14 +138,65 @@ unsigned int Squadra::getRigoriTotali() const{
     return tot;
 }
 
+unsigned int Squadra::getTiriParati() const{
+    unsigned int tot=0;
+    for(Vettore<Tesserato*>::const_iterator cit = tesserati.cbegin(); cit<tesserati.cend(); ++cit){
+        const Portiere* p = dynamic_cast<const Portiere*>(*cit);
+        if(p){
+            tot+= p->getTiriParati();
+        }
+    }
+    return tot;
+}
+
+unsigned int Squadra::getTiriRicevuti() const{
+    unsigned int tot=0;
+    for(Vettore<Tesserato*>::const_iterator cit = tesserati.cbegin(); cit<tesserati.cend(); ++cit){
+        const Portiere* p = dynamic_cast<const Portiere*>(*cit);
+        if(p){
+            tot+= p->getTiriRicevuti();
+        }
+    }
+    return tot;
+}
+
+unsigned int Squadra::getRigoriParati() const{
+    unsigned int tot=0;
+    for(Vettore<Tesserato*>::const_iterator cit = tesserati.cbegin(); cit<tesserati.cend(); ++cit){
+        const Portiere* p = dynamic_cast<const Portiere*>(*cit);
+        if(p){
+            tot+= p->getRigoriParati();
+        }
+    }
+    return tot;
+}
+
+unsigned int Squadra::getRigoriRicevuti() const{
+    unsigned int tot=0;
+    for(Vettore<Tesserato*>::const_iterator cit = tesserati.cbegin(); cit<tesserati.cend(); ++cit){
+        const Portiere* p = dynamic_cast<const Portiere*>(*cit);
+        if(p){
+            tot+= p->getRigoriRicevuti();
+        }
+    }
+    return tot;
+}
+
 double Squadra::getTiriPerc() const{
-    return getTiriSegnati()*100 /getTiriTotali();
+    return (double)getTiriSegnati()*100 /getTiriEffettuati();
 }
 
 double Squadra::getRigoriPerc() const{
-    return getRigoriSegnati()*100 /getRigoriTotali();
+    return (double)getRigoriSegnati()*100 /getRigoriEffettuati();
 }
 
+double Squadra::getParatePerc() const{
+    return (double)getTiriParati()*100 /getTiriRicevuti();
+}
+
+double Squadra::getParateRigoriPerc() const{
+    return (double)getRigoriParati()*100 /getRigoriRicevuti();
+}
 
 void Squadra::addTesserato(Tesserato *t) throw(Err_Tesserato){
     if(!dynamic_cast<const Arbitro*>(t)){

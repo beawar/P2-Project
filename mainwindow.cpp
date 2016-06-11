@@ -264,8 +264,9 @@ void MainWindow::showPartita(){
     Squadra* guest = newWizard->getGuestTeam();
     Arbitro* a1 = newWizard->getArbitro1();
     Arbitro* a2 = newWizard->getArbitro2();
+    Arbitro::Categoria cat= newWizard->getCategoria();
 
-    tabs = new Tabs(home, guest, a1, a2, this);
+    tabs = new Tabs(home, guest, a1, a2, cat, this);
 
     classificaAct->setEnabled(false);
     exportAct->setEnabled(true);

@@ -13,6 +13,8 @@ private:
 
     void aumentaLivello ();
 public:
+    enum Categoria{regionale, nazionale, internazionale};
+
     Arbitro(const QString& nome="", const QString& cognome="",
             const QDate& nascita=QDate::currentDate(), const unsigned int& livello= 0);
     Arbitro(const Arbitro& a);
@@ -22,9 +24,7 @@ public:
     unsigned int getLivello () const;
 
     void setLivello (const unsigned int & l);
-    void addPRegionale (int x =1);
-    void addPNazionale(int x =1);
-    void addPInternaz(int x =1);
+    void addPartita (Categoria cat, int x =1);
 
     unsigned int getPartite() const;
 

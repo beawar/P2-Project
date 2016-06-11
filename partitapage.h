@@ -66,7 +66,7 @@ public:
     int nextId() const;
     bool validatePage() const;
 
-    QString getCategoria() const;
+    Arbitro::Categoria getCategoria() const;
 signals:
 
 public slots:

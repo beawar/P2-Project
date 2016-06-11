@@ -5,19 +5,23 @@
 LinePartita::LinePartita(Tesserato* t, QWidget *parent) :
     QWidget(parent), tesserato(t)
 {
-    setStyleSheet("font-size: 10pt");
+    setStyleSheet("font-size: 10pt;");
 
     numeroLabel = new QLabel(this);
     numeroLabel->setMinimumSize(15, 15);
     numeroLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    numeroLabel->setAlignment(Qt::AlignVCenter);
 
     nomeLabel = new QLabel(t->getCognome() + " " + t->getNome(), this);
     nomeLabel->setMinimumSize(200, 15);
     nomeLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    nomeLabel->setAlignment(Qt::AlignVCenter);
 
     goalLabel = new QLabel(this);
     goalLabel->setMinimumSize(15, 15);
     goalLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    goalLabel->setAlignment(Qt::AlignVCenter);
+
     if(dynamic_cast<Giocatore*>(tesserato) || dynamic_cast<Allenatore*>(tesserato)){
         createButtons();
     }

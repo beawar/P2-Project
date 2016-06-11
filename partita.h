@@ -23,6 +23,10 @@ private:
     Squadra* homeTeam;
     Squadra* guestTeam;
 
+    Arbitro* arbitro1;
+    Arbitro* arbitro2;
+    Arbitro::Categoria categoria;
+
     int goalHome;
     int goalGuest;
 
@@ -41,9 +45,7 @@ private:
     QLabel* punteggio;
 
 public:
-    explicit Partita(Squadra* home, Squadra* guest, Arbitro* a1, Arbitro* a2, QWidget *parent = 0);
-    Squadra* getHomeTeam() const;
-    Squadra* getGuestTeam() const;
+    explicit Partita(Squadra* home, Squadra* guest, Arbitro* a1, Arbitro* a2, Arbitro::Categoria cat, QWidget *parent = 0);
 
 signals:
     void dataChanged();

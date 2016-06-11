@@ -50,9 +50,11 @@ void PartitaPage::createView(){
 
     squadra1List = new QListView(this);
     squadra1List->setModel(squadra1);
+    squadra1List->setMinimumSize(squadra1List->sizeHint());
 
     squadra2List = new QListView(this);
     squadra2List->setModel(squadra2);
+    squadra2List->setMinimumSize(squadra2List->sizeHint());
 
     categoriaLabel = new QLabel(tr("Categoria: "), this);
 
@@ -65,13 +67,11 @@ void PartitaPage::createView(){
     connect(numeroButton, SIGNAL(clicked()), this, SLOT(sort()));
 
     connect(squadra1ComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateList()));
-    //connect(squadra1ComboBox, SIGNAL(currentIndexChanged(int)), squadra1List, SLOT(update()));
     connect(squadra1List, SIGNAL(clicked(QModelIndex)), this, SLOT(checkItemS1(QModelIndex)));
     connect(squadra1, SIGNAL(dataChanged(QModelIndex,QModelIndex)), squadra1List, SLOT(update()));
     connect(squadra1, SIGNAL(dataChanged(QModelIndex,QModelIndex)), squadra2List, SLOT(update()));
 
     connect(squadra2ComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateList()));
-    connect(squadra2ComboBox, SIGNAL(currentIndexChanged(int)), squadra2List, SLOT(update()));
     connect(squadra2List, SIGNAL(clicked(QModelIndex)), this, SLOT(checkItemS2(QModelIndex)));
     connect(squadra2, SIGNAL(dataChanged(QModelIndex,QModelIndex)), squadra2List, SLOT(update()));
     connect(squadra2, SIGNAL(dataChanged(QModelIndex,QModelIndex)), squadra1List, SLOT(update()));
@@ -132,21 +132,24 @@ int PartitaPage::nextId() const{
 }
 
 bool PartitaPage::validatePage() const{
-    if(squadra1ComboBox->currentText() == squadra2ComboBox->currentText()){
+    if(squadra1ComboBox->currentText() == squadra2ComboBox->currentText() ||
+            arbitro1ComboBox->currentText() == arbitro2ComboBox->currentText() ||
+            squadra1->checkedGiocatori() < 7 || squadra2->checkedGiocatori() < 7){
         return false;
     }
-    else if(arbitro1ComboBox->currentText() == arbitro2ComboBox->currentText()){
-        return false;
-    }
-    else{
-        return true;
-    }
+    return true;
 
 }
 
-
-QString PartitaPage::getCategoria() const{
-    return categoria->currentText();
+Arbitro::Categoria PartitaPage::getCategoria() const{
+    if(categoria->currentText() == tr("Regionale")){
+        return Arbitro::regionale;
+    }
+    else if(categoria->currentText() == tr("Nazionale")){
+        return Arbitro::nazionale;
+    }
+    else if(categoria->currentText() == tr("Internazionale"))
+        return Arbitro::internazionale;
 }
 
 void PartitaPage::updateList(){
@@ -175,7 +178,6 @@ void PartitaPage::checkItemS1(QModelIndex index){
                                                                                   QString::number(maxAllenatori)));
         }
     }
-
 }
 
 void PartitaPage::checkItemS2(QModelIndex index){

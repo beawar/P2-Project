@@ -47,21 +47,13 @@ Arbitro* NewWizard::getArbitro2() const{
     return arbitri->at(field("partita.arbitro2").toInt());
 }
 
+Arbitro::Categoria NewWizard::getCategoria() const{
+    return partitaP->getCategoria();
+}
+
 void NewWizard::accept(){
     if(currentId() == Page_Partita){
         if(partitaP->validatePage()){
-            if(partitaP->getCategoria() == tr("Regionale")){
-                arbitri->at(field("partita.arbitro1").toInt())->addPRegionale();
-                arbitri->at(field("partita.arbitro2").toInt())->addPRegionale();
-            }
-            else if(partitaP->getCategoria() == tr("Nazionale")){
-                arbitri->at(field("partita.arbitro1").toInt())->addPNazionale();
-                arbitri->at(field("partita.arbitro2").toInt())->addPNazionale();
-            }
-            else if(partitaP->getCategoria() == tr("Internazionale")){
-                arbitri->at(field("partita.arbitro1").toInt())->addPInternaz();
-                arbitri->at(field("partita.arbitro2").toInt())->addPInternaz();
-            }
             emit partitaCreata();
             close();
         }

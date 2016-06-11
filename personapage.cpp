@@ -35,17 +35,20 @@ void PersonaPage::createButtons(){
     }
 
     insertButton = new QPushButton(tr("Inserisci"), this);
+    insertButton->setEnabled(false);
     connect(insertButton, SIGNAL(clicked()), this, SLOT(insertPerson()));
 }
 
 void PersonaPage::createEditor(){
     nomeLabel = new QLabel(tr("Nome:"), this);
     nomeLabel->setAlignment(Qt::AlignCenter);
-    nomeEdit = new QLineEdit;
+    nomeEdit = new QLineEdit(this);
+    connect(nomeEdit, SIGNAL(textChanged(QString)), this, SLOT(validateData()));
 
     cognomeLabel = new QLabel(tr("Cognome:"), this);
     cognomeLabel->setAlignment(Qt::AlignCenter);
-    cognomeEdit = new QLineEdit;
+    cognomeEdit = new QLineEdit(this);
+    connect(cognomeEdit, SIGNAL(textChanged(QString)), this, SLOT(validateData()));
 
     dataLabel = new QLabel(tr("Data di Nascita:"), this);
     dataLabel->setAlignment(Qt::AlignCenter);
@@ -70,15 +73,6 @@ void PersonaPage::createEditor(){
     livelloEdit = new QSpinBox(this);
     livelloEdit->setRange(0, 3);
 
-    registerField("persona.giocatore", giocatoreButton);
-    registerField("persona.allenatore", allenatoreButton);
-    registerField("persona.arbitro", arbitroButton);
-    registerField("persona.nome", nomeEdit);
-    registerField("persona.cognome", cognomeEdit);
-    registerField("persona.data", dataEdit);
-    registerField("persona.numero", numeroEdit);
-    registerField("persona.squadra", squadraEdit);
-    registerField("persona.livello", livelloEdit);
 }
 
 void PersonaPage::createLayout(){
@@ -115,6 +109,15 @@ void PersonaPage::createLayout(){
 
 int PersonaPage::nextId() const{
     return -1;
+}
+
+void PersonaPage::validateData(){
+    if(!nomeEdit->text().isEmpty() && !cognomeEdit->text().isEmpty()){
+        insertButton->setEnabled(true);
+    }
+    else{
+        insertButton->setEnabled(false);
+    }
 }
 
 void PersonaPage::changeEditor(){

@@ -37,6 +37,7 @@ public:
     Squadra* getGuestTeam() const;
     Arbitro* getArbitro1() const;
     Arbitro* getArbitro2() const;
+    Arbitro::Categoria getCategoria() const;
 
     void accept();
 
