@@ -103,3 +103,22 @@ Arbitro& Arbitro::operator =(const Arbitro& a){
     partiteInternaz = a.partiteInternaz;
     return *this;
 }
+
+void Arbitro::ammonito (const bool& add) throw (Err_Ammonizione) {
+    throw Err_Ammonizione();
+}
+void Arbitro::add2Minuti (int x) throw (Err_DueMinuti) {
+    throw Err_DueMinuti();
+}
+void Arbitro::escluso (const bool& add) throw (Err_Esclusione) {
+    throw Err_Esclusione();
+}
+bool Arbitro::isAmmonito () const {
+    throw Err_Ammonizione();
+}
+int Arbitro::get2Minuti () const {
+    throw Err_DueMinuti();
+}
+bool Arbitro::isEscluso () const {
+    throw Err_Esclusione();
+}

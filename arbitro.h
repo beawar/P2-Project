@@ -30,6 +30,13 @@ public:
 
     Arbitro& operator =(const Arbitro& a);
 
+    virtual void ammonito (const bool& add =true) throw (Err_Ammonizione);
+    virtual void add2Minuti (int x =1) throw (Err_DueMinuti);
+    virtual void escluso (const bool& add =true) throw (Err_Esclusione);
+    virtual bool isAmmonito () const;
+    virtual int get2Minuti () const;
+    virtual bool isEscluso () const;
+
     virtual void reset(){}
 
 };

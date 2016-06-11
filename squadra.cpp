@@ -108,7 +108,7 @@ unsigned int Squadra::getTiriSegnati() const{
 unsigned int Squadra::getTiriEffettuati() const{
     unsigned int tot=0;
     for(Vettore<Tesserato*>::const_iterator cit = tesserati.cbegin(); cit<tesserati.cend(); ++cit){
-        Giocatore* g = dynamic_cast<Giocatore*>(*cit);
+        const Giocatore* g = dynamic_cast<const Giocatore*>(*cit);
         if(g){
             tot+= g->getTiriTotali();
         }

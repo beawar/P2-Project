@@ -167,7 +167,7 @@ void PartitaPage::checkItemS1(QModelIndex index){
         if(dynamic_cast<Giocatore*>(homeTeam()->at(index.row())) && squadra1->checkedGiocatori()<maxGiocatori){
             squadra1->setData(index, Qt::Checked, Qt::CheckStateRole);
         }
-        else if(dynamic_cast<Allenatore*>(homeTeam()->at(index.row())) && squadra1->checkedAllenatori()<maxAllenatori){
+        else if(squadra1->checkedAllenatori()<maxAllenatori){
             squadra1->setData(index, Qt::Checked, Qt::CheckStateRole);
         }
         else{
@@ -188,7 +188,7 @@ void PartitaPage::checkItemS2(QModelIndex index){
         if(dynamic_cast<Giocatore*>(guestTeam()->at(index.row())) && squadra2->checkedGiocatori()<maxGiocatori){
             squadra2->setData(index, Qt::Checked, Qt::CheckStateRole);
         }
-        else if(dynamic_cast<Allenatore*>(guestTeam()->at(index.row())) && squadra2->checkedAllenatori()<maxAllenatori){
+        else if(squadra2->checkedAllenatori()<maxAllenatori){
             squadra2->setData(index, Qt::Checked, Qt::CheckStateRole);
         }
         else{

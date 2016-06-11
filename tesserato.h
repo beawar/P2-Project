@@ -3,8 +3,7 @@
 
 #include <QString>
 #include <QDate>
-
-
+#include "eccezioni.h"
 
 class Tesserato
 {
@@ -45,6 +44,12 @@ public:
   bool isChecked() const;
 
   virtual QString getInfo() const;
+  virtual void ammonito (const bool& add =true) throw (Err_Ammonizione) =0;
+  virtual void add2Minuti (int x =1) throw (Err_DueMinuti) =0;
+  virtual void escluso (const bool& add =true) throw (Err_Esclusione) =0;
+  virtual bool isAmmonito () const =0;
+  virtual int get2Minuti () const =0;
+  virtual bool isEscluso () const =0;
   virtual void reset() =0;
 
 };

@@ -19,9 +19,7 @@ LinePartita::LinePartita(Tesserato* t, QWidget *parent) :
     goalLabel->setMinimumSize(15, 15);
     goalLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-    if(dynamic_cast<Giocatore*>(tesserato) || dynamic_cast<Allenatore*>(tesserato)){
-        createButtons();
-    }
+    createButtons();
 
     createLayout();
     setLayout(layout);
@@ -71,161 +69,81 @@ void LinePartita::createLayout(){
     layout = new QHBoxLayout;
     layout->addWidget(numeroLabel);
     layout->addWidget(nomeLabel);
-    if(!dynamic_cast<Arbitro*>(tesserato)){
-        layout->addWidget(goalLabel);
-        layout->addWidget(tiroButton);
-        layout->addWidget(rigoreButton);
-        layout->addWidget(ammoButton);
-        layout->addWidget(dueMinButton);
-        layout->addWidget(esclButton);
-        Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
-        if(g){
-            numeroLabel->setText(QString::number(g->getNumero()));
-            goalLabel->setText(QString::number(g->getTiriSegnati()));
-        }
-        else{
-            numeroLabel->setText(tr("All"));
-            tiroButton->setEnabled(false);
-            rigoreButton->setEnabled(false);
-        }
+    layout->addWidget(goalLabel);
+    layout->addWidget(tiroButton);
+    layout->addWidget(rigoreButton);
+    layout->addWidget(ammoButton);
+    layout->addWidget(dueMinButton);
+    layout->addWidget(esclButton);
+    Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
+    if(g){
+        numeroLabel->setText(QString::number(g->getNumero()));
+        goalLabel->setText(QString::number(g->getTiriSegnati()));
+    }
+    else{
+        numeroLabel->setText(tr("All"));
+        tiroButton->setEnabled(false);
+        rigoreButton->setEnabled(false);
     }
 }
 
 void LinePartita::rightclickAmmo(){
     ammoButton->setStyleSheet("/**/");
-    Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
-    if(g){
-        g->ammonito(false);
-    }
-    else{
-        Allenatore* a = dynamic_cast<Allenatore*>(tesserato);
-        if(a){
-            a->ammonito(false);
-        }
-    }
+    tesserato->ammonito(false);
     emit dataChanged();
     update();
 }
 
 void LinePartita::leftclickAmmo(){
     ammoButton->setStyleSheet("background-color: yellow");
-    Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
-    if(g){
-        try{
-            g->ammonito(true);
-            emit dataChanged();
-        }
-        catch(Err_Ammonizione e){
-            QMessageBox::warning(this, tr("Errore"),
-                                 tr("Giocatore già ammonito"),
-                                 QMessageBox::Cancel);
-        }
+    try{
+        tesserato->ammonito(true);
+        emit dataChanged();
     }
-    else{
-        Allenatore* a = dynamic_cast<Allenatore*>(tesserato);
-        if(a){
-            try{
-                a->ammonito(true);
-                emit dataChanged();
-            }
-            catch(Err_Ammonizione){
-                QMessageBox::warning(this, tr("Errore"),
-                                     tr("Allenatore già ammonito"),
-                                     QMessageBox::Cancel);
-            }
-        }
+    catch(Err_Ammonizione e){
+        QMessageBox::warning(this, tr("Errore"),
+                             tr("Persna già ammonita"),
+                             QMessageBox::Cancel);
     }
     update();
 }
 
 void LinePartita::rightclickdueMin(){
-    Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
-    if(g){
-        g->add2Minuti(-1);
-    }
-    else{
-        Allenatore* a = dynamic_cast<Allenatore*>(tesserato);
-        if(a){
-            a->set2Minuti(false);
-        }
-    }
+    tesserato->add2Minuti(-1);
     emit dataChanged();
     update();
 }
 
 void LinePartita::leftclickdueMin(){
-    Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
-    if(g){
-        try{
-            g->add2Minuti();
-            emit dataChanged();
-        }
-        catch(Err_DueMinuti e){
-            QMessageBox::warning(this, tr("Errore"),
-                                 tr("Questo giocatore ha già %1 esclusioni temporanee").arg(QString::number(g->max2Minuti)),
-                                 QMessageBox::Cancel);
-        }
+    try{
+        tesserato->add2Minuti();
+        emit dataChanged();
     }
-    else{
-        Allenatore* a = dynamic_cast<Allenatore*>(tesserato);
-        if(a){
-            try{
-                a->set2Minuti(true);
-                emit dataChanged();
-            }
-            catch(Err_Ammonizione){
-                QMessageBox::warning(this, tr("Errore"),
-                                     tr("Questo allenatore ha già %1 esclusione temporanea").arg(QString::number(a->max2Minuti)),
-                                     QMessageBox::Cancel);
-            }
-        }
+    catch(Err_DueMinuti e){
+        QMessageBox::warning(this, tr("Errore"),
+                             tr("Raggiunte le esclusioni temporanee massime"),
+                             QMessageBox::Cancel);
     }
     update();
 }
 
 void LinePartita::rightclickEscl(){
     esclButton->setStyleSheet("/**/");
-    Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
-    if(g){
-        g->escluso(false);
-    }
-    else{
-        Allenatore* a = dynamic_cast<Allenatore*>(tesserato);
-        if(a){
-            a->escluso(false);
-        }
-    }
+    tesserato->escluso(false);
     emit dataChanged();
     update();
 }
 
 void LinePartita::leftclickEscl(){
     esclButton->setStyleSheet("background-color: red");
-    Giocatore* g = dynamic_cast<Giocatore*>(tesserato);
-    if(g){
-        try{
-            g->escluso();
-            emit dataChanged();
-        }
-        catch(Err_Esclusione e){
-            QMessageBox::warning(this, tr("Errore"),
-                                 tr("Giocatore già espulso"),
-                                 QMessageBox::Cancel);
-        }
-    }
-    else{
-        Allenatore* a = dynamic_cast<Allenatore*>(tesserato);
-        if(a){
-            try{
-                a->set2Minuti(true);
-                emit dataChanged();
-            }
-            catch(Err_Ammonizione){
-                QMessageBox::warning(this, tr("Errore"),
-                                     tr("Allenatore già espulso"),
-                                     QMessageBox::Cancel);
-            }
-        }
+    try{
+     tesserato->escluso();
+     emit dataChanged();
+     }
+     catch(Err_Esclusione e){
+     QMessageBox::warning(this, tr("Errore"),
+                          tr("Giocatore già espulso"),
+                          QMessageBox::Cancel);
     }
     update();
 }

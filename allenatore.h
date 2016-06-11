@@ -16,13 +16,13 @@ public:
     Allenatore(const QString& nome="", const QString& cognome="", const QDate& nascita=QDate::currentDate());
     Allenatore(const Allenatore& a);
 
-    bool isAmmonito () const;
-    int get2Minuti () const;
-    bool isEscluso () const;
+    virtual bool isAmmonito () const;
+    virtual int get2Minuti () const;
+    virtual bool isEscluso () const;
 
-    void ammonito (const bool& add =true) throw (Err_Ammonizione);
-    void set2Minuti (const bool& add = true) throw (Err_DueMinuti);
-    void escluso (const bool& add =true) throw (Err_Esclusione);
+    virtual void ammonito (const bool& add =true) throw (Err_Ammonizione);
+    virtual void add2Minuti (int x=1) throw (Err_DueMinuti);
+    virtual void escluso (const bool& add =true) throw (Err_Esclusione);
 
     Allenatore& operator =(const Allenatore& a);
 
