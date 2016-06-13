@@ -34,6 +34,7 @@ private:
 public:
     Squadra(const QString& = "");
     Squadra(const QString&, const QString&);
+    ~Squadra();
 
     QString getNome () const;
     QString getSocieta () const;
