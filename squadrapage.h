@@ -28,6 +28,7 @@ private:
 
 private slots:
     void insertTeam();
+    void validateData();
 
 
 public:

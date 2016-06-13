@@ -17,15 +17,15 @@ void Arbitro::modifica(const Tesserato &a){
             setLivello(aux->livello);
         }
         if(partiteRegionali != aux->partiteRegionali){
-            addPRegionale(aux->partiteRegionali);
+            addPartita(regionale, aux->partiteRegionali);
             aumentaLivello();
         }
         if(partiteNazionali != aux->partiteNazionali){
-            addPNazionale(aux->partiteNazionali);
+            addPartita(nazionale, aux->partiteNazionali);
             aumentaLivello();
         }
         if(partiteInternaz != aux->partiteInternaz){
-            addPInternaz(aux->partiteInternaz);
+            addPartita(internazionale, aux->partiteInternaz);
             aumentaLivello();
         }
     }
@@ -59,18 +59,20 @@ void Arbitro::setLivello(const unsigned int &l){
     }
 }
 
-void Arbitro::addPRegionale(int x){
-    (partiteRegionali+x)<0 ? partiteRegionali=0 : partiteRegionali+=x;
-    aumentaLivello();
-}
-
-void Arbitro::addPNazionale(int x){
-    (partiteNazionali+x)<0 ? partiteNazionali=0 : partiteNazionali+=x;
-    aumentaLivello();
-}
-
-void Arbitro::addPInternaz(int x){
-    (partiteInternaz+x)<0 ? partiteInternaz=0 : partiteInternaz+=x;
+void Arbitro::addPartita(Categoria cat, int x){
+    switch (cat){
+        case regionale:
+            partiteRegionali+x < 0 ? partiteRegionali=0 : partiteRegionali+=x;
+            break;
+        case nazionale:
+            partiteNazionali+x < 0 ? partiteNazionali=0 : partiteNazionali+=x;
+            break;
+        case internazionale:
+            partiteInternaz+x < 0 ? partiteInternaz=0 : partiteInternaz+=x;
+            break;
+        default:
+            break;
+    }
     aumentaLivello();
 }
 
@@ -100,4 +102,23 @@ Arbitro& Arbitro::operator =(const Arbitro& a){
     partiteNazionali = a.partiteNazionali;
     partiteInternaz = a.partiteInternaz;
     return *this;
+}
+
+void Arbitro::ammonito (const bool& add) throw (Err_Ammonizione) {
+    throw Err_Ammonizione();
+}
+void Arbitro::add2Minuti (int x) throw (Err_DueMinuti) {
+    throw Err_DueMinuti();
+}
+void Arbitro::escluso (const bool& add) throw (Err_Esclusione) {
+    throw Err_Esclusione();
+}
+bool Arbitro::isAmmonito () const {
+    throw Err_Ammonizione();
+}
+int Arbitro::get2Minuti () const {
+    throw Err_DueMinuti();
+}
+bool Arbitro::isEscluso () const {
+    throw Err_Esclusione();
 }

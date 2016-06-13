@@ -62,6 +62,9 @@ public:
 signals:
     void personaCreata();
 
+private slots:
+    void validateData();
+
 public slots:
     void changeEditor();
     void insertPerson();

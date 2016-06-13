@@ -3,8 +3,8 @@
 #include <QRadioButton>
 #include <QMessageBox>
 
-Partita::Partita(Squadra *home, Squadra *guest, Arbitro *a1, Arbitro *a2, QWidget *parent) :
-    QWidget(parent), homeTeam(home), guestTeam(guest),
+Partita::Partita(Squadra *home, Squadra *guest, Arbitro *a1, Arbitro *a2, Arbitro::Categoria cat, QWidget *parent) :
+    QWidget(parent), homeTeam(home), guestTeam(guest), arbitro1(a1), arbitro2(a2), categoria(cat),
     goalHome(0), goalGuest(0), currentPortiereHome(0), currentPortiereGuest(0)
 {
     mainLayout = new QVBoxLayout;
@@ -23,6 +23,7 @@ Partita::Partita(Squadra *home, Squadra *guest, Arbitro *a1, Arbitro *a2, QWidge
     punteggio = new QLabel("0 : 0", this);
     punteggio->setAlignment(Qt::AlignHCenter);
     punteggio->setFont(font);
+    punteggio->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     QLabel* arbitriLabel = new QLabel(tr("Arbitri:"), this);
     QFont corsivo;
@@ -34,11 +35,11 @@ Partita::Partita(Squadra *home, Squadra *guest, Arbitro *a1, Arbitro *a2, QWidge
     QFont arbitriFont;
     arbitriFont.setPointSize(15);
 
-    QString arb1str = a1->getCognome() + " " + a1->getNome();
+    QString arb1str = arbitro1->getCognome() + " " + arbitro1->getNome();
     QLabel* arbitro1Label = new QLabel(arb1str, this);
     arbitro1Label->setFont(arbitriFont);
 
-    QString arb2str = a2->getCognome() + " " + a2->getNome();
+    QString arb2str = arbitro2->getCognome() + " " + arbitro2->getNome();
     QLabel* arbitro2Label = new QLabel(arb2str, this);
     arbitro2Label->setFont(arbitriFont);
 
@@ -70,14 +71,6 @@ Partita::Partita(Squadra *home, Squadra *guest, Arbitro *a1, Arbitro *a2, QWidge
     mainLayout->addLayout(arbitriLayout);
 
     setLayout(mainLayout);
-}
-
-Squadra* Partita::getHomeTeam() const{
-    return homeTeam;
-}
-
-Squadra* Partita::getGuestTeam() const{
-    return guestTeam;
 }
 
 void Partita::createHomeLayout(){
@@ -212,9 +205,6 @@ void Partita::updatePunteggio(){
 }
 
 void Partita::tiroHome(int val, bool segnato){
-    if(segnato){
-        //goalHome += val;
-    }
     Portiere* p = dynamic_cast<Portiere*>(guestTeam->at(currentPortiereGuest));
     if(p){
         bool parato = !segnato;
@@ -226,9 +216,6 @@ void Partita::tiroHome(int val, bool segnato){
 }
 
 void Partita::rigoreHome(int val, bool segnato){
-    if(segnato){
-        //goalHome += val;
-    }
     Portiere* p = dynamic_cast<Portiere*>(guestTeam->at(currentPortiereGuest));
     if(p){
         bool parato = !segnato;
@@ -239,9 +226,6 @@ void Partita::rigoreHome(int val, bool segnato){
 }
 
 void Partita::tiroGuest(int val, bool segnato){
-    if(segnato){
-        //goalGuest += val;
-    }
     Portiere* p = dynamic_cast<Portiere*>(homeTeam->at(currentPortiereHome));
     if(p){
         bool parato = !segnato;
@@ -252,9 +236,6 @@ void Partita::tiroGuest(int val, bool segnato){
 }
 
 void Partita::rigoreGuest(int val, bool segnato){
-    if(segnato){
-        //goalGuest += val;
-    }
     Portiere* p = dynamic_cast<Portiere*>(homeTeam->at(currentPortiereHome));
     if(p){
         bool parato = !segnato;
@@ -323,13 +304,15 @@ void Partita::termina(){
         guestTeam->addSconfitta(1, goalGuest, goalHome);
     }
     else if(goalHome == goalGuest){
-        homeTeam->addPareggio(goalHome);
-        guestTeam->addPareggio(goalGuest);
+        homeTeam->addPareggio(1, goalHome);
+        guestTeam->addPareggio(1, goalGuest);
     }
     else{
         homeTeam->addSconfitta(1, goalHome, goalGuest);
         guestTeam->addVittoria(1, goalGuest, goalHome);
     }
+    arbitro1->addPartita(categoria);
+    arbitro2->addPartita(categoria);
 }
 
 void Partita::reset(){
@@ -339,4 +322,8 @@ void Partita::reset(){
     for(int i = 0; i<homeTeam->size(); ++i){
         homeLines[i]->reset();
     }
+    for(int i = 0; i<guestTeam->size(); ++i){
+        guestLines[i]->reset();
+    }
+    updatePunteggio();
 }

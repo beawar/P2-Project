@@ -30,27 +30,27 @@ public:
     unsigned int getRigoriTotali() const;
     double getTiriPerc () const;
     double getRigoriPerc () const;
-    bool isAmmonito () const;
-    int get2Minuti () const;
-    bool isEscluso () const;
+    virtual bool isAmmonito () const;
+    virtual int get2Minuti () const;
+    virtual bool isEscluso () const;
 
     void setNumero(unsigned int n);
     void addTiro (int x =1, const bool& segnato =false);
     void addRigore (int x =1, const bool& segnato =false);
-    void ammonito (const bool& add =true) throw (Err_Ammonizione);
-    void add2Minuti (int x =1) throw (Err_DueMinuti);
-    void escluso (const bool& add =true) throw (Err_Esclusione);
+    virtual void ammonito (const bool& add =true) throw (Err_Ammonizione);
+    virtual void add2Minuti (int x =1) throw (Err_DueMinuti);
+    virtual void escluso (const bool& add =true) throw (Err_Esclusione);
 
     virtual void modifica(const Tesserato &g);
 
     Giocatore& operator = (const Giocatore& g);
 
-    bool operator ==(const Giocatore& g) const;
-    bool operator !=(const Giocatore& g) const;
-    bool operator <(const Giocatore& g) const;
-    bool operator <=(const Giocatore& g) const;
-    bool operator >(const Giocatore& g) const;
-    bool operator >=(const Giocatore& g) const;
+    virtual bool operator ==(const Giocatore& g) const;
+    virtual bool operator !=(const Giocatore& g) const;
+    virtual bool operator <(const Giocatore& g) const;
+    virtual bool operator <=(const Giocatore& g) const;
+    virtual bool operator >(const Giocatore& g) const;
+    virtual bool operator >=(const Giocatore& g) const;
 
     virtual QString getInfo() const;
     virtual void reset();

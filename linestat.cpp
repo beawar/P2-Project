@@ -26,8 +26,10 @@ LineStat::LineStat(Tesserato*t, QWidget *parent) :
 void LineStat::createLabels(){
     cognome = new QLabel(tess->getCognome(), this);
     cognome->setMinimumSize(100, 15);
+    cognome->setAlignment(Qt::AlignVCenter);
     nome = new QLabel(tess->getNome(), this);
     nome->setMinimumSize(100, 15);
+    nome->setAlignment(Qt::AlignVCenter);
     numero = new QLabel(this);
     numero->setMinimumSize(30, 15);
     numero->setMaximumSize(50, 50);
@@ -69,6 +71,35 @@ void LineStat::createLabels(){
 }
 
 void LineStat::updateDati(Tesserato* t){
+    if(t->isAmmonito()){
+        ammo->setText("X");
+    }
+    else{
+        ammo->clear();
+    }
+
+    switch(t->get2Minuti()){
+        case 1:
+            dueMin->setText("X");
+            break;
+        case 2:
+            dueMin->setText("XX");
+            break;
+        case 3:
+            dueMin->setText("XXX");
+            break;
+        default:
+            dueMin->clear();
+            break;
+    }
+
+    if(t->isEscluso()){
+        escl->setText("X");
+    }
+    else{
+        escl->clear();
+    }
+
     Giocatore* g = dynamic_cast<Giocatore*>(t);
     if(g){
         numero->setText(QString::number(g->getNumero()));
@@ -78,34 +109,6 @@ void LineStat::updateDati(Tesserato* t){
                                               QString::number(g->getRigoriTotali())));
         perc->setText(tr("%1% (%2%)").arg(QString::number(g->getTiriPerc(), 'f', 2),
                                         QString::number(g->getRigoriPerc(), 'f', 2)));
-        if(g->isAmmonito()){
-            ammo->setText("X");
-        }
-        else{
-            ammo->clear();
-        }
-
-        switch(g->get2Minuti()){
-            case 1:
-                dueMin->setText("X");
-                break;
-            case 2:
-                dueMin->setText("XX");
-                break;
-            case 3:
-                dueMin->setText("XXX");
-                break;
-            default:
-                dueMin->clear();
-                break;
-        }
-
-        if(g->isEscluso()){
-            escl->setText("X");
-        }
-        else{
-            escl->clear();
-        }
 
         Portiere* p = dynamic_cast<Portiere*>(g);
         if(p){
@@ -117,28 +120,6 @@ void LineStat::updateDati(Tesserato* t){
                                                   QString::number(p->getRigoriParatiPerc(), 'f', 2)));
         }
     }
-    else{
-        Allenatore* all = dynamic_cast<Allenatore*>(t);
-        if(all){
-            if(all->isAmmonito()){
-                ammo->setText("X");
-            }
-            else{
-                ammo->clear();
-            }
-            if(all->get2Minuti() == 1){
-                dueMin->setText("X");
-            }
-            else{
-                dueMin->clear();
-            }
-            if(all->isEscluso()){
-                escl->setText("X");
-            }
-            else{
-                escl->clear();
-            }
-        }
-    }
+
     update();
 }

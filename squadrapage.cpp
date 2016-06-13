@@ -15,16 +15,16 @@ void SquadraPage::createEditor(){
     nomeLabel = new QLabel(tr("Nome:"), this);
     nomeLabel->setAlignment(Qt::AlignCenter);
     nomeEdit = new QLineEdit(this);
+    connect(nomeEdit, SIGNAL(textChanged(QString)), this, SLOT(validateData()));
 
     societaLabel = new QLabel(tr("Società:"));
     societaLabel->setAlignment(Qt::AlignCenter);
     societaEdit = new QLineEdit(this);
 
     insertButton = new QPushButton(tr("Inserisci"),this);
+    insertButton->setEnabled(false);
     connect(insertButton, SIGNAL(clicked()), this, SLOT(insertTeam()));
 
-    registerField("squadra.nome", nomeEdit);
-    registerField("squadra.societa", societaEdit);
 }
 
 void SquadraPage::createLayout(){
@@ -52,6 +52,15 @@ void SquadraPage::insertTeam(){
     nomeEdit->clear();
     societaEdit->clear();
     emit squadraCreata();
+}
+
+void SquadraPage::validateData(){
+    if(!nomeEdit->text().isEmpty()){
+        insertButton->setEnabled(true);
+    }
+    else{
+        insertButton->setEnabled(false);
+    }
 }
 
 int SquadraPage::nextId() const{

@@ -34,6 +34,7 @@ private:
 public:
     Squadra(const QString& = "");
     Squadra(const QString&, const QString&);
+    ~Squadra();
 
     QString getNome () const;
     QString getSocieta () const;
@@ -60,14 +61,21 @@ public:
     int getDifferenzaReti() const;
 
     unsigned int getTiriSegnati() const;
-    unsigned int getTiriSubiti() const;
-    unsigned int getTiriTotali() const;
+    unsigned int getTiriEffettuati() const;
+
     unsigned int getRigoriSegnati() const;
-    unsigned int getRigoriSubiti() const;
-    unsigned int getRigoriTotali() const;
+    unsigned int getRigoriEffettuati() const;
+
+    unsigned int getTiriParati() const;
+    unsigned int getTiriRicevuti() const;
+
+    unsigned int getRigoriParati() const;
+    unsigned int getRigoriRicevuti() const;
 
     double getTiriPerc() const;
     double getRigoriPerc() const;
+    double getParatePerc() const;
+    double getParateRigoriPerc() const;
 
     void addTesserato (Tesserato*) throw(Err_Tesserato);
     void modificaTesserato(Tesserato*, const Tesserato&);

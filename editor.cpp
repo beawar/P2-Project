@@ -33,6 +33,7 @@ Editor::Editor(SquadreModel*sm, ArbitriModel*am, QWidget *parent) :
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     updateList(squadreComboBox->currentIndex());
+
 }
 
 void Editor::createMainEditor(){

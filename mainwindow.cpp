@@ -71,10 +71,10 @@ void MainWindow::createActions(){
     exitAct->setShortcut(QKeySequence::Quit);
     connect(exitAct, SIGNAL(triggered()), this, SLOT(close()));
 
-    aboutAct = new QAction(tr("&About HBStats"), this);
+    aboutAct = new QAction(tr("Informazioni su HBStats"), this);
     connect(aboutAct, SIGNAL(triggered()), this, SLOT(about()));
 
-    aboutQtAct = new QAction(tr("&Qt"), this);
+    aboutQtAct = new QAction(tr("About Qt"), this);
     connect(aboutQtAct, SIGNAL(triggered()), this, SLOT(aboutQt()));
 
     resetPartitaAct = new QAction(QIcon(":/images/images/reset.png"), tr("Reset Partita"), this);
@@ -236,6 +236,7 @@ void MainWindow::exportPng(){
 void MainWindow::edit(){
     editor = new Editor(squadre, arbitri, this);
     editor->setAttribute(Qt::WA_DeleteOnClose);
+    editor->setModal(true);
 
     for(int i=0; i<squadre->size(); ++i){
         squadre->at(i)->sortByName();
@@ -251,8 +252,8 @@ void MainWindow::about(){
     QMessageBox::about(this, "HandBall Stats", tr("HandBallStats è un applicativo per la gestione "
                                                   "di partite di pallamano, che permette di mantenere traccia "
                                                   "delle statistiche individuali e di squadra per ogni partita "
-                                                  "giocata.\n ----------------------------------------------- \n"
-                                                  "Versione 1.0 Copyright Beatrice Guerra"));
+                                                  "giocata.\n\n"
+                                                  "Creato da Beatrice Guerra"));
 }
 
 void MainWindow::aboutQt(){
@@ -264,18 +265,17 @@ void MainWindow::showPartita(){
     Squadra* guest = newWizard->getGuestTeam();
     Arbitro* a1 = newWizard->getArbitro1();
     Arbitro* a2 = newWizard->getArbitro2();
+    Arbitro::Categoria cat= newWizard->getCategoria();
 
-    tabs = new Tabs(home, guest, a1, a2, this);
+    tabs = new Tabs(home, guest, a1, a2, cat, this);
 
     classificaAct->setEnabled(false);
     exportAct->setEnabled(true);
     resetPartitaAct->setEnabled(true);
     closePartitaAct->setEnabled(true);
 
-
     connect(exportAct, SIGNAL(triggered()), tabs, SLOT(exportPng()));
     connect(resetPartitaAct, SIGNAL(triggered()), tabs, SLOT(reset()));
-
 
     setCentralWidget(tabs);
 }

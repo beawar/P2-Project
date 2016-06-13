@@ -47,11 +47,11 @@ unsigned int Portiere::getRigoriSubiti() const{
 }
 
 double Portiere::getTiriParatiPerc() const{
-    return tiriRicevuti == 0 ? 0 : (tiriParati*100)/tiriRicevuti;
+    return tiriRicevuti == 0 ? 0 : (double)(tiriParati*100)/tiriRicevuti;
 }
 
 double Portiere::getRigoriParatiPerc() const{
-    return rigoriRicevuti == 0 ? 0 : (rigoriParati*100)/rigoriRicevuti;
+    return rigoriRicevuti == 0 ? 0 : (double)(rigoriParati*100)/rigoriRicevuti;
 }
 
 void Portiere::addTiroRicevuto(int x, const bool & parato){

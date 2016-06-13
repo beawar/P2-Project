@@ -33,12 +33,12 @@ void Allenatore::ammonito(const bool& add) throw(Err_Ammonizione){
     }
 }
 
-void Allenatore::set2Minuti(const bool& add) throw(Err_DueMinuti){
-    if(add){
-        get2Minuti() == max2Minuti ? throw Err_DueMinuti(): ++dueMinuti;
+void Allenatore::add2Minuti(int x) throw(Err_DueMinuti){
+    if(x > 0){
+        dueMinuti+x >= max2Minuti ? throw Err_DueMinuti() : dueMinuti+=x;
     }
-    else if(!add && get2Minuti()>0){
-        --dueMinuti;
+    else{
+        dueMinuti+x <= 0 ? 0 : dueMinuti+=x;
     }
 }
 

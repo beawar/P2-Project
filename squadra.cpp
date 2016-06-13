@@ -105,21 +105,10 @@ unsigned int Squadra::getTiriSegnati() const{
     return tot;
 }
 
- unsigned int Squadra::getTiriSubiti() const{
-     unsigned int tot=0;
-     for(Vettore<Tesserato*>::const_iterator cit = tesserati.cbegin(); cit<tesserati.cend(); ++cit){
-         Portiere* p = dynamic_cast<Portiere*>(*cit);
-         if(p){
-             tot+= p->getGoalSubiti();
-         }
-     }
-     return tot;
- }
-
-unsigned int Squadra::getTiriTotali() const{
+unsigned int Squadra::getTiriEffettuati() const{
     unsigned int tot=0;
     for(Vettore<Tesserato*>::const_iterator cit = tesserati.cbegin(); cit<tesserati.cend(); ++cit){
-        Giocatore* g = dynamic_cast<Giocatore*>(*cit);
+        const Giocatore* g = dynamic_cast<const Giocatore*>(*cit);
         if(g){
             tot+= g->getTiriTotali();
         }
@@ -138,18 +127,7 @@ unsigned int Squadra::getRigoriSegnati() const{
     return tot;
 }
 
-unsigned int Squadra::getRigoriSubiti() const{
-    unsigned int tot=0;
-    for(Vettore<Tesserato*>::const_iterator cit = tesserati.cbegin(); cit<tesserati.cend(); ++cit){
-        Portiere* p = dynamic_cast<Portiere*>(*cit);
-        if(p){
-            tot+= p->getRigoriSubiti();
-        }
-    }
-    return tot;
-}
-
-unsigned int Squadra::getRigoriTotali() const{
+unsigned int Squadra::getRigoriEffettuati() const{
     unsigned int tot=0;
     for(Vettore<Tesserato*>::const_iterator cit = tesserati.cbegin(); cit<tesserati.cend(); ++cit){
         const Giocatore* g = dynamic_cast<const Giocatore*>(*cit);
@@ -160,14 +138,65 @@ unsigned int Squadra::getRigoriTotali() const{
     return tot;
 }
 
+unsigned int Squadra::getTiriParati() const{
+    unsigned int tot=0;
+    for(Vettore<Tesserato*>::const_iterator cit = tesserati.cbegin(); cit<tesserati.cend(); ++cit){
+        const Portiere* p = dynamic_cast<const Portiere*>(*cit);
+        if(p){
+            tot+= p->getTiriParati();
+        }
+    }
+    return tot;
+}
+
+unsigned int Squadra::getTiriRicevuti() const{
+    unsigned int tot=0;
+    for(Vettore<Tesserato*>::const_iterator cit = tesserati.cbegin(); cit<tesserati.cend(); ++cit){
+        const Portiere* p = dynamic_cast<const Portiere*>(*cit);
+        if(p){
+            tot+= p->getTiriRicevuti();
+        }
+    }
+    return tot;
+}
+
+unsigned int Squadra::getRigoriParati() const{
+    unsigned int tot=0;
+    for(Vettore<Tesserato*>::const_iterator cit = tesserati.cbegin(); cit<tesserati.cend(); ++cit){
+        const Portiere* p = dynamic_cast<const Portiere*>(*cit);
+        if(p){
+            tot+= p->getRigoriParati();
+        }
+    }
+    return tot;
+}
+
+unsigned int Squadra::getRigoriRicevuti() const{
+    unsigned int tot=0;
+    for(Vettore<Tesserato*>::const_iterator cit = tesserati.cbegin(); cit<tesserati.cend(); ++cit){
+        const Portiere* p = dynamic_cast<const Portiere*>(*cit);
+        if(p){
+            tot+= p->getRigoriRicevuti();
+        }
+    }
+    return tot;
+}
+
 double Squadra::getTiriPerc() const{
-    return getTiriSegnati()*100 /getTiriTotali();
+    return getTiriEffettuati() > 0 ? (double)getTiriSegnati()*100 /getTiriEffettuati() : 0;
 }
 
 double Squadra::getRigoriPerc() const{
-    return getRigoriSegnati()*100 /getRigoriTotali();
+    return getRigoriEffettuati() > 0 ? (double)getRigoriSegnati()*100 /getRigoriEffettuati() : 0;
 }
 
+double Squadra::getParatePerc() const{
+    return getTiriRicevuti() > 0 ? (double)getTiriParati()*100 /getTiriRicevuti() : 0;
+}
+
+double Squadra::getParateRigoriPerc() const{
+    return getRigoriRicevuti() ? (double)getRigoriParati()*100 /getRigoriRicevuti() : 0;
+}
 
 void Squadra::addTesserato(Tesserato *t) throw(Err_Tesserato){
     if(!dynamic_cast<const Arbitro*>(t)){
@@ -314,9 +343,18 @@ void Squadra::reset(){
 }
 
 void Squadra::clear(){
-    delete[] &tesserati;
+    for(Vettore<Tesserato*>::iterator it = tesserati.begin(); it!=tesserati.end(); ++it){
+        delete (*it);
+    }
+    tesserati.clear();
 }
 
 unsigned int Squadra::size() const{
     return tesserati.size();
+}
+
+Squadra::~Squadra(){
+    for(Vettore<Tesserato*>::iterator it = tesserati.begin(); it!=tesserati.end(); ++it){
+        delete (*it);
+    }
 }

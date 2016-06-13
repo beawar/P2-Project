@@ -24,7 +24,6 @@ NewWizard::NewWizard(SquadreModel *sm, ArbitriModel *am, QWidget *parent) :
 
     setStartId(Page_Intro);
     setWindowTitle(tr("Nuovo"));
-    setMinimumSize(sizeHint());
 
     connect(personaP, SIGNAL(personaCreata()), this, SLOT(nuovaPersona()));
     connect(squadraP, SIGNAL(squadraCreata()), this, SLOT(nuovaSquadra()));
@@ -47,27 +46,25 @@ Arbitro* NewWizard::getArbitro2() const{
     return arbitri->at(field("partita.arbitro2").toInt());
 }
 
+Arbitro::Categoria NewWizard::getCategoria() const{
+    return partitaP->getCategoria();
+}
+
 void NewWizard::accept(){
     if(currentId() == Page_Partita){
         if(partitaP->validatePage()){
-            if(partitaP->getCategoria() == tr("Regionale")){
-                arbitri->at(field("partita.arbitro1").toInt())->addPRegionale();
-                arbitri->at(field("partita.arbitro2").toInt())->addPRegionale();
-            }
-            else if(partitaP->getCategoria() == tr("Nazionale")){
-                arbitri->at(field("partita.arbitro1").toInt())->addPNazionale();
-                arbitri->at(field("partita.arbitro2").toInt())->addPNazionale();
-            }
-            else if(partitaP->getCategoria() == tr("Internazionale")){
-                arbitri->at(field("partita.arbitro1").toInt())->addPInternaz();
-                arbitri->at(field("partita.arbitro2").toInt())->addPInternaz();
-            }
             emit partitaCreata();
             close();
         }
         else{
-            QMessageBox::warning(this, tr("Informazioni invalide"), tr("Impossibile creare la partita. Ricontrollare le "
-                                                                        "informazioni immesse"), QMessageBox::Ok);
+            QMessageBox::warning(this, tr("Informazioni invalide"),
+                                 tr("Impossibile creare la partita. Ricontrollare le "
+                                 "informazioni immesse:\n"
+                                 " - la squadra in casa e quella ospite devono essere distinte;\n"
+                                 " - devono essere specificati due arbitri distinti;\n"
+                                 " - devono essere selezionati minimo 7 giocatori e massimo "
+                                 " 14 giocatori e 2 allenatori per squadra."),
+                                 QMessageBox::Ok);
         }
     }
     else{
