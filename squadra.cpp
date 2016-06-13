@@ -352,3 +352,9 @@ void Squadra::clear(){
 unsigned int Squadra::size() const{
     return tesserati.size();
 }
+
+Squadra::~Squadra(){
+    for(Vettore<Tesserato*>::iterator it = tesserati.begin(); it!=tesserati.end(); ++it){
+        delete (*it);
+    }
+}
