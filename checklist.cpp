@@ -80,7 +80,7 @@ bool CheckList::setData(const QModelIndex &index, const QVariant &value, int rol
 
 }
 
-void CheckList::createList(){
+void CheckList::updateList(){
     if(squadra){
         strList.clear();
         for(int i=0; i<squadra->size(); ++i){

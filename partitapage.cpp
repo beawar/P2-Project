@@ -208,6 +208,6 @@ void PartitaPage::sort(){
         else if(numeroButton->isChecked()){
             squadre->at(i)->sortByNumber();
         }
-        checkArray[i]->createList();
+        checkArray[i]->updateList();
     }
 }

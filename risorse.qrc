@@ -2,10 +2,7 @@
     <qresource prefix="/images">
         <file>images/giallo.png</file>
         <file>images/rosso.png</file>
-        <file>images/HBStats_Icon.png</file>
         <file>images/HBStats_Icon_Sfondo.png</file>
-        <file>images/Logo.png</file>
-        <file>images/Sfondo_logo.png</file>
         <file>images/edit.png</file>
         <file>images/footbal.png</file>
         <file>images/new.png</file>

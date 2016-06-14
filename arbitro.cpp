@@ -12,7 +12,7 @@ Arbitro::Arbitro(const Arbitro &a)
 
 void Arbitro::modifica(const Tesserato &a){
     const Arbitro* aux = dynamic_cast<const Arbitro*>(&a);
-    if(aux && *this != *aux){
+    if(aux){
         if(livello != aux->livello){
             setLivello(aux->livello);
         }
