@@ -283,6 +283,7 @@ void Editor::updateList(int index){
     switch(radioButtonGroup->checkedId()){
         case id_tesserato:
             checkArray[index]->updateList();
+            tesserati = checkArray[index];
             listView->setModel(tesserati);
             break;
         case id_squadra:

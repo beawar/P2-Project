@@ -159,6 +159,9 @@ void MainWindow::newFile(){
     connect(newWizard, SIGNAL(partitaCreata()), this, SLOT(showPartita()));
     connect(newWizard, SIGNAL(squadraCreata()), this, SLOT(creaClassifica()));
     connect(newWizard, SIGNAL(dataChanged(bool)), this, SLOT(wasModified(bool)));
+    if(!editAct->isEnabled() && !squadre->isEmpty()){
+        editAct->setEnabled(true);
+    }
 }
 
 void MainWindow::open(){

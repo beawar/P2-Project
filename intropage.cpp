@@ -46,7 +46,8 @@ void IntroPage::createButtons(){
     radioButtonGroup->addButton(squadraRadioButton, squadra);
     radioButtonGroup->addButton(partitaRadioButton, partita);
 
-    if(squadre->isEmpty() || arbitri->isEmpty()){
+    if(squadre->isEmpty()){
+        personaRadioButton->setEnabled(false);
         partitaRadioButton->setEnabled(false);
     }
 }
