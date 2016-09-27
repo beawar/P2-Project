@@ -10,7 +10,7 @@ Tabs::Tabs(Squadra *s1, Squadra *s2, Arbitro *arb1, Arbitro *arb2, Arbitro::Cate
     statTeam1(0), statTeam2(0), partita(0)
 {
 
-    if(team1 && team2 && a1 && a2){
+    if(team1 && team2){
 
         statTeam1 = new Stat(team1);
         statTeam1->setObjectName("Stat1");

@@ -266,8 +266,8 @@ void MainWindow::aboutQt(){
 void MainWindow::showPartita(){
     Squadra* home = newWizard->getHomeTeam();
     Squadra* guest = newWizard->getGuestTeam();
-    Arbitro* a1 = newWizard->getArbitro1();
-    Arbitro* a2 = newWizard->getArbitro2();
+    Arbitro* a1 = 0; /*newWizard->getArbitro1();*/
+    Arbitro* a2 = 0; /*newWizard->getArbitro2();*/
     Arbitro::Categoria cat= newWizard->getCategoria();
 
     tabs = new Tabs(home, guest, a1, a2, cat, this);

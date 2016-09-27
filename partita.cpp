@@ -25,23 +25,25 @@ Partita::Partita(Squadra *home, Squadra *guest, Arbitro *a1, Arbitro *a2, Arbitr
     punteggio->setFont(font);
     punteggio->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
-    QLabel* arbitriLabel = new QLabel(tr("Arbitri:"), this);
-    QFont corsivo;
-    corsivo.setPointSize(20);
-    corsivo.setItalic(true);
-    corsivo.setBold(true);
-    arbitriLabel->setFont(corsivo);
-
-    QFont arbitriFont;
-    arbitriFont.setPointSize(15);
-
-    QString arb1str = arbitro1->getCognome() + " " + arbitro1->getNome();
-    QLabel* arbitro1Label = new QLabel(arb1str, this);
-    arbitro1Label->setFont(arbitriFont);
-
-    QString arb2str = arbitro2->getCognome() + " " + arbitro2->getNome();
-    QLabel* arbitro2Label = new QLabel(arb2str, this);
-    arbitro2Label->setFont(arbitriFont);
+/*
+*    QLabel* arbitriLabel = new QLabel(tr("Arbitri:"), this);
+*    QFont corsivo;
+*    corsivo.setPointSize(20);
+*    corsivo.setItalic(true);
+*    corsivo.setBold(true);
+*    arbitriLabel->setFont(corsivo);
+*
+*    QFont arbitriFont;
+*    arbitriFont.setPointSize(15);
+*
+*    QString arb1str = arbitro1->getCognome() + " " + arbitro1->getNome();
+*    QLabel* arbitro1Label = new QLabel(arb1str, this);
+*    arbitro1Label->setFont(arbitriFont);
+*
+*    QString arb2str = arbitro2->getCognome() + " " + arbitro2->getNome();
+*    QLabel* arbitro2Label = new QLabel(arb2str, this);
+*    arbitro2Label->setFont(arbitriFont);
+*/
 
     createHomeLayout();
     createGuestLayout();
@@ -61,14 +63,16 @@ Partita::Partita(Squadra *home, Squadra *guest, Arbitro *a1, Arbitro *a2, Arbitr
     teams->addWidget(homeGroup);
     teams->addWidget(guestGroup);
 
-    QHBoxLayout* arbitriLayout = new QHBoxLayout;
-    arbitriLayout->addWidget(arbitriLabel);
-    arbitriLayout->addWidget(arbitro1Label);
-    arbitriLayout->addWidget(arbitro2Label);
+/*
+*    QHBoxLayout* arbitriLayout = new QHBoxLayout;
+*    arbitriLayout->addWidget(arbitriLabel);
+*    arbitriLayout->addWidget(arbitro1Label);
+*    arbitriLayout->addWidget(arbitro2Label);
+*/
 
     mainLayout->addWidget(goalsGroup);
     mainLayout->addLayout(teams);
-    mainLayout->addLayout(arbitriLayout);
+//    mainLayout->addLayout(arbitriLayout);
 
     setLayout(mainLayout);
 }
@@ -252,7 +256,7 @@ void Partita::cambiaPortiereHome(){
     }
     else{
         int ret = QMessageBox::warning(this, tr("Conversione necessaria"),
-                                       tr("Il giocatore selezionato non è memorizzato come portire."
+                                       tr("Il giocatore selezionato non è memorizzato come portiere."
                                           "Per renderlo il portiere corrente è necessaria una conversione.\n"
                                           "Continuare?"),
                                        QMessageBox::Ok | QMessageBox::Cancel);
@@ -261,6 +265,7 @@ void Partita::cambiaPortiereHome(){
             Portiere* portiere = new Portiere(*gioc);
             homeTeam->sostituisciTesserato(homePortiere->checkedId(), portiere);
             currentPortiereHome = homePortiere->checkedId();
+            homeLines[currentPortiereHome]->updateTesserato(portiere);
         }
         else{
             homePortiere->button(currentPortiereHome)->setChecked(true);
@@ -284,6 +289,7 @@ void Partita::cambiaPortiereGuest(){
             Portiere* portiere = new Portiere(*gioc);
             guestTeam->sostituisciTesserato(guestPortiere->checkedId(), portiere);
             currentPortiereGuest = guestPortiere->checkedId();
+            guestLines[currentPortiereGuest]->updateTesserato(portiere);
         }
         else{
             guestPortiere->button(currentPortiereGuest)->setChecked(true);
@@ -311,8 +317,8 @@ void Partita::termina(){
         homeTeam->addSconfitta(1, goalHome, goalGuest);
         guestTeam->addVittoria(1, goalGuest, goalHome);
     }
-    arbitro1->addPartita(categoria);
-    arbitro2->addPartita(categoria);
+//    arbitro1->addPartita(categoria);
+//    arbitro2->addPartita(categoria);
 }
 
 void Partita::reset(){
@@ -320,10 +326,14 @@ void Partita::reset(){
     goalGuest = 0;
 
     for(int i = 0; i<homeTeam->size(); ++i){
-        homeLines[i]->reset();
+        if(homeTeam->at(i)->isChecked()){
+            homeLines[i]->reset();
+        }
     }
     for(int i = 0; i<guestTeam->size(); ++i){
-        guestLines[i]->reset();
+        if(homeTeam->at(i)->isChecked()){
+            guestLines[i]->reset();
+        }
     }
     updatePunteggio();
 }
