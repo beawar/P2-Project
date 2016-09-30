@@ -276,6 +276,7 @@ void MainWindow::showPartita(){
     exportAct->setEnabled(true);
     resetPartitaAct->setEnabled(true);
     closePartitaAct->setEnabled(true);
+    closeTabs->setEnabled(false);
 
     connect(exportAct, SIGNAL(triggered()), tabs, SLOT(exportPng()));
     connect(resetPartitaAct, SIGNAL(triggered()), tabs, SLOT(reset()));
@@ -365,6 +366,7 @@ void MainWindow::terminaPartita(){
     classificaAct->setEnabled(true);
     resetPartitaAct->setEnabled(false);
     closePartitaAct->setEnabled(false);
+    closeTabs->setEnabled(true);
     tabs->termina();
     modificato = true;
 
